@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Layer & Link Layer — Exam Trainer (Ch. 4–6)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Spline+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b131f; --panel:#121f2e; --panel2:#0e1825; --panelup:#16273a;
+  --ink:#e7eef7; --muted:#8ba1b8; --faint:#5b7088;
+  --line:#22344a; --line2:#2c4159;
+  --teal:#5eead4; --teal-dim:#2dd4bf; --amber:#fbbf24;
+  --green:#34d399; --red:#fb7185; --blue:#60a5fa; --violet:#c4b5fd;
+  --shadow:0 18px 50px -20px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(94,234,212,.10), transparent 60%),
+    radial-gradient(1000px 620px at 8% 108%, rgba(96,165,250,.10), transparent 55%),
+    var(--bg);
+  color:var(--ink);
+  font-family:'Spline Sans',system-ui,sans-serif;
+  line-height:1.55; -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.wrap{max-width:880px;margin:0 auto;padding:28px 20px 90px}
+a{color:var(--teal)}
+code,.mono{font-family:'Spline Sans Mono',ui-monospace,monospace}
+
+/* ---- header / hero ---- */
+.kicker{font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--teal-dim);margin:0 0 14px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,6vw,52px);line-height:1.02;letter-spacing:-.01em;margin:0 0 14px}
+h1 .em{font-style:italic;color:var(--teal)}
+.lead{color:var(--muted);font-size:17px;max-width:60ch;margin:0 0 26px}
+
+.card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+.hero{position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:34px 34px;opacity:.08;pointer-events:none}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+@media(max-width:640px){.grid3{grid-template-columns:1fr}}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px 14px}
+.chip .n{font-family:'Fraunces',serif;font-size:13px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase}
+.chip .t{font-weight:600;margin:4px 0 4px}
+.chip .d{color:var(--muted);font-size:13.5px}
+
+ul.feat{list-style:none;padding:0;margin:18px 0 6px;display:grid;gap:9px}
+ul.feat li{padding-left:26px;position:relative;color:var(--muted);font-size:14.5px}
+ul.feat li:before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(94,234,212,.16)}
+ul.feat li b{color:var(--ink);font-weight:600}
+
+.note{font-size:13px;color:var(--faint);border-left:2px solid var(--line2);padding:4px 0 4px 14px;margin:18px 0 0}
+
+/* ---- buttons ---- */
+.btn{font-family:'Spline Sans',sans-serif;font-weight:600;font-size:15px;border:none;border-radius:12px;padding:13px 22px;cursor:pointer;transition:transform .12s ease,box-shadow .2s,background .2s;display:inline-flex;align-items:center;gap:9px}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--teal-dim));color:#06251f;box-shadow:0 10px 26px -10px rgba(94,234,212,.6)}
+.btn-primary:hover{box-shadow:0 14px 30px -8px rgba(94,234,212,.75)}
+.btn-ghost{background:var(--panelup);color:var(--ink);border:1px solid var(--line2)}
+.btn-ghost:hover{border-color:var(--teal-dim);color:var(--teal)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+
+/* ---- mode selector ---- */
+.modes{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:6px 0 4px}
+@media(max-width:640px){.modes{grid-template-columns:1fr 1fr}}
+.mode{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:14px;cursor:pointer;text-align:left;transition:.15s;color:var(--ink)}
+.mode:hover{border-color:var(--teal-dim)}
+.mode.sel{border-color:var(--teal);background:rgba(94,234,212,.08);box-shadow:inset 0 0 0 1px var(--teal)}
+.mode .mt{font-weight:600}
+.mode .ms{font-size:12.5px;color:var(--muted)}
+
+/* ---- quiz ---- */
+.topbar{position:sticky;top:0;z-index:30;backdrop-filter:blur(10px);background:rgba(11,19,31,.82);border-bottom:1px solid var(--line);margin:-28px -20px 22px;padding:14px 20px}
+.topbar .row{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.progresswrap{flex:1;height:8px;background:var(--panel2);border-radius:99px;border:1px solid var(--line);overflow:hidden}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .3s}
+.counter{font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--muted);white-space:nowrap}
+.btn-sm{padding:8px 13px;font-size:13px;border-radius:10px}
+
+.qmeta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.tag{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid var(--line2)}
+.tag.ch4{color:var(--teal);border-color:rgba(94,234,212,.4)}
+.tag.ch5{color:var(--amber);border-color:rgba(251,191,36,.4)}
+.tag.ch6{color:var(--violet);border-color:rgba(196,181,253,.4)}
+.tag.kind{color:var(--blue);border-color:rgba(96,165,250,.4)}
+.qnum{font-family:'Spline Sans Mono',monospace;color:var(--faint);font-size:13px;margin-left:auto}
+
+.qtext{font-size:18px;font-weight:500;margin:0 0 8px;line-height:1.5}
+.qtext .mono{color:var(--amber);font-size:.95em}
+
+.diagram{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px;margin:16px 0}
+.diagram svg{display:block;width:100%;height:auto}
+.diagram .cap{font-size:12px;color:var(--faint);font-family:'Spline Sans Mono',monospace;text-align:center;margin-top:8px}
+
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{display:flex;gap:13px;align-items:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:14px 15px;cursor:pointer;transition:.13s;text-align:left;color:var(--ink);font-size:15px;width:100%;font-family:inherit;line-height:1.45}
+.opt:hover{border-color:var(--line2);background:var(--panelup)}
+.opt .lk{flex:none;width:26px;height:26px;border-radius:8px;border:1px solid var(--line2);display:grid;place-items:center;font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--muted);font-weight:600}
+.opt.sel{border-color:var(--teal);background:rgba(94,234,212,.09)}
+.opt.sel .lk{background:var(--teal);color:#06251f;border-color:var(--teal)}
+.opt.correct{border-color:var(--green);background:rgba(52,211,153,.12)}
+.opt.correct .lk{background:var(--green);color:#05221a;border-color:var(--green)}
+.opt.wrong{border-color:var(--red);background:rgba(251,113,133,.12)}
+.opt.wrong .lk{background:var(--red);color:#2a0a12;border-color:var(--red)}
+.opt[disabled]{cursor:default}
+
+/* free response */
+.frq textarea{width:100%;min-height:150px;background:var(--panel2);border:1px solid var(--line);border-radius:13px;color:var(--ink);font-family:'Spline Sans Mono',monospace;font-size:14px;padding:14px;resize:vertical;line-height:1.6}
+.frq textarea:focus{outline:none;border-color:var(--teal-dim)}
+.uploadrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.upload-label{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);background:var(--panel2);border:1px dashed var(--line2);padding:10px 14px;border-radius:11px;cursor:pointer;transition:.15s}
+.upload-label:hover{border-color:var(--teal-dim);color:var(--teal)}
+.upload-label input{display:none}
+.thumb{position:relative;display:inline-block}
+.thumb img{max-height:84px;border-radius:9px;border:1px solid var(--line2);display:block}
+.thumb .x{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;border:none;cursor:pointer;font-size:13px;line-height:1}
+
+.feedback{margin-top:16px;border-radius:14px;border:1px solid var(--line);overflow:hidden;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fb-head{display:flex;align-items:center;gap:12px;padding:13px 16px;font-weight:600}
+.fb-head.correct{background:rgba(52,211,153,.14);color:var(--green)}
+.fb-head.partial{background:rgba(251,191,36,.14);color:var(--amber)}
+.fb-head.incorrect{background:rgba(251,113,133,.14);color:var(--red)}
+.fb-score{margin-left:auto;font-family:'Spline Sans Mono',monospace;font-size:14px}
+.fb-body{padding:6px 16px 16px;background:var(--panel2)}
+.fb-body h5{margin:14px 0 7px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-family:'Spline Sans Mono',monospace;color:var(--faint)}
+.fb-body ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.fb-body li{font-size:14.5px}
+.fb-body li .corr{color:var(--green)}
+.fb-body .err{font-size:14.5px;padding:9px 12px;border-radius:10px;background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.25);margin-bottom:7px}
+.fb-body .err .mk{color:var(--red);font-weight:600}
+.fb-body .err .fx{display:block;margin-top:4px;color:var(--green)}
+.fb-summary{font-size:14.5px;color:var(--muted);margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.modelbox{margin-top:14px;border:1px solid var(--line);border-radius:13px;background:var(--panel2);overflow:hidden}
+.modelbox summary{cursor:pointer;padding:13px 16px;font-weight:600;color:var(--teal);font-size:14.5px;list-style:none}
+.modelbox summary::-webkit-details-marker{display:none}
+.modelbox summary:before{content:"▸ ";color:var(--faint)}
+.modelbox[open] summary:before{content:"▾ "}
+.modelbox .mc{padding:0 16px 16px;white-space:pre-wrap;font-family:'Spline Sans Mono',monospace;font-size:13.5px;color:var(--ink);line-height:1.7}
+
+.explain{margin-top:16px;background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);border-radius:13px;padding:14px 16px;font-size:14.5px;color:#cfe0f5}
+.explain b{color:var(--blue)}
+
+.navbtns{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
+
+/* palette */
+.palette{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.pdot{width:34px;height:34px;border-radius:9px;border:1px solid var(--line2);background:var(--panel2);color:var(--muted);font-family:'Spline Sans Mono',monospace;font-size:12px;cursor:pointer;transition:.12s}
+.pdot:hover{border-color:var(--teal-dim)}
+.pdot.done{border-color:var(--teal);color:var(--teal)}
+.pdot.cur{background:var(--teal);color:#06251f;border-color:var(--teal);font-weight:700}
+
+/* results */
+.score-hero{text-align:center;padding:34px 20px}
+.score-ring{font-family:'Fraunces',serif;font-size:62px;font-weight:600;line-height:1}
+.score-ring .pct{color:var(--teal)}
+.score-sub{color:var(--muted);margin-top:8px}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+@media(max-width:560px){.statgrid{grid-template-columns:1fr}}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:16px;text-align:center}
+.stat .v{font-family:'Fraunces',serif;font-size:30px;font-weight:600}
+.stat .l{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);font-family:'Spline Sans Mono',monospace;margin-top:4px}
+.stat.ok .v{color:var(--green)} .stat.bad .v{color:var(--red)} .stat.frq .v{color:var(--amber)}
+
+.section-h{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:30px 0 6px}
+.section-h .mono{font-size:14px;color:var(--faint)}
+.review-q{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:16px 17px;margin-top:13px}
+.review-q .yours{color:var(--red)} .review-q .right{color:var(--green)}
+.review-q .lab{font-family:'Spline Sans Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin-right:6px}
+
+.empty-good{text-align:center;color:var(--green);padding:24px;font-size:15px}
+.hide{display:none!important}
+.center{text-align:center}
+.fineprint{font-size:12px;color:var(--faint);text-align:center;margin-top:40px;font-family:'Spline Sans Mono',monospace}
+
+/* ===== supplementary UI styles ===== */
+.accent{color:var(--teal)}
+.lede{font-size:17px;line-height:1.65;color:var(--muted);max-width:60ch;margin:18px 0 0}
+.statline{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:22px;font-size:14px;color:var(--muted);font-family:'Spline Sans Mono',monospace}
+.statline b{color:var(--ink)}
+.dot{color:var(--faint)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;margin-top:26px;box-shadow:var(--shadow)}
+.panel-h{font-family:'Fraunces',serif;font-size:20px;color:var(--ink);margin-bottom:16px}
+.modes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.modecard{text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;color:var(--ink);transition:.15s;display:flex;flex-direction:column;gap:8px}
+.modecard:hover{border-color:var(--teal-dim);transform:translateY(-1px)}
+.modecard.sel{border-color:var(--teal);background:rgba(94,234,212,.07);box-shadow:0 0 0 1px var(--teal) inset}
+.modetop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.modelabel{font-weight:600;font-size:15px}
+.modecount{font-family:'Spline Sans Mono',monospace;font-size:12px;color:var(--teal);background:rgba(94,234,212,.1);padding:2px 8px;border-radius:20px;white-space:nowrap}
+.modesub{font-size:13px;color:var(--muted);line-height:1.45}
+.btn-primary.big{width:100%;padding:15px;font-size:16px}
+.hint{font-size:13px;color:var(--faint);line-height:1.55;margin-top:16px}
+.hint em{color:var(--muted)}
+/* topbar / progress */
+.progress-wrap{flex:1;min-width:0}
+.progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'Spline Sans Mono',monospace;gap:10px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));border-radius:20px;transition:width .3s}
+.link-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:6px 4px;white-space:nowrap}
+.link-btn:hover{color:var(--teal)}
+/* question card */
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow)}
+.qnum{font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--teal);letter-spacing:.05em;margin-bottom:14px}
+.qnum .of{color:var(--faint)}
+.oletter{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.06);font-family:'Spline Sans Mono',monospace;font-size:13px;flex:0 0 auto;margin-top:1px}
+.opt.osel .oletter{background:var(--teal);color:#06231d}
+.otext{flex:1}
+/* frq */
+.frq-input{width:100%;min-height:140px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--ink);font-family:'Spline Sans Mono',monospace;font-size:14px;line-height:1.55;resize:vertical;box-sizing:border-box}
+.frq-input:focus{outline:none;border-color:var(--teal-dim)}
+.frq-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:14px}
+.upload-btn{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:14px;color:var(--ink)}
+.upload-btn:hover{border-color:var(--teal-dim)}
+.grade-btn{margin-left:auto}
+.thumb-wrap{position:relative;display:inline-block}
+.thumb{width:48px;height:48px;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block}
+.thumb.big{width:auto;max-width:min(420px,100%);height:auto;max-height:360px}
+.thumb-x{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;border:none;background:var(--red);color:#3a0d16;font-size:12px;cursor:pointer;line-height:1}
+/* feedback */
+.fb{margin-top:18px;border-radius:14px;padding:18px;border:1px solid var(--line)}
+.fb-warn{background:rgba(251,191,36,.07);border-color:rgba(251,191,36,.35)}
+.fb-warn.small{padding:12px;font-size:14px}
+.fb-graded{background:var(--panel2)}
+.fb-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.verdict{font-family:'Spline Sans Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:5px 12px;border-radius:20px}
+.verdict.v-good{background:rgba(52,211,153,.14);color:var(--green)}
+.verdict.v-mid{background:rgba(251,191,36,.14);color:var(--amber)}
+.verdict.v-bad{background:rgba(251,113,133,.14);color:var(--red)}
+.scorepill{font-family:'Spline Sans Mono',monospace;font-size:14px;font-weight:600;color:var(--ink);margin-left:auto;background:rgba(255,255,255,.05);padding:5px 12px;border-radius:20px}
+.fb-sum{font-size:14px;color:var(--muted);line-height:1.55;margin:0 0 14px}
+.fb-block{margin-top:12px}
+.fb-label{font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+.fb-label.good{color:var(--green)}
+.fb-label.bad{color:var(--red)}
+.fb-list{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.fb-list li{font-size:14px;line-height:1.5;padding-left:16px;position:relative}
+.fb-list.good li::before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--green)}
+.fb-list.bad li{display:flex;flex-direction:column;gap:3px;padding-left:0}
+.err-m{color:var(--ink)}
+.err-c{color:var(--green);font-size:13px}
+.good{color:var(--green)}
+.modeldetails{margin-top:14px;font-size:14px}
+.modeldetails summary{cursor:pointer;color:var(--teal);font-family:'Spline Sans Mono',monospace;font-size:13px;padding:6px 0}
+/* nav row */
+.navrow{display:flex;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap}
+.navrow .palette{flex:1;justify-content:center}
+/* results */
+.results-hero{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow)}
+.score-row{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:18px}
+.score-inner{position:absolute;inset:12px;border-radius:50%;background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-pct{font-family:'Fraunces',serif;font-size:30px;color:var(--ink);line-height:1}
+.score-stats{display:flex;gap:14px;flex-wrap:wrap}
+.score-stats .stat{display:flex;flex-direction:column;min-width:64px}
+.score-stats .stat b{font-family:'Fraunces',serif;font-size:26px}
+.score-stats .stat span{font-size:12px;color:var(--muted);font-family:'Spline Sans Mono',monospace}
+.stat.good b{color:var(--green)} .stat.bad b{color:var(--red)}
+.stat.blank b{color:var(--faint)} .stat.frq b{color:var(--teal)}
+.results-actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.review-section{margin-top:30px}
+.rev-h{font-family:'Fraunces',serif;font-size:24px;color:var(--ink);margin:0 0 6px}
+.rev-intro{color:var(--muted);font-size:14px;margin:0 0 18px}
+.allgood{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.35);border-radius:14px;padding:20px;color:var(--green);font-size:15px}
+.rev-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px}
+.rev-tag{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.rev-q{font-size:16px;line-height:1.55;color:var(--ink);margin-bottom:14px}
+.diagram.small{max-width:440px;margin:0 0 14px}
+.rev-ans{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.ra{display:flex;gap:12px;align-items:baseline;font-size:14px;padding:10px 12px;border-radius:10px}
+.ra-l{font-family:'Spline Sans Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;flex:0 0 90px;color:var(--muted)}
+.ra-wrong{background:rgba(251,113,133,.08)} .ra-wrong span:last-child{color:var(--red)}
+.ra-right{background:rgba(52,211,153,.08)} .ra-right span:last-child{color:var(--green)}
+.rev-explain{font-size:14px;line-height:1.6;color:var(--muted);background:var(--panel2);border-radius:10px;padding:14px;border-left:3px solid var(--teal-dim)}
+.rx-l{display:block;font-family:'Spline Sans Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--teal);margin-bottom:6px}
+.your-work{margin:14px 0}
+.yw-body{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:'Spline Sans Mono',monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;color:var(--ink)}
+/* overrides for reused base classes */
+.pdot.pdone{border-color:var(--teal-dim);color:var(--teal);background:rgba(94,234,212,.08)}
+.pdot.pcur{border-color:var(--teal);background:var(--teal);color:#06231d;font-weight:600}
+.frq-rev{border-left:3px solid var(--teal-dim)}
+.progress{height:8px;width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.opt.osel{border-color:var(--teal);background:rgba(94,234,212,.09)}
+.score-ring{width:150px;height:150px;border-radius:50%;position:relative;flex:0 0 auto;font-size:0;font-weight:400;padding:0}
+@media(max-width:640px){.modes{grid-template-columns:1fr}.score-row{gap:18px}.ra{flex-direction:column;gap:4px}.ra-l{flex-basis:auto}.score-ring{width:124px;height:124px}.score-pct{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+/* =========================================================================
+   NETWORK DIAGRAMS (inline SVG — crisp at any zoom, dark-theme friendly)
+   ========================================================================= */
+const SVG = {};
+
+SVG.dijkstra = `
+<svg viewBox="0 0 600 400" role="img" aria-label="Weighted graph for Dijkstra">
+ <defs><style>
+  .ed{stroke:#7f97b0;stroke-width:2.2}
+  .nd{fill:#13243a;stroke:#5eead4;stroke-width:2.4}
+  .src{fill:#0b3a33;stroke:#5eead4;stroke-width:3}
+  .nl{fill:#e7eef7;font:600 18px 'Spline Sans Mono',monospace;text-anchor:middle;dominant-baseline:central}
+  .wt{fill:#fbbf24;font:600 16px 'Spline Sans Mono',monospace;text-anchor:middle}
+  .wb{fill:#0b131f}
+ </style></defs>
+ <line class="ed" x1="70" y1="200" x2="210" y2="80"/>
+ <line class="ed" x1="70" y1="200" x2="210" y2="320"/>
+ <line class="ed" x1="210" y1="80" x2="210" y2="320"/>
+ <line class="ed" x1="210" y1="80" x2="370" y2="140"/>
+ <line class="ed" x1="210" y1="320" x2="370" y2="300"/>
+ <line class="ed" x1="370" y1="140" x2="370" y2="300"/>
+ <line class="ed" x1="370" y1="140" x2="530" y2="200"/>
+ <line class="ed" x1="370" y1="300" x2="530" y2="200"/>
+ <g><rect class="wb" x="128" y="128" width="20" height="20"/><text class="wt" x="138" y="142">2</text></g>
+ <g><rect class="wb" x="128" y="252" width="20" height="20"/><text class="wt" x="138" y="266">1</text></g>
+ <g><rect class="wb" x="200" y="190" width="20" height="20"/><text class="wt" x="210" y="204">2</text></g>
+ <g><rect class="wb" x="280" y="98"  width="20" height="20"/><text class="wt" x="290" y="112">3</text></g>
+ <g><rect class="wb" x="280" y="300" width="20" height="20"/><text class="wt" x="290" y="314">1</text></g>
+ <g><rect class="wb" x="360" y="210" width="20" height="20"/><text class="wt" x="370" y="224">1</text></g>
+ <g><rect class="wb" x="442" y="158" width="20" height="20"/><text class="wt" x="452" y="172">5</text></g>
+ <g><rect class="wb" x="442" y="246" width="20" height="20"/><text class="wt" x="452" y="260">2</text></g>
+ <circle class="src" cx="70"  cy="200" r="24"/><text class="nl" x="70"  y="200">A</text>
+ <circle class="nd"  cx="210" cy="80"  r="22"/><text class="nl" x="210" y="80">B</text>
+ <circle class="nd"  cx="210" cy="320" r="22"/><text class="nl" x="210" y="320">D</text>
+ <circle class="nd"  cx="370" cy="140" r="22"/><text class="nl" x="370" y="140">C</text>
+ <circle class="nd"  cx="370" cy="300" r="22"/><text class="nl" x="370" y="300">E</text>
+ <circle class="nd"  cx="530" cy="200" r="22"/><text class="nl" x="530" y="200">F</text>
+ <text x="70" y="248" fill="#5eead4" font-family="'Spline Sans Mono',monospace" font-size="12" text-anchor="middle">source</text>
+</svg>`;
+
+SVG.dv = `
+<svg viewBox="0 0 480 400" role="img" aria-label="Three node network for distance vector">
+ <defs><style>
+  .ed{stroke:#7f97b0;stroke-width:2.2}
+  .nd{fill:#13243a;stroke:#5eead4;stroke-width:2.6}
+  .nl{fill:#e7eef7;font:600 20px 'Spline Sans Mono',monospace;text-anchor:middle;dominant-baseline:central}
+  .wt{fill:#fbbf24;font:600 17px 'Spline Sans Mono',monospace;text-anchor:middle}
+  .wb{fill:#0b131f}
+ </style></defs>
+ <line class="ed" x1="110" y1="90" x2="110" y2="300"/>
+ <line class="ed" x1="110" y1="90" x2="370" y2="195"/>
+ <line class="ed" x1="110" y1="300" x2="370" y2="195"/>
+ <g><rect class="wb" x="98" y="185" width="22" height="20"/><text class="wt" x="109" y="199">2</text></g>
+ <g><rect class="wb" x="228" y="120" width="22" height="20"/><text class="wt" x="239" y="134">7</text></g>
+ <g><rect class="wb" x="228" y="252" width="22" height="20"/><text class="wt" x="239" y="266">3</text></g>
+ <circle class="nd" cx="110" cy="90"  r="26"/><text class="nl" x="110" y="90">x</text>
+ <circle class="nd" cx="110" cy="300" r="26"/><text class="nl" x="110" y="300">y</text>
+ <circle class="nd" cx="370" cy="195" r="26"/><text class="nl" x="370" y="195">z</text>
+</svg>`;
+
+SVG.sdn = `
+<svg viewBox="0 0 660 470" role="img" aria-label="SDN OpenFlow triangle network">
+ <defs><style>
+  .lk{stroke:#7f97b0;stroke-width:2.6}
+  .ctl{stroke:#5eead4;stroke-width:1.6;stroke-dasharray:5 5;opacity:.75}
+  .sw{fill:#0b3a33;stroke:#5eead4;stroke-width:2.4}
+  .hs{fill:#16273a;stroke:#60a5fa;stroke-width:2}
+  .sl{fill:#5eead4;font:700 17px 'Spline Sans Mono',monospace;text-anchor:middle;dominant-baseline:central}
+  .hl{fill:#cfe0f5;font:600 12.5px 'Spline Sans',sans-serif;text-anchor:middle}
+  .hi{fill:#8ba1b8;font:11px 'Spline Sans Mono',monospace;text-anchor:middle}
+  .pt{fill:#fbbf24;font:600 12px 'Spline Sans Mono',monospace;text-anchor:middle}
+  .cl{fill:#16273a;stroke:#5eead4;stroke-width:1.6}
+  .clt{fill:#8ba1b8;font:11px 'Spline Sans Mono',monospace;text-anchor:middle}
+ </style></defs>
+ <!-- triangle links -->
+ <line class="lk" x1="320" y1="300" x2="470" y2="150"/>
+ <line class="lk" x1="320" y1="300" x2="170" y2="150"/>
+ <line class="lk" x1="170" y1="150" x2="470" y2="150"/>
+ <!-- controller -->
+ <line class="ctl" x1="320" y1="78" x2="320" y2="296"/>
+ <line class="ctl" x1="320" y1="78" x2="170" y2="146"/>
+ <line class="ctl" x1="320" y1="78" x2="470" y2="146"/>
+ <rect class="cl" x="284" y="40" width="72" height="40" rx="6"/>
+ <text class="clt" x="320" y="62">controller</text>
+ <!-- host links -->
+ <line class="lk" x1="320" y1="300" x2="230" y2="402"/>
+ <line class="lk" x1="320" y1="300" x2="410" y2="402"/>
+ <line class="lk" x1="470" y1="150" x2="585" y2="92"/>
+ <line class="lk" x1="470" y1="150" x2="585" y2="210"/>
+ <line class="lk" x1="170" y1="150" x2="60" y2="92"/>
+ <line class="lk" x1="170" y1="150" x2="60" y2="210"/>
+ <!-- switches -->
+ <circle class="sw" cx="320" cy="300" r="26"/><text class="sl" x="320" y="300">s1</text>
+ <circle class="sw" cx="470" cy="150" r="26"/><text class="sl" x="470" y="150">s2</text>
+ <circle class="sw" cx="170" cy="150" r="26"/><text class="sl" x="170" y="150">s3</text>
+ <!-- s1 ports -->
+ <text class="pt" x="362" y="262">1</text>
+ <text class="pt" x="278" y="262">2</text>
+ <text class="pt" x="290" y="332">3</text>
+ <text class="pt" x="352" y="332">4</text>
+ <!-- s2 ports -->
+ <text class="pt" x="438" y="178">1</text>
+ <text class="pt" x="440" y="138">2</text>
+ <text class="pt" x="498" y="120">3</text>
+ <text class="pt" x="500" y="182">4</text>
+ <!-- s3 ports -->
+ <text class="pt" x="202" y="178">1</text>
+ <text class="pt" x="200" y="138">2</text>
+ <text class="pt" x="140" y="120">3</text>
+ <text class="pt" x="142" y="182">4</text>
+ <!-- hosts -->
+ <rect class="hs" x="196" y="404" width="68" height="34" rx="6"/><text class="hl" x="230" y="416">h1</text><text class="hi" x="230" y="430">10.1.0.1</text>
+ <rect class="hs" x="376" y="404" width="68" height="34" rx="6"/><text class="hl" x="410" y="416">h2</text><text class="hi" x="410" y="430">10.1.0.2</text>
+ <rect class="hs" x="551" y="74"  width="68" height="34" rx="6"/><text class="hl" x="585" y="86">h3</text><text class="hi" x="585" y="100">10.2.0.3</text>
+ <rect class="hs" x="551" y="192" width="68" height="34" rx="6"/><text class="hl" x="585" y="204">h4</text><text class="hi" x="585" y="218">10.2.0.4</text>
+ <rect class="hs" x="26"  y="74"  width="68" height="34" rx="6"/><text class="hl" x="60"  y="86">h5</text><text class="hi" x="60"  y="100">10.3.0.5</text>
+ <rect class="hs" x="26"  y="192" width="68" height="34" rx="6"/><text class="hl" x="60"  y="204">h6</text><text class="hi" x="60"  y="218">10.3.0.6</text>
+</svg>`;
+
+SVG.as = `
+<svg viewBox="0 0 620 380" role="img" aria-label="Inter-AS BGP topology">
+ <defs><style>
+  .cloud{fill:#101d2c;stroke:#2c4159;stroke-width:1.8}
+  .as{fill:#cfe0f5;font:700 15px 'Spline Sans',sans-serif;text-anchor:middle}
+  .rt{fill:#13243a;stroke:#60a5fa;stroke-width:2}
+  .rl{fill:#cfe0f5;font:600 12px 'Spline Sans Mono',monospace;text-anchor:middle;dominant-baseline:central}
+  .ebgp{stroke:#5eead4;stroke-width:2.6}
+  .ibgp{stroke:#fbbf24;stroke-width:1.6;stroke-dasharray:4 4}
+  .lab{fill:#8ba1b8;font:11px 'Spline Sans Mono',monospace;text-anchor:middle}
+  .xt{fill:#fb7185;font:700 16px 'Spline Sans Mono',monospace;text-anchor:middle;dominant-baseline:central}
+ </style></defs>
+ <ellipse class="cloud" cx="150" cy="190" rx="120" ry="105"/>
+ <ellipse class="cloud" cx="470" cy="100" rx="105" ry="75"/>
+ <ellipse class="cloud" cx="470" cy="285" rx="105" ry="75"/>
+ <text class="as" x="80" y="120">AS1</text>
+ <text class="as" x="470" y="48">AS2</text>
+ <text class="as" x="470" y="345">AS3</text>
+ <!-- iBGP inside AS1 (1a 1b 1c 1d) -->
+ <line class="ibgp" x1="110" y1="150" x2="110" y2="235"/>
+ <line class="ibgp" x1="110" y1="150" x2="235" y2="160"/>
+ <line class="ibgp" x1="110" y1="235" x2="235" y2="160"/>
+ <line class="ibgp" x1="110" y1="150" x2="110" y2="235"/>
+ <line class="ibgp" x1="235" y1="160" x2="160" y2="245"/>
+ <line class="ibgp" x1="110" y1="235" x2="160" y2="245"/>
+ <!-- eBGP links -->
+ <line class="ebgp" x1="235" y1="160" x2="372" y2="118"/>
+ <line class="ebgp" x1="235" y1="160" x2="372" y2="265"/>
+ <circle class="rt" cx="110" cy="150" r="17"/><text class="rl" x="110" y="150">1a</text>
+ <circle class="rt" cx="110" cy="235" r="17"/><text class="rl" x="110" y="235">1b</text>
+ <circle class="rt" cx="235" cy="160" r="17"/><text class="rl" x="235" y="160">1c</text>
+ <circle class="rt" cx="160" cy="245" r="17"/><text class="rl" x="160" y="245">1d</text>
+ <circle class="rt" cx="388" cy="110" r="17"/><text class="rl" x="388" y="110">2a</text>
+ <circle class="rt" cx="388" cy="275" r="17"/><text class="rl" x="388" y="275">3a</text>
+ <text class="xt" x="540" y="285">X</text>
+ <text class="lab" x="300" y="120">eBGP</text>
+ <text class="lab" x="300" y="232">eBGP</text>
+ <text class="lab" x="150" y="200" fill="#fbbf24">iBGP</text>
+</svg>`;
+
+SVG.switchlearn = `
+<svg viewBox="0 0 560 300" role="img" aria-label="Ethernet switch with four hosts">
+ <defs><style>
+  .lk{stroke:#7f97b0;stroke-width:2.4}
+  .sw{fill:#0b3a33;stroke:#5eead4;stroke-width:2.4}
+  .swt{fill:#5eead4;font:700 16px 'Spline Sans Mono',monospace;text-anchor:middle}
+  .hs{fill:#16273a;stroke:#60a5fa;stroke-width:2}
+  .hl{fill:#cfe0f5;font:700 16px 'Spline Sans Mono',monospace;text-anchor:middle;dominant-baseline:central}
+  .pt{fill:#fbbf24;font:600 13px 'Spline Sans Mono',monospace;text-anchor:middle}
+ </style></defs>
+ <line class="lk" x1="100" y1="70"  x2="225" y2="120"/>
+ <line class="lk" x1="100" y1="230" x2="225" y2="180"/>
+ <line class="lk" x1="460" y1="70"  x2="335" y2="120"/>
+ <line class="lk" x1="460" y1="230" x2="335" y2="180"/>
+ <rect class="sw" x="225" y="105" width="110" height="90" rx="10"/>
+ <text class="swt" x="280" y="142">Switch</text>
+ <text class="swt" x="280" y="166" font-size="11" fill="#8ba1b8">(table empty)</text>
+ <text class="pt" x="238" y="118">1</text>
+ <text class="pt" x="238" y="190">2</text>
+ <text class="pt" x="322" y="118">3</text>
+ <text class="pt" x="322" y="190">4</text>
+ <circle class="hs" cx="80" cy="70" r="26"/><text class="hl" x="80" y="70">A</text>
+ <circle class="hs" cx="80" cy="230" r="26"/><text class="hl" x="80" y="230">B</text>
+ <circle class="hs" cx="480" cy="70" r="26"/><text class="hl" x="480" y="70">C</text>
+ <circle class="hs" cx="480" cy="230" r="26"/><text class="hl" x="480" y="230">D</text>
+ <text class="pt" x="80" y="108" fill="#8ba1b8">port 1</text>
+ <text class="pt" x="80" y="268" fill="#8ba1b8">port 2</text>
+ <text class="pt" x="480" y="108" fill="#8ba1b8">port 3</text>
+ <text class="pt" x="480" y="268" fill="#8ba1b8">port 4</text>
+</svg>`;
+
+/* =========================================================================
+   QUESTION BANK — chapters 4-6, covers every slide concept.
+   mcq: {id,ch,type,q,svg?,options[],answer,explain}
+   frq: {id,ch,type,q,svg?,modelAnswer,gradingNotes}
+   ========================================================================= */
+const QUESTIONS = [
+/* ---------------------- CHAPTER 4: DATA PLANE ---------------------- */
+{id:'c4-1',ch:'ch4',type:'mcq',
+ q:'In the network layer, what is the difference between <em>forwarding</em> and <em>routing</em>?',
+ options:[
+  'Forwarding is a network-wide process; routing is a purely local action at one router',
+  'Forwarding is the local per-router action of moving a packet from an input link to the correct output link; routing is the network-wide process that determines the end-to-end paths',
+  'They are two names for the same operation',
+  'Forwarding happens in the control plane; routing happens in the data plane'],
+ answer:1,
+ explain:'Forwarding is a <strong>local</strong> data-plane action: when a packet arrives, the router moves it to the appropriate output port. Routing is a <strong>network-wide</strong> control-plane process that computes the paths packets take from source to destination.'},
+
+{id:'c4-2',ch:'ch4',type:'mcq',
+ q:'Which statement best describes the <em>data plane</em>?',
+ options:[
+  'The network-wide logic that determines how datagrams are routed end-to-end',
+  'The per-router local function that determines how a datagram arriving on an input port is forwarded to an output port',
+  'The protocol used by routers to exchange routing tables',
+  'The management interface used by network operators'],
+ answer:1,
+ explain:'The data plane is the <strong>local, per-router</strong> function executed for every datagram, deciding the output port. The control plane is the network-wide path-determination logic.'},
+
+{id:'c4-3',ch:'ch4',type:'mcq',
+ q:'In the <em>SDN (software-defined networking)</em> approach to the control plane, where does the routing logic reside?',
+ options:[
+  'In each individual router, which runs a routing algorithm and communicates with peers',
+  'In a remote (logically centralized) controller that computes and installs forwarding tables into the routers',
+  'In the end hosts, which tell routers how to forward',
+  'In the DNS servers'],
+ answer:1,
+ explain:'SDN separates control from data plane: a <strong>logically centralized remote controller</strong> computes forwarding tables and installs them in the (now simpler) switches. The traditional approach runs routing algorithms in each router.'},
+
+{id:'c4-4',ch:'ch4',type:'mcq',
+ q:'The Internet network layer provides which service model?',
+ options:['Guaranteed bandwidth and bounded delay','Best-effort service (no guarantees on delivery, order, timing, or bandwidth)','Reliable, in-order delivery','Constant bit rate'],
+ answer:1,
+ explain:'IP offers a <strong>best-effort</strong> service: no guarantee of delivery, no guarantee of in-order delivery, no guarantee on delay or bandwidth. Reliability, if needed, is added by TCP at the transport layer.'},
+
+{id:'c4-5',ch:'ch4',type:'mcq',
+ q:'A forwarding table contains these entries. To which interface is a datagram with destination <strong>200.23.17.5</strong> forwarded?<br><code>200.23.16.0/23 → 0<br>200.23.18.0/23 → 1<br>200.23.16.0/20 → 2<br>otherwise → 3</code>',
+ options:['Interface 0','Interface 1','Interface 2','Interface 3'],
+ answer:0,
+ explain:'Use <strong>longest-prefix matching</strong>. 200.23.17.5 → 200.23.16.0/23 matches (200.23.16.0–200.23.17.255) and so does the /20, but /23 is longer (more specific), so interface <strong>0</strong> wins.'},
+
+{id:'c4-6',ch:'ch4',type:'mcq',
+ q:'What hardware is commonly used to perform fast longest-prefix matching in line-rate routers?',
+ options:['DRAM','TCAM (ternary content-addressable memory)','A spinning hard disk','SRAM cache only'],
+ answer:1,
+ explain:'<strong>TCAM</strong> returns an address in one clock cycle regardless of table size, and its "ternary" (0/1/don\'t-care) nature is ideal for prefix matching — perfect for line-rate longest-prefix lookups.'},
+
+{id:'c4-7',ch:'ch4',type:'mcq',
+ q:'Which of the following is <em>NOT</em> one of the three classic switching-fabric types in a router?',
+ options:['Switching via memory','Switching via a bus','Switching via an interconnection network (crossbar)','Switching via DNS'],
+ answer:3,
+ explain:'The three switching-fabric types are via <strong>memory</strong>, via a <strong>bus</strong>, and via an <strong>interconnection network</strong> (e.g., crossbar). DNS is unrelated.'},
+
+{id:'c4-8',ch:'ch4',type:'mcq',
+ q:'Head-of-line (HOL) blocking occurs at which part of a router, and what causes it?',
+ options:[
+  'At output ports, caused by a full routing table',
+  'At input ports, when a queued datagram at the head of the queue blocks others behind it from being switched even though their output ports are free',
+  'At the control plane, caused by slow route computation',
+  'In the link layer, caused by collisions'],
+ answer:1,
+ explain:'<strong>HOL blocking</strong> happens at <strong>input ports</strong>: the datagram at the front of the input queue waits for a busy output port, blocking the datagrams behind it that could otherwise be forwarded.'},
+
+{id:'c4-9',ch:'ch4',type:'mcq',
+ q:'Packet loss at a router most commonly occurs because:',
+ options:[
+  'The TTL field reaches zero',
+  'Output-port buffers (queues) overflow when packets arrive faster than the link transmission rate',
+  'The checksum fails',
+  'The MAC address is unknown'],
+ answer:1,
+ explain:'When the arrival rate to an output port exceeds the link rate, the <strong>output buffer fills and overflows</strong>, and arriving packets are dropped. (TTL=0 causes discard too, but buffer overflow is the principal loss/congestion cause.)'},
+
+{id:'c4-10',ch:'ch4',type:'mcq',
+ q:'The classic "rule of thumb" for buffer sizing is RTT×C, but RFC 3439 argues that for a link with N TCP flows the buffer should be about:',
+ options:['RTT×C × N','RTT×C / √N','RTT×C × √N','Independent of N'],
+ answer:1,
+ explain:'For a large number N of independent TCP flows, the recommended buffer is <strong>(RTT×C)/√N</strong> — much smaller than the single-flow RTT×C rule.'},
+
+{id:'c4-11',ch:'ch4',type:'mcq',
+ q:'In Explicit Congestion Notification (ECN) / RED, what does a router do as queues begin to build?',
+ options:[
+  'Immediately drops all incoming packets',
+  'Marks packets (rather than dropping them) to signal congestion to the endpoints before the buffer is full',
+  'Sends the packets back to the source',
+  'Increases the link speed'],
+ answer:1,
+ explain:'With ECN/RED, the router <strong>marks</strong> packets to signal incipient congestion, letting endpoints slow down <em>before</em> the buffer overflows and forces drops.'},
+
+{id:'c4-12',ch:'ch4',type:'mcq',
+ q:'Under <em>Weighted Fair Queueing (WFQ)</em>, the bandwidth class i receives is proportional to:',
+ options:[
+  'Its arrival order (first come first served)',
+  'Its weight divided by the sum of weights of all active classes: w<sub>i</sub> / Σw<sub>j</sub>',
+  'The inverse of its packet size',
+  'Always an equal 1/N share regardless of weight'],
+ answer:1,
+ explain:'WFQ generalizes round robin: each class i gets a guaranteed share <strong>w<sub>i</sub>/Σw<sub>j</sub></strong> of the link, providing a minimum bandwidth guarantee per class.'},
+
+{id:'c4-13',ch:'ch4',type:'mcq',
+ q:'The principle of <em>net neutrality</em> is most commonly summarized by which set of rules for ISPs?',
+ options:[
+  'No caching, no compression, no encryption',
+  'No blocking, no throttling, no paid prioritization',
+  'No IPv6, no NAT, no DHCP',
+  'No routing, no forwarding, no queueing'],
+ answer:1,
+ explain:'Net-neutrality rules generally require ISPs to apply <strong>no blocking, no throttling, and no paid prioritization</strong> of lawful traffic.'},
+
+{id:'c4-14',ch:'ch4',type:'mcq',
+ q:'What is the purpose of the <strong>TTL (time-to-live)</strong> field in the IPv4 header?',
+ options:[
+  'To store the packet\'s priority',
+  'To bound the number of hops a datagram may take; it is decremented at each router and the packet is discarded when it reaches 0',
+  'To carry the checksum',
+  'To indicate the upper-layer protocol'],
+ answer:1,
+ explain:'TTL is decremented by each router; when it hits <strong>0</strong> the datagram is dropped (and an ICMP error is returned). This prevents packets from circulating forever in routing loops.'},
+
+{id:'c4-15',ch:'ch4',type:'mcq',
+ q:'Which IPv4 header field identifies the upper-layer protocol (e.g., TCP vs UDP) that should receive the payload?',
+ options:['The "protocol" field','The TTL field','The "flags" field','The header-checksum field'],
+ answer:0,
+ explain:'The <strong>protocol</strong> field tells the destination network layer which transport protocol to hand the payload to (e.g., 6 = TCP, 17 = UDP). It is the network-layer analogue of the transport-layer port number.'},
+
+{id:'c4-16',ch:'ch4',type:'mcq',
+ q:'IPv4 fragmentation is needed when:',
+ options:[
+  'The datagram is smaller than the MTU',
+  'A datagram is larger than the maximum transmission unit (MTU) of an outgoing link and must be split into smaller fragments',
+  'The TTL expires',
+  'The checksum fails'],
+ answer:1,
+ explain:'If a datagram exceeds a link\'s <strong>MTU</strong>, the router fragments it into pieces small enough to fit; the pieces are reassembled later.'},
+
+{id:'c4-17',ch:'ch4',type:'mcq',
+ q:'In IPv4, the fragment-offset field is measured in units of:',
+ options:['1 byte','8 bytes','4 bytes','512 bytes'],
+ answer:1,
+ explain:'The offset is expressed in <strong>8-byte (64-bit) units</strong>, which is why all fragments except the last must have a length that is a multiple of 8 bytes.'},
+
+{id:'c4-18',ch:'ch4',type:'mcq',
+ q:'Where are IPv4 fragments reassembled?',
+ options:['At the next router','At every router along the path','Only at the final destination host','At the source host'],
+ answer:2,
+ explain:'Reassembly happens <strong>only at the destination</strong> host, not at intermediate routers — this keeps routers simpler and avoids re-fragmentation issues.'},
+
+{id:'c4-19',ch:'ch4',type:'mcq',
+ q:'A subnet is best defined as:',
+ options:[
+  'A single host',
+  'A group of device interfaces that can physically reach each other without passing through an intervening router',
+  'Any set of routers in an AS',
+  'The set of all hosts sharing a DNS server'],
+ answer:1,
+ explain:'A <strong>subnet</strong> is a set of interfaces that share a common network prefix and can reach each other without going through a router.'},
+
+{id:'c4-20',ch:'ch4',type:'mcq',
+ q:'In CIDR notation a.b.c.d/x, the value x specifies:',
+ options:[
+  'The number of hosts',
+  'The number of high-order bits that constitute the network (subnet) portion of the address',
+  'The TTL',
+  'The number of subnets in the AS'],
+ answer:1,
+ explain:'In <strong>CIDR</strong>, /x means the first <strong>x bits</strong> are the network/subnet prefix; the remaining 32−x bits identify hosts within that subnet.'},
+
+{id:'c4-21',ch:'ch4',type:'mcq',
+ q:'What is the primary purpose of DHCP?',
+ options:[
+  'To resolve domain names to IP addresses',
+  'To allow a host to dynamically obtain an IP address (and other config) from a server when it joins a network',
+  'To route packets between autonomous systems',
+  'To detect bit errors in frames'],
+ answer:1,
+ explain:'<strong>DHCP</strong> (Dynamic Host Configuration Protocol) lets a host automatically lease an IP address, plus subnet mask, default gateway, and DNS server, when it joins a network.'},
+
+{id:'c4-22',ch:'ch4',type:'mcq',
+ q:'What is the correct order of the four DHCP messages?',
+ options:[
+  'Request, Discover, ACK, Offer',
+  'Discover, Offer, Request, ACK',
+  'Offer, Discover, ACK, Request',
+  'Discover, Request, Offer, ACK'],
+ answer:1,
+ explain:'The DHCP exchange is <strong>Discover → Offer → Request → ACK</strong> (often remembered as DORA).'},
+
+{id:'c4-23',ch:'ch4',type:'mcq',
+ q:'Besides an IP address, DHCP can also return which of the following to a client?',
+ options:[
+  'Only the IP address, nothing else',
+  'The address of the first-hop (default gateway) router, the subnet mask, and the address of a DNS server',
+  'The MAC address of every host on the subnet',
+  'The full BGP routing table'],
+ answer:1,
+ explain:'A DHCP ACK can also supply the <strong>default-gateway router address, subnet mask, and DNS server address</strong> — everything a host needs to start communicating.'},
+
+{id:'c4-24',ch:'ch4',type:'mcq',
+ q:'Which address range is a private (RFC 1918) range used behind NAT?',
+ options:['8.0.0.0/8','192.168.0.0/16','200.23.16.0/20','172.0.0.0/8'],
+ answer:1,
+ explain:'<strong>192.168.0.0/16</strong> (along with 10.0.0.0/8 and 172.16.0.0/12) is a private range, not routable on the public Internet, typically used behind a NAT.'},
+
+{id:'c4-25',ch:'ch4',type:'mcq',
+ q:'When a packet leaves a home network through a NAT router, the NAT rewrites:',
+ options:[
+  'Only the destination IP address',
+  'The source IP address and source port number (to the NAT\'s public IP and a new port), recording the mapping in its table',
+  'Only the TTL',
+  'The destination port only'],
+ answer:1,
+ explain:'NAT replaces the <strong>(private source IP, source port)</strong> with <strong>(public NAT IP, new port)</strong> and stores the translation so replies can be mapped back.'},
+
+{id:'c4-26',ch:'ch4',type:'mcq',
+ q:'A commonly cited objection to NAT is that it:',
+ options:[
+  'Makes IP addresses too plentiful',
+  'Violates the end-to-end principle and complicates peer-to-peer / server-reachability because internal hosts are not directly addressable',
+  'Requires IPv6 to function',
+  'Increases the IPv4 address space'],
+ answer:1,
+ explain:'NAT <strong>breaks the end-to-end principle</strong>: external hosts can\'t directly initiate connections to internal hosts, which complicates P2P apps and hosting servers (hence NAT-traversal techniques).'},
+
+{id:'c4-27',ch:'ch4',type:'mcq',
+ q:'How many bits is an IPv6 address?',
+ options:['32','64','128','256'],
+ answer:2,
+ explain:'IPv6 uses <strong>128-bit</strong> addresses, vastly expanding the address space compared to IPv4\'s 32 bits.'},
+
+{id:'c4-28',ch:'ch4',type:'mcq',
+ q:'Which of the following did IPv6 <em>remove</em> from the IPv4 header to streamline processing?',
+ options:[
+  'The source and destination addresses',
+  'The header checksum, fragmentation fields, and options (fixed 40-byte header instead)',
+  'The version field',
+  'The payload'],
+ answer:1,
+ explain:'IPv6 drops the <strong>header checksum, in-network fragmentation, and the options field</strong>, using a fixed 40-byte header for faster router processing.'},
+
+{id:'c4-29',ch:'ch4',type:'mcq',
+ q:'During the IPv4-to-IPv6 transition, <em>tunneling</em> means:',
+ options:[
+  'Translating every IPv6 address to an IPv4 address',
+  'Carrying an IPv6 datagram as the payload of an IPv4 datagram across IPv4-only portions of the network',
+  'Dropping all IPv6 packets',
+  'Encrypting all traffic'],
+ answer:1,
+ explain:'<strong>Tunneling</strong> encapsulates an IPv6 datagram inside an IPv4 datagram so it can traverse routers that only understand IPv4; the IPv6 packet emerges intact at the tunnel\'s end.'},
+
+{id:'c4-30',ch:'ch4',type:'mcq',
+ q:'Generalized forwarding (as in OpenFlow) is based on which abstraction?',
+ options:[
+  'Destination-IP-only lookup',
+  'A flow table of <em>match-plus-action</em> rules that can match many header fields (link, network, transport) and take various actions',
+  'MAC-address learning only',
+  'Random early detection'],
+ answer:1,
+ explain:'Generalized "match+action" forwarding lets a switch match on <strong>many header fields across layers</strong> and perform actions (forward, drop, rewrite, send to controller), unifying routing, switching, firewalling, and NAT.'},
+
+{id:'c4-31',ch:'ch4',type:'mcq',
+ q:'Which of the following is <em>NOT</em> a typical OpenFlow action?',
+ options:['Forward the packet to a specified port','Drop the packet','Rewrite/modify a header field','Encrypt the packet with TLS'],
+ answer:3,
+ explain:'OpenFlow actions include <strong>forward, drop, modify-field, and send-to-controller</strong>. TLS encryption is not an OpenFlow flow-table action.'},
+
+{id:'c4-32',ch:'ch4',type:'mcq',
+ q:'To make a switch act as a firewall that blocks all SSH traffic, an OpenFlow rule would:',
+ options:[
+  'Match TCP destination port 22 and apply a <em>drop</em> action',
+  'Match UDP port 53 and forward to the controller',
+  'Match IP TTL = 0 and rewrite it',
+  'Match the MAC broadcast address and flood'],
+ answer:0,
+ explain:'A firewall rule matches the relevant header fields — here <strong>TCP dst port 22 (SSH)</strong> — with a <strong>drop</strong> action, discarding those packets.'},
+
+{id:'c4-33',ch:'ch4',type:'mcq',
+ q:'"Middleboxes" (RFC 3234) are best described as:',
+ options:[
+  'End hosts running applications',
+  'Intermediary devices performing functions other than standard IP forwarding (e.g., NAT, firewalls, load balancers, caches)',
+  'Only the core backbone routers',
+  'DNS resolvers exclusively'],
+ answer:1,
+ explain:'<strong>Middleboxes</strong> are in-path devices (NATs, firewalls, load balancers, caches, etc.) that do more than basic IP forwarding — and which complicate the original end-to-end Internet model.'},
+
+{id:'c4-34',ch:'ch4',type:'mcq',
+ q:'The "thin waist" / hourglass model of the Internet refers to the fact that:',
+ options:[
+  'There are very few physical links',
+  'There is exactly one network-layer protocol (IP) connecting many transport protocols above and many link technologies below',
+  'The application layer is the narrowest',
+  'There is only one application protocol'],
+ answer:1,
+ explain:'In the hourglass, <strong>IP is the single narrow waist</strong>: many upper-layer protocols and many lower-layer technologies all converge on one common network-layer protocol.'},
+
+{id:'c4-35',ch:'ch4',type:'mcq',
+ q:'The switching rate of a router is ideally expressed as a multiple of the line rate. If a router has N ports each at rate R, the desirable switching fabric rate is:',
+ options:['R','N×R','R/N','√N × R'],
+ answer:1,
+ explain:'To avoid the fabric being a bottleneck, the desired switching rate is <strong>N×R</strong> — fast enough to move packets from all input ports to output ports at line rate simultaneously.'},
+
+/* ---------------------- CHAPTER 4: SDN IMAGE QUESTION ---------------------- */
+{id:'c4-sdn',ch:'ch4',type:'mcq',
+ q:'Examine the SDN/OpenFlow network below. Host <strong>h1</strong> (attached to s1 port 3) sends a datagram destined for <strong>h3 at 10.2.0.3</strong>. The flow tables direct traffic by destination subnet. Which match/action entry at <strong>s1</strong> correctly handles this datagram?',
+ svg:'sdn',
+ options:[
+  'match: IP-Dst = 10.2.*.*  →  action: forward to port 1 (toward s2)',
+  'match: IP-Dst = 10.2.*.*  →  action: forward to port 3 (toward h1)',
+  'match: IP-Dst = 10.1.*.*  →  action: drop',
+  'match: IP-Dst = 10.3.*.*  →  action: forward to port 2 (toward s3)'],
+ answer:0,
+ explain:'h3 lives in subnet <strong>10.2.0.0/16</strong>, reachable from s1 via s2. So s1\'s rule matches <strong>IP-Dst = 10.2.*.*</strong> and forwards out <strong>port 1 toward s2</strong>, which then delivers to h3. Forwarding back to h1 (port 3) or to s3 (port 2) would not reach the 10.2 subnet.'},
+
+/* ---------------------- CHAPTER 4: FREE-RESPONSE ---------------------- */
+{id:'c4-frq-nat',ch:'ch4',type:'frq',
+ q:'<strong>NAT translation.</strong> A home host <strong>10.0.0.2</strong> using source port <strong>3000</strong> opens a connection to web server <strong>64.12.5.7 : 80</strong>. The home NAT router has public address <strong>138.76.29.7</strong>. (a) Give the source and destination (IP : port) of the datagram <em>after</em> it leaves the NAT toward the server. (b) Describe the NAT table entry created. (c) Give the source/destination of the server\'s reply as it arrives at the NAT, and what the NAT rewrites it to before delivering to the host.',
+ modelAnswer:'(a) After NAT, leaving toward server: <strong>src = 138.76.29.7 : 5001</strong> (NAT\'s public IP and a newly chosen port, e.g. 5001), <strong>dst = 64.12.5.7 : 80</strong> (unchanged). (b) NAT table entry maps <strong>(WAN side) 138.76.29.7 : 5001 ↔ (LAN side) 10.0.0.2 : 3000</strong>. (c) The reply arrives with <strong>src = 64.12.5.7 : 80, dst = 138.76.29.7 : 5001</strong>. The NAT looks up port 5001 in its table and rewrites the destination to <strong>10.0.0.2 : 3000</strong>, then forwards it on the LAN.',
+ gradingNotes:'Key points: (1) outgoing source IP becomes the NAT public IP 138.76.29.7 and source port is replaced with a NAT-chosen port; destination 64.12.5.7:80 is UNCHANGED. (2) The NAT table maps the (public IP, new port) to the (private IP 10.0.0.2, original port 3000). (3) The reply\'s destination is the NAT public IP + chosen port, which NAT reverse-translates back to 10.0.0.2:3000. The exact chosen port number (5001) is arbitrary — accept any port the student picks as long as it is used consistently. Destination IP/port must remain the server\'s throughout.'},
+
+{id:'c4-frq-subnet',ch:'ch4',type:'frq',
+ q:'<strong>Subnet addressing / CIDR.</strong> An ISP is allocated the address block <strong>200.23.16.0/20</strong>. It must divide this block into <strong>4 equal-size subnets</strong>, one per customer organization. (a) What prefix length (/x) does each subnet need? (b) List the four subnet addresses in CIDR notation. (c) How many addresses does each subnet contain?',
+ modelAnswer:'(a) A /20 block has 2<sup>(32−20)</sup> = 4096 addresses. Splitting into 4 equal parts means each part needs 4096/4 = 1024 addresses = 2<sup>10</sup>, so each subnet is a <strong>/22</strong> (since 32−10 = 22). Equivalently, dividing into 4 = 2² parts adds 2 bits to the prefix: 20 + 2 = 22. (b) The four /22 subnets:<br>• <strong>200.23.16.0/22</strong><br>• <strong>200.23.20.0/22</strong><br>• <strong>200.23.24.0/22</strong><br>• <strong>200.23.28.0/22</strong><br>(c) Each /22 contains <strong>1024 addresses</strong> (2<sup>10</sup>); 4 × 1024 = 4096 = the original /20. ✓',
+ gradingNotes:'Correct prefix is /22 (adding 2 bits to /20 to make 4 subnets). The four network addresses must increment by 4 in the third octet: 16, 20, 24, 28. Each subnet has 1024 addresses. Accept reasoning either via "4 = 2^2, so +2 bits" or via address counting. If the student writes /21 (only 2 subnets) or wrong block boundaries (e.g., increments of 2 or 8 in the third octet), mark that portion incorrect and show the correct increment of 4.'},
+
+/* ---------------------- CHAPTER 5: CONTROL PLANE ---------------------- */
+{id:'c5-1',ch:'ch5',type:'mcq',
+ q:'The overall goal of a routing algorithm is to:',
+ options:[
+  'Detect bit errors in frames',
+  'Determine "good" (e.g., least-cost) paths from senders to receivers through the network of routers',
+  'Assign IP addresses to hosts',
+  'Translate domain names to IP addresses'],
+ answer:1,
+ explain:'A routing algorithm computes <strong>good paths (typically least-cost)</strong> from source to destination across the graph of routers and links.'},
+
+{id:'c5-2',ch:'ch5',type:'mcq',
+ q:'A <em>link-state (LS)</em> routing algorithm requires each router to know:',
+ options:[
+  'Only the cost to its directly attached neighbors',
+  'The complete topology and all link costs of the entire network',
+  'Only the destination IP',
+  'The MAC addresses of all hosts'],
+ answer:1,
+ explain:'In <strong>link-state</strong> routing every node first floods link-state info so all routers learn the <strong>full topology and all link costs</strong>; each then runs Dijkstra locally.'},
+
+{id:'c5-3',ch:'ch5',type:'mcq',
+ q:'Dijkstra\'s link-state algorithm has what computational complexity for n nodes (naïve implementation)?',
+ options:['O(1)','O(log n)','O(n²)','O(2ⁿ)'],
+ answer:2,
+ explain:'A straightforward implementation of Dijkstra requires checking all nodes each iteration, giving <strong>O(n²)</strong> complexity (improvable to O(n log n) with a heap).'},
+
+{id:'c5-4',ch:'ch5',type:'mcq',
+ q:'A known problem with link-state routing when link costs depend on load is:',
+ options:[
+  'Count-to-infinity',
+  'Route oscillations, as traffic shifts to least-cost links and back',
+  'ARP poisoning',
+  'Buffer bloat'],
+ answer:1,
+ explain:'If LS link costs reflect current load, all routers may simultaneously route onto the cheapest links, then away again — causing <strong>oscillations</strong>.'},
+
+{id:'c5-5',ch:'ch5',type:'mcq',
+ q:'The Bellman-Ford equation at the heart of distance-vector routing states that the least cost from x to y is:',
+ options:[
+  'd<sub>x</sub>(y) = max<sub>v</sub> { c(x,v) + d<sub>v</sub>(y) }',
+  'd<sub>x</sub>(y) = min<sub>v</sub> { c(x,v) + d<sub>v</sub>(y) }, over all neighbors v of x',
+  'd<sub>x</sub>(y) = c(x,y) only',
+  'd<sub>x</sub>(y) = Σ<sub>v</sub> c(x,v)'],
+ answer:1,
+ explain:'Bellman-Ford: <strong>d<sub>x</sub>(y) = min over neighbors v of { c(x,v) + d<sub>v</sub>(y) }</strong> — the cost to a neighbor plus that neighbor\'s least cost to y, minimized over neighbors.'},
+
+{id:'c5-6',ch:'ch5',type:'mcq',
+ q:'In distance-vector routing, a node sends its distance vector to its neighbors:',
+ options:[
+  'Continuously, many times per second',
+  'Only when its own distance vector changes (or periodically), and the neighbors recompute and propagate as needed',
+  'Never — DV is computed centrally',
+  'Only to the destination node'],
+ answer:1,
+ explain:'A DV node notifies <strong>only its directly attached neighbors</strong>, and does so <strong>when its DV changes</strong> (or on a timer). Neighbors recompute and, if their DV changes, propagate further.'},
+
+{id:'c5-7',ch:'ch5',type:'mcq',
+ q:'The "count-to-infinity" problem is associated with which algorithm, and what is its symptom?',
+ options:[
+  'Link-state; routes converge too fast',
+  'Distance-vector; "bad news" (a cost increase / link failure) propagates slowly, with metrics creeping upward',
+  'Dijkstra; it loops forever',
+  'BGP; it withdraws too many routes'],
+ answer:1,
+ explain:'Count-to-infinity afflicts <strong>distance-vector</strong>: good news travels fast but <strong>bad news travels slowly</strong>, with distance estimates incrementing gradually toward infinity.'},
+
+{id:'c5-8',ch:'ch5',type:'mcq',
+ q:'Which is a genuine robustness difference between LS and DV under router malfunction?',
+ options:[
+  'In LS a router can advertise incorrect costs only for its own attached links, limiting damage; in DV a node can advertise wrong least-cost paths to <em>all</em> destinations, and errors propagate through the network',
+  'DV is always more robust than LS',
+  'LS errors propagate to every router instantly; DV errors stay local',
+  'Neither algorithm is affected by malfunctioning routers'],
+ answer:0,
+ explain:'In <strong>LS</strong>, a node only advertises its own link costs, so a faulty node corrupts limited info. In <strong>DV</strong>, a node advertises path costs to <em>all</em> destinations, and those errors can spread network-wide.'},
+
+{id:'c5-9',ch:'ch5',type:'mcq',
+ q:'Why is the Internet organized into autonomous systems (AS) rather than running one flat routing algorithm?',
+ options:[
+  'To increase packet loss',
+  'For scale (millions of routers) and administrative autonomy (each AS controls its own routing/policy)',
+  'To eliminate the need for IP addresses',
+  'Because BGP requires exactly two routers'],
+ answer:1,
+ explain:'ASes provide <strong>scalability</strong> (no single algorithm over millions of routers) and <strong>administrative autonomy</strong> (each network runs and controls its own intra-AS routing).'},
+
+{id:'c5-10',ch:'ch5',type:'mcq',
+ q:'Inter-AS routing decisions are dominated by ____, whereas intra-AS routing is dominated by ____.',
+ options:[
+  'performance ; policy',
+  'policy ; performance',
+  'cost ; cost',
+  'security ; speed'],
+ answer:1,
+ explain:'Between ASes, <strong>policy</strong> (business relationships, who you\'ll carry traffic for) dominates. Within an AS, the operator optimizes <strong>performance</strong> (least cost).'},
+
+{id:'c5-11',ch:'ch5',type:'mcq',
+ q:'OSPF is best characterized as:',
+ options:[
+  'A distance-vector inter-AS protocol',
+  'A link-state intra-AS protocol that uses Dijkstra',
+  'A path-vector protocol',
+  'A NAT-traversal protocol'],
+ answer:1,
+ explain:'<strong>OSPF</strong> (Open Shortest Path First) is an <strong>intra-AS link-state</strong> protocol; each router builds the full topology and runs <strong>Dijkstra</strong>.'},
+
+{id:'c5-12',ch:'ch5',type:'mcq',
+ q:'A security feature OSPF provides that basic RIP did not is:',
+ options:[
+  'End-to-end encryption of all data packets',
+  'Authentication of routing messages (e.g., MD5) so links between routers are protected against malicious injection',
+  'NAT translation',
+  'DHCP leasing'],
+ answer:1,
+ explain:'OSPF messages can be <strong>authenticated</strong> (e.g., with MD5), preventing malicious or accidental injection of false routing information.'},
+
+{id:'c5-13',ch:'ch5',type:'mcq',
+ q:'OSPF "areas" are used to:',
+ options:[
+  'Encrypt traffic',
+  'Introduce hierarchy within a large AS so link-state flooding and Dijkstra computation are confined to each area (reducing overhead)',
+  'Assign public IP addresses',
+  'Replace BGP'],
+ answer:1,
+ explain:'<strong>OSPF areas</strong> add a two-level hierarchy: link-state flooding is limited to within an area, and a backbone area interconnects them — improving scalability in large ASes.'},
+
+{id:'c5-14',ch:'ch5',type:'mcq',
+ q:'BGP (Border Gateway Protocol) is classified as a:',
+ options:['Link-state protocol','Distance-vector protocol','Path-vector protocol','Spanning-tree protocol'],
+ answer:2,
+ explain:'BGP is a <strong>path-vector</strong> protocol: advertisements carry the entire <strong>AS-PATH</strong> (list of ASes) to the destination, not just a numeric distance.'},
+
+{id:'c5-15',ch:'ch5',type:'mcq',
+ q:'What is the difference between eBGP and iBGP?',
+ options:[
+  'eBGP runs between routers in different ASes; iBGP distributes the learned reachability to routers inside the same AS',
+  'eBGP is encrypted; iBGP is not',
+  'eBGP is link-state; iBGP is distance-vector',
+  'There is no difference'],
+ answer:0,
+ explain:'<strong>eBGP</strong> sessions are between border routers of <em>different</em> ASes; <strong>iBGP</strong> sessions propagate that externally-learned reachability to routers <em>within</em> the AS.'},
+
+{id:'c5-16',ch:'ch5',type:'mcq',
+ q:'BGP sessions run over which transport protocol and port?',
+ options:['UDP port 520','TCP port 179','TCP port 6653','UDP port 67'],
+ answer:1,
+ explain:'BGP peers maintain a semi-permanent <strong>TCP connection on port 179</strong> to exchange routing messages reliably.'},
+
+{id:'c5-17',ch:'ch5',type:'mcq',
+ q:'The BGP <strong>AS-PATH</strong> attribute serves two key roles:',
+ options:[
+  'Encryption and compression',
+  'Loop detection (an AS rejects a route that already contains its own AS number) and route selection (e.g., preferring shorter paths)',
+  'Address assignment and NAT',
+  'Error detection and correction'],
+ answer:1,
+ explain:'AS-PATH lists the ASes traversed; it enables <strong>loop avoidance</strong> (reject paths containing your own AS) and informs <strong>route selection</strong> (shorter AS-PATH often preferred).'},
+
+{id:'c5-18',ch:'ch5',type:'mcq',
+ q:'The BGP <strong>NEXT-HOP</strong> attribute specifies:',
+ options:[
+  'The final destination host',
+  'The IP address of the router interface that begins the AS-PATH (the immediate next-hop toward the advertised prefix)',
+  'The DNS server to use',
+  'The TTL value'],
+ answer:1,
+ explain:'<strong>NEXT-HOP</strong> is the router interface address that starts the advertised AS-PATH — used together with intra-AS routing to actually reach that next hop.'},
+
+{id:'c5-19',ch:'ch5',type:'mcq',
+ q:'Which is <em>NOT</em> a BGP message type?',
+ options:['OPEN','UPDATE','KEEPALIVE','SYN'],
+ answer:3,
+ explain:'BGP message types are <strong>OPEN, UPDATE, KEEPALIVE, and NOTIFICATION</strong>. SYN is a TCP flag, not a BGP message (although BGP rides on TCP).'},
+
+{id:'c5-20',ch:'ch5',type:'mcq',
+ q:'"Hot-potato routing" in BGP means a router chooses the route that:',
+ options:[
+  'Has the longest AS-PATH',
+  'Minimizes the <em>intra-AS</em> cost to reach the chosen NEXT-HOP — i.e., hand traffic off to another AS as soon (cheaply) as possible',
+  'Maximizes total end-to-end delay',
+  'Always uses the most expensive link'],
+ answer:1,
+ explain:'<strong>Hot-potato</strong>: among acceptable routes, pick the one with the <strong>least intra-domain cost to its NEXT-HOP</strong>, getting the packet out of your own AS as cheaply as possible.'},
+
+{id:'c5-21',ch:'ch5',type:'mcq',
+ q:'In BGP route selection, which attribute is consulted <em>first</em> (highest priority)?',
+ options:[
+  'Shortest AS-PATH',
+  'Local preference (a policy decision)',
+  'Hot-potato (closest NEXT-HOP)',
+  'Lowest router ID'],
+ answer:1,
+ explain:'BGP route-selection order: (1) highest <strong>local preference</strong> (policy), then (2) shortest <strong>AS-PATH</strong>, then (3) closest NEXT-HOP (<strong>hot-potato</strong>), then additional tie-breakers.'},
+
+{id:'c5-22',ch:'ch5',type:'mcq',
+ q:'Why might an AS choose <em>not</em> to advertise a route it has learned, even though it is reachable?',
+ options:[
+  'Because of TTL expiry',
+  'Policy: e.g., it does not want to be a transit network carrying traffic between two other ASes for which it earns nothing',
+  'Because BGP forbids advertising any learned routes',
+  'Because of MAC address conflicts'],
+ answer:1,
+ explain:'BGP advertisement is governed by <strong>policy</strong>. A network often refuses to provide free <strong>transit</strong> between other ASes, so it withholds those advertisements.'},
+
+{id:'c5-23',ch:'ch5',type:'mcq',
+ q:'A key motivation for SDN is that traditional LS/DV routing makes <em>traffic engineering</em> hard. Why?',
+ options:[
+  'Because they cannot compute any paths',
+  'Because operators can only tune link weights, an indirect and clumsy lever for steering traffic the way they want',
+  'Because they require IPv6',
+  'Because they do not support TCP'],
+ answer:1,
+ explain:'With destination-based LS/DV, an operator\'s only knob is <strong>link weights</strong> — an indirect way to influence paths. SDN lets the controller install arbitrary flow rules, enabling direct traffic engineering.'},
+
+{id:'c5-24',ch:'ch5',type:'mcq',
+ q:'Which set of properties characterizes the SDN architecture?',
+ options:[
+  'Per-router control, vertically integrated switches, destination-based forwarding only',
+  'Flow-based forwarding, separation of control and data plane, an (external) logically centralized controller, and programmability',
+  'No controller, fully distributed, proprietary',
+  'Only link-layer functions'],
+ answer:1,
+ explain:'SDN = <strong>flow-based forwarding + control/data-plane separation + logically centralized (external) control + network programmability</strong>.'},
+
+{id:'c5-25',ch:'ch5',type:'mcq',
+ q:'In the SDN architecture, the <strong>"southbound"</strong> interface is the API between:',
+ options:[
+  'The controller and the network-control applications above it',
+  'The controller and the switches/routers below it (e.g., OpenFlow)',
+  'Two different controllers',
+  'Two end hosts'],
+ answer:1,
+ explain:'The <strong>southbound</strong> API (e.g., OpenFlow) connects the controller <em>down</em> to the data-plane switches. The <strong>northbound</strong> API connects the controller <em>up</em> to control applications.'},
+
+{id:'c5-26',ch:'ch5',type:'mcq',
+ q:'The OpenFlow controller-switch protocol typically runs over TCP on which port?',
+ options:['179','6653','80','53'],
+ answer:1,
+ explain:'OpenFlow uses <strong>TCP port 6653</strong> (formerly 6633) for the secure channel between controller and switch.'},
+
+{id:'c5-27',ch:'ch5',type:'mcq',
+ q:'A <strong>"packet-in"</strong> OpenFlow message flows in which direction?',
+ options:[
+  'Controller → switch, to install a flow rule',
+  'Switch → controller, when a packet matches no flow-table entry (or a rule says "send to controller")',
+  'Switch → switch',
+  'Host → controller'],
+ answer:1,
+ explain:'<strong>packet-in</strong> goes <strong>from switch to controller</strong> — typically when an arriving packet matches no installed rule, prompting the controller to decide and install a new rule.'},
+
+{id:'c5-28',ch:'ch5',type:'mcq',
+ q:'Which of these is a controller-to-switch OpenFlow message?',
+ options:[
+  'packet-in',
+  'flow-mod / modify-state (to add, delete, or modify flow-table entries)',
+  'port-status',
+  'flow-removed'],
+ answer:1,
+ explain:'<strong>modify-state / flow-mod</strong> is sent <strong>from controller to switch</strong> to add/delete/modify flow entries. packet-in, port-status, and flow-removed are switch→controller (asynchronous) messages.'},
+
+{id:'c5-29',ch:'ch5',type:'mcq',
+ q:'What is the primary role of ICMP?',
+ options:[
+  'Reliable byte-stream transport',
+  'Error reporting and network diagnostics between hosts and routers (e.g., "destination unreachable", "TTL expired")',
+  'Assigning IP addresses',
+  'Resolving names to addresses'],
+ answer:1,
+ explain:'<strong>ICMP</strong> carries <strong>error and diagnostic</strong> messages (destination unreachable, TTL expired, echo request/reply), used by tools like ping and traceroute.'},
+
+{id:'c5-30',ch:'ch5',type:'mcq',
+ q:'How does <em>traceroute</em> use ICMP and TTL to map a path?',
+ options:[
+  'It sends packets with increasing TTL values; each router that decrements TTL to 0 returns an ICMP "TTL exceeded" (type 11), revealing successive hops',
+  'It floods the network with ARP requests',
+  'It opens a TCP connection to every router',
+  'It queries DNS for each hop'],
+ answer:0,
+ explain:'Traceroute sends datagrams with <strong>TTL = 1, 2, 3, …</strong>; each router whose decrement makes TTL hit 0 sends back an <strong>ICMP "TTL exceeded" (type 11, code 0)</strong>, exposing each hop in turn.'},
+
+/* ---------------------- CHAPTER 5: AS / BGP IMAGE QUESTION ---------------------- */
+{id:'c5-as',ch:'ch5',type:'mcq',
+ q:'In the inter-AS topology below, gateway router <strong>1c</strong> in AS1 has an <strong>eBGP</strong> session with <strong>3a</strong> in AS3 and learns that destination prefix <strong>X</strong> is reachable via AS3. How does an <em>interior</em> router such as <strong>1a</strong> (not directly peering with any other AS) learn how to reach X?',
+ svg:'as',
+ options:[
+  'Via iBGP — router 1c distributes the externally-learned route to 1a inside AS1',
+  'Via an eBGP session that 1a establishes directly with AS3',
+  'Via OSPF flooding of the external prefix from AS3',
+  'It cannot learn the route at all'],
+ answer:0,
+ explain:'1c learns prefix X externally over <strong>eBGP</strong> from 3a, then redistributes that reachability to interior routers like 1a over <strong>iBGP</strong> (the dashed internal sessions). Interior routers don\'t peer externally themselves.'},
+
+/* ---------------------- CHAPTER 5: FREE-RESPONSE ---------------------- */
+{id:'c5-frq-dijkstra',ch:'ch5',type:'frq',
+ q:'<strong>Dijkstra\'s algorithm.</strong> Using the weighted graph shown (source = node <strong>A</strong>), run Dijkstra\'s link-state algorithm. (a) Give the least-cost (shortest) distance from A to every other node (B, C, D, E, F). (b) State the path to node <strong>F</strong>. (c) Give the forwarding table at A: for each destination, which first-hop neighbor (link out of A) does A use?',
+ svg:'dijkstra',
+ modelAnswer:'Edge costs: A-B=2, A-D=1, B-D=2, B-C=3, D-E=1, C-E=1, C-F=5, E-F=2.<br><br>(a) Least-cost distances from A:<br>• <strong>D = 1</strong> (path A-D)<br>• <strong>B = 2</strong> (path A-B)<br>• <strong>E = 2</strong> (path A-D-E)<br>• <strong>C = 3</strong> (path A-D-E-C)<br>• <strong>F = 4</strong> (path A-D-E-F)<br><br>(b) Path to F: <strong>A → D → E → F</strong>, total cost 1+1+2 = <strong>4</strong>. (Compare the alternative A-D-E-C-F = 1+1+1+5 = 8, which is worse.)<br><br>(c) Forwarding table at A (first hop):<br>• to B → link <strong>(A,B)</strong><br>• to D → link <strong>(A,D)</strong><br>• to E → link <strong>(A,D)</strong><br>• to C → link <strong>(A,D)</strong><br>• to F → link <strong>(A,D)</strong><br>So every destination except B is reached via the <strong>A-D</strong> link.',
+ gradingNotes:'Correct distances from A: B=2, C=3, D=1, E=2, F=4. The shortest path to F is A-D-E-F (cost 4); A-B-C-F would be 2+3+5=10 and A-D-E-C-F=8, both worse. Forwarding table: destination B uses first hop (A,B); ALL other destinations (C,D,E,F) use first hop (A,D). Common errors to flag: forgetting that E is reached more cheaply via D than via B; taking C-F directly (cost 5) instead of E-F (cost 2); reporting F=8. Accept correct distances even if the student\'s intermediate N\' ordering differs, as long as final distances/paths are right.'},
+
+{id:'c5-frq-dv',ch:'ch5',type:'frq',
+ q:'<strong>Distance-vector (Bellman-Ford).</strong> Consider the 3-node network shown with costs c(x,y)=2, c(x,z)=7, c(y,z)=3. (a) Write node x\'s <em>initial</em> distance vector (its distances to x, y, z before receiving anything from neighbors). (b) After x receives its neighbors\' distance vectors (y advertises D<sub>y</sub>(z)=3; z advertises D<sub>z</sub>(z)=0), apply the Bellman-Ford update to compute x\'s new least cost to z. Show the computation. (c) What is x\'s resulting next hop toward z?',
+ svg:'dv',
+ modelAnswer:'(a) Initial DV at x (knows only direct link costs): <strong>D<sub>x</sub>(x)=0, D<sub>x</sub>(y)=2, D<sub>x</sub>(z)=7</strong>.<br><br>(b) Bellman-Ford: D<sub>x</sub>(z) = min over neighbors v of { c(x,v) + D<sub>v</sub>(z) }.<br>• via y: c(x,y) + D<sub>y</sub>(z) = 2 + 3 = <strong>5</strong><br>• via z: c(x,z) + D<sub>z</sub>(z) = 7 + 0 = 7<br>D<sub>x</sub>(z) = min(5, 7) = <strong>5</strong>.<br>(D<sub>x</sub>(y) stays min(2, 2+0)=2.)<br><br>(c) The minimum is achieved <strong>via y</strong>, so x\'s next hop toward z is <strong>y</strong> (the path x→y→z, total cost 5, beats the direct link of 7).',
+ gradingNotes:'Initial DV at x: Dx(x)=0, Dx(y)=2, Dx(z)=7. The key update: Dx(z) = min(c(x,y)+Dy(z), c(x,z)+Dz(z)) = min(2+3, 7+0) = min(5,7) = 5. Final Dx(z)=5 with next hop = y. Common errors: keeping Dx(z)=7 (not updating via y), or computing 2+3 but then not recognizing 5<7. Dx(y) remains 2. Accept correct final values; the routing improvement (5 via y vs 7 direct) is the central point.'},
+
+/* ---------------------- CHAPTER 6: LINK LAYER AND LANs ---------------------- */
+{id:'c6-1',ch:'ch6',type:'mcq',
+ q:'The link layer is responsible for transferring a datagram:',
+ options:[
+  'End-to-end from the original source to the final destination',
+  'Over a single link, from one node to an adjacent node physically connected by that link',
+  'Between two different autonomous systems',
+  'From an application to the transport layer'],
+ answer:1,
+ explain:'The link layer moves a datagram <strong>node-to-adjacent-node over one link</strong>; end-to-end delivery across many links is the network/transport layer\'s concern.'},
+
+{id:'c6-2',ch:'ch6',type:'mcq',
+ q:'The link-layer unit of data (encapsulating a network-layer datagram) is called a:',
+ options:['Segment','Packet','Frame','Stream'],
+ answer:2,
+ explain:'The link layer encapsulates a datagram in a <strong>frame</strong>; segments are transport-layer, datagrams/packets are network-layer.'},
+
+{id:'c6-3',ch:'ch6',type:'mcq',
+ q:'Which of the following is <em>NOT</em> a service the link layer may provide?',
+ options:['Framing and link access (MAC)','Error detection and correction','Reliable delivery over a link','Domain-name resolution'],
+ answer:3,
+ explain:'Link-layer services include <strong>framing, medium access (MAC), error detection/correction, and (optionally) reliable delivery</strong>. Name resolution (DNS) is an application-layer service.'},
+
+{id:'c6-4',ch:'ch6',type:'mcq',
+ q:'Which statement about duplex modes is correct?',
+ options:[
+  'WiFi (802.11) is full-duplex; switched Ethernet is half-duplex',
+  'WiFi is half-duplex (can\'t send and receive simultaneously); modern switched Ethernet is full-duplex',
+  'Both are always half-duplex',
+  'Duplex mode has nothing to do with the link layer'],
+ answer:1,
+ explain:'<strong>WiFi is half-duplex</strong> (a station cannot transmit and receive at the same time), while <strong>switched Ethernet</strong> with a dedicated link per host is <strong>full-duplex</strong>.'},
+
+{id:'c6-5',ch:'ch6',type:'mcq',
+ q:'Link-layer functionality is implemented primarily in:',
+ options:[
+  'The application software only',
+  'The network interface card (NIC) / adapter, in hardware (with some host driver software)',
+  'The DNS server',
+  'The router\'s control plane only'],
+ answer:1,
+ explain:'The link layer lives largely in the <strong>NIC/adapter hardware</strong> (e.g., the Ethernet or WiFi chip), combining hardware, software and firmware.'},
+
+{id:'c6-6',ch:'ch6',type:'mcq',
+ q:'Error-detection schemes (checksums, CRC) share which fundamental limitation?',
+ options:[
+  'They can always correct any number of errors',
+  'They are not 100% reliable — some error patterns can go undetected — and larger check fields reduce but never eliminate this',
+  'They only work on wireless links',
+  'They require encryption'],
+ answer:1,
+ explain:'Error detection is <strong>probabilistic</strong>: some error patterns evade detection. More check bits lower the miss probability but can never make it zero.'},
+
+{id:'c6-7',ch:'ch6',type:'mcq',
+ q:'Two-dimensional (2D) parity can:',
+ options:[
+  'Detect but never correct errors',
+  'Detect <em>and correct</em> any single-bit error (and detect many multi-bit errors)',
+  'Correct any number of errors',
+  'Only detect errors on the first row'],
+ answer:1,
+ explain:'<strong>2D parity</strong> pinpoints the row and column of a single flipped bit, so it can <strong>detect and correct single-bit errors</strong> (and detect many double-bit errors).'},
+
+{id:'c6-8',ch:'ch6',type:'mcq',
+ q:'In CRC, the r-bit remainder R is appended so that the resulting codeword (D followed by R), interpreted as a binary number, is:',
+ options:[
+  'A prime number',
+  'Exactly divisible (modulo-2) by the generator G',
+  'Equal to D',
+  'Always zero'],
+ answer:1,
+ explain:'CRC chooses R so that <D,R> is <strong>exactly divisible by the generator G under modulo-2 arithmetic</strong>; the receiver divides by G and flags an error if the remainder is non-zero.'},
+
+{id:'c6-9',ch:'ch6',type:'mcq',
+ q:'A CRC with an r-bit generator can detect all burst errors of length:',
+ options:['Less than or equal to r','Greater than r only','Exactly 2r','Of any length with certainty'],
+ answer:0,
+ explain:'A properly chosen r-bit CRC detects <strong>all burst errors of length ≤ r</strong> (and most longer bursts probabilistically).'},
+
+{id:'c6-10',ch:'ch6',type:'mcq',
+ q:'CRC arithmetic is performed modulo-2, in which addition and subtraction are both equivalent to:',
+ options:['Logical AND','Logical OR','Logical XOR (exclusive-or), with no carries/borrows','Multiplication'],
+ answer:2,
+ explain:'Modulo-2 arithmetic uses <strong>XOR</strong> for both addition and subtraction (no carries or borrows), which is what makes CRC easy to implement in hardware.'},
+
+{id:'c6-11',ch:'ch6',type:'mcq',
+ q:'Multiple-access protocols are needed because:',
+ options:[
+  'Point-to-point links require addressing',
+  'On a shared broadcast medium, simultaneous transmissions by two or more nodes collide and interfere',
+  'IP addresses are scarce',
+  'Routers need to exchange routes'],
+ answer:1,
+ explain:'When many nodes share a single <strong>broadcast channel</strong>, a multiple-access protocol coordinates who transmits when, to avoid/handle <strong>collisions</strong>.'},
+
+{id:'c6-12',ch:'ch6',type:'mcq',
+ q:'The three broad classes of multiple-access protocols are:',
+ options:[
+  'Wired, wireless, optical',
+  'Channel partitioning, random access, and taking-turns',
+  'Unicast, multicast, broadcast',
+  'TCP, UDP, IP'],
+ answer:1,
+ explain:'MAC protocols fall into <strong>channel partitioning</strong> (TDMA/FDMA/CDMA), <strong>random access</strong> (ALOHA, CSMA/CD, CSMA/CA), and <strong>taking-turns</strong> (polling, token passing).'},
+
+{id:'c6-13',ch:'ch6',type:'mcq',
+ q:'A drawback of TDMA and FDMA channel-partitioning is that:',
+ options:[
+  'They can never avoid collisions',
+  'A node is limited to its fixed share even when others are idle, wasting capacity at low load',
+  'They require a controller',
+  'They only work on fiber'],
+ answer:1,
+ explain:'With <strong>TDMA/FDMA</strong>, each node gets a fixed slot/band; if other nodes are idle, that capacity is <strong>wasted</strong> because it can\'t be reused, hurting efficiency under light load.'},
+
+{id:'c6-14',ch:'ch6',type:'mcq',
+ q:'CDMA allows multiple nodes to transmit simultaneously by:',
+ options:[
+  'Using different time slots',
+  'Assigning each node a unique code so receivers can separate the overlapping signals',
+  'Using different frequencies only',
+  'Polling each node in turn'],
+ answer:1,
+ explain:'<strong>CDMA</strong> gives each sender a distinct <strong>code</strong>; signals overlap in time and frequency but a receiver knowing the code can recover its sender\'s bits.'},
+
+{id:'c6-15',ch:'ch6',type:'mcq',
+ q:'CSMA (carrier-sense multiple access) means a node:',
+ options:[
+  'Transmits whenever it has data, ignoring others',
+  'Listens to the channel before transmitting and defers if it senses another transmission in progress',
+  'Always waits for a token',
+  'Uses a central scheduler'],
+ answer:1,
+ explain:'<strong>CSMA</strong> = "listen before talk": a node senses the carrier and only transmits if the channel appears idle.'},
+
+{id:'c6-16',ch:'ch6',type:'mcq',
+ q:'What is the key difference between CSMA/CD and CSMA/CA?',
+ options:[
+  'CD (collision detection, wired Ethernet) detects collisions while transmitting and aborts; CA (collision avoidance, WiFi) tries to avoid collisions since a wireless node can\'t reliably detect them while sending',
+  'CD is for WiFi and CA is for Ethernet',
+  'CA detects collisions and CD avoids them',
+  'They are identical'],
+ answer:0,
+ explain:'<strong>CSMA/CD</strong> (wired Ethernet) detects collisions during transmission and aborts. <strong>CSMA/CA</strong> (WiFi) uses avoidance (e.g., RTS/CTS, backoff) because wireless nodes generally cannot detect collisions while transmitting.'},
+
+{id:'c6-17',ch:'ch6',type:'mcq',
+ q:'Even with carrier sensing, collisions can still occur because:',
+ options:[
+  'Nodes ignore the protocol',
+  'Of non-zero signal propagation delay: a node may begin transmitting before another node\'s signal has reached it',
+  'The CRC is wrong',
+  'The TTL expired'],
+ answer:1,
+ explain:'Because of <strong>propagation delay</strong>, two nodes can both sense an idle channel and start transmitting before either\'s signal arrives at the other — causing a collision.'},
+
+{id:'c6-18',ch:'ch6',type:'mcq',
+ q:'In Ethernet\'s binary exponential backoff, after the n-th collision a node waits a random number of 512-bit times chosen from:',
+ options:[
+  '{0, 1}',
+  '{0, 1, 2, …, 2ⁿ − 1} (capped at n=10)',
+  'Always exactly 512 bit times',
+  '{1, 2, …, n}'],
+ answer:1,
+ explain:'After the n-th collision the node picks K randomly from <strong>{0,1,…,2ⁿ−1}</strong> (with the exponent capped, typically at 10) and waits <strong>K × 512 bit times</strong>, spreading out retransmissions adaptively.'},
+
+{id:'c6-19',ch:'ch6',type:'mcq',
+ q:'A disadvantage of "taking-turns" protocols (polling / token passing) is:',
+ options:[
+  'They always cause collisions',
+  'Polling/token overhead and latency, plus a single point of failure (master node or lost token)',
+  'They waste bandwidth when load is high',
+  'They cannot guarantee any node access'],
+ answer:1,
+ explain:'Taking-turns protocols add <strong>coordination overhead and latency</strong>, and depend on a master/token — introducing a <strong>single point of failure</strong> if the master dies or the token is lost.'},
+
+{id:'c6-20',ch:'ch6',type:'mcq',
+ q:'A MAC (LAN/physical) address is how many bits, and how is it usually written?',
+ options:[
+  '32 bits, dotted decimal',
+  '48 bits, six pairs of hexadecimal digits',
+  '128 bits, colon-separated hex',
+  '16 bits, binary'],
+ answer:1,
+ explain:'A MAC address is <strong>48 bits</strong>, conventionally written as six hex byte pairs (e.g., 1A-2F-BB-76-09-AD).'},
+
+{id:'c6-21',ch:'ch6',type:'mcq',
+ q:'Which contrast between MAC and IP addressing is correct?',
+ options:[
+  'MAC addresses are hierarchical and change as you move; IP addresses are flat and portable',
+  'MAC addresses are flat and portable (burned into the NIC, location-independent); IP addresses are hierarchical and depend on the subnet a host attaches to',
+  'Both are hierarchical',
+  'Both are assigned by DHCP at boot'],
+ answer:1,
+ explain:'<strong>MAC</strong> addresses are <strong>flat and portable</strong> (fixed in the NIC regardless of network). <strong>IP</strong> addresses are <strong>hierarchical</strong> and reflect where the host attaches — which is why they support routing/aggregation.'},
+
+{id:'c6-22',ch:'ch6',type:'mcq',
+ q:'The Address Resolution Protocol (ARP) resolves:',
+ options:[
+  'A domain name to an IP address',
+  'An IP address to the MAC address of a node on the <em>same subnet</em>',
+  'A MAC address to an AS number',
+  'A port number to a process'],
+ answer:1,
+ explain:'<strong>ARP</strong> maps a known <strong>IP address to the MAC address</strong> of a node on the same LAN/subnet, so the frame can be addressed at the link layer.'},
+
+{id:'c6-23',ch:'ch6',type:'mcq',
+ q:'An ARP query is sent to which destination MAC address?',
+ options:[
+  'The sender\'s own MAC',
+  'The broadcast address FF-FF-FF-FF-FF-FF, so all nodes on the subnet receive it',
+  '00-00-00-00-00-00',
+  'The default gateway only'],
+ answer:1,
+ explain:'ARP queries are <strong>broadcast</strong> (dest MAC = <strong>FF-FF-FF-FF-FF-FF</strong>) so every node on the subnet sees them; only the node owning the queried IP replies (unicast).'},
+
+{id:'c6-24',ch:'ch6',type:'mcq',
+ q:'ARP table entries are:',
+ options:[
+  'Permanent and never expire',
+  'Soft state — they time out (e.g., after about 20 minutes) and must be refreshed',
+  'Stored in the DNS server',
+  'Configured manually by the user always'],
+ answer:1,
+ explain:'ARP entries are <strong>soft state</strong> with a TTL (commonly ~20 minutes); after expiry the mapping is removed and re-resolved if needed.'},
+
+{id:'c6-25',ch:'ch6',type:'mcq',
+ q:'When a host sends a datagram to a destination on <em>another</em> subnet, which addresses change as the frame travels hop by hop?',
+ options:[
+  'The source/destination IP addresses change at every hop; MAC addresses stay constant',
+  'The source/destination IP addresses stay constant end-to-end; the source/destination MAC addresses are rewritten at every hop',
+  'Both IP and MAC stay constant',
+  'Both IP and MAC change at every hop'],
+ answer:1,
+ explain:'The <strong>IP src/dst remain the original end hosts</strong> throughout; the <strong>MAC addresses are rewritten hop-by-hop</strong> (from the sending interface to the next-hop interface) as the frame crosses each link.'},
+
+{id:'c6-26',ch:'ch6',type:'mcq',
+ q:'Which field is <em>NOT</em> part of an Ethernet frame?',
+ options:['Preamble','Destination MAC address','CRC','TTL'],
+ answer:3,
+ explain:'An Ethernet frame has a <strong>preamble, dest & source MAC, type, data/payload, and CRC</strong>. <strong>TTL</strong> is an IP (network-layer) field, not a link-layer one.'},
+
+{id:'c6-27',ch:'ch6',type:'mcq',
+ q:'The Ethernet frame\'s preamble exists to:',
+ options:[
+  'Carry the IP address',
+  'Synchronize the receiver\'s clock to the sender\'s and signal the start of the frame (with the start-of-frame delimiter)',
+  'Detect collisions',
+  'Encrypt the payload'],
+ answer:1,
+ explain:'The <strong>preamble</strong> (alternating bits) lets the receiver <strong>synchronize its clock</strong>, and the final start-of-frame delimiter marks where the real frame begins.'},
+
+{id:'c6-28',ch:'ch6',type:'mcq',
+ q:'Ethernet provides which kind of service to the network layer?',
+ options:[
+  'Connection-oriented and reliable',
+  'Connectionless and unreliable (no ACKs/NAKs; frames failing the CRC are simply dropped)',
+  'Connection-oriented but unreliable',
+  'Reliable but connectionless'],
+ answer:1,
+ explain:'Ethernet is <strong>connectionless and unreliable</strong>: there is no handshake and no link-layer ACK; a frame failing its CRC is just discarded, leaving recovery to higher layers (e.g., TCP).'},
+
+{id:'c6-29',ch:'ch6',type:'mcq',
+ q:'What does an Ethernet receiver do with a frame whose CRC check fails?',
+ options:[
+  'Requests retransmission with a NAK',
+  'Silently drops (discards) the frame',
+  'Forwards it anyway',
+  'Corrects the error using the CRC'],
+ answer:1,
+ explain:'Ethernet uses CRC only for <strong>detection</strong>; a frame that fails is <strong>silently dropped</strong> with no NAK or correction.'},
+
+{id:'c6-30',ch:'ch6',type:'mcq',
+ q:'What is the key functional difference between a hub and a switch?',
+ options:[
+  'A hub examines MAC addresses and forwards selectively; a switch blindly repeats bits to all ports',
+  'A hub is a "dumb" physical-layer repeater that floods bits to all ports; a switch is a link-layer device that learns MAC addresses and forwards selectively',
+  'They are identical devices',
+  'A switch operates at the network layer like a router'],
+ answer:1,
+ explain:'A <strong>hub</strong> repeats incoming bits out <em>all</em> ports (one collision domain). A <strong>switch</strong> inspects MAC addresses, builds a table, and <strong>forwards selectively</strong>, breaking the LAN into separate collision domains.'},
+
+{id:'c6-31',ch:'ch6',type:'mcq',
+ q:'A switch builds its forwarding table by <em>self-learning</em>. When a frame arrives, the switch:',
+ options:[
+  'Records the destination MAC and the port',
+  'Records the <em>source</em> MAC of the frame together with the incoming port (and the current time)',
+  'Asks the controller',
+  'Broadcasts an ARP query'],
+ answer:1,
+ explain:'Self-learning: the switch notes the <strong>source MAC + arrival port</strong> of each frame, so it learns which hosts live on which ports.'},
+
+{id:'c6-32',ch:'ch6',type:'mcq',
+ q:'If a switch receives a frame whose destination MAC is <em>not</em> in its table, it:',
+ options:[
+  'Drops the frame',
+  'Floods the frame out all ports except the one it arrived on',
+  'Sends it to the controller',
+  'Returns it to the sender'],
+ answer:1,
+ explain:'On an unknown destination, the switch <strong>floods</strong> the frame out every port except the incoming one, ensuring it reaches the destination (and learns the reply\'s source later).'},
+
+{id:'c6-33',ch:'ch6',type:'mcq',
+ q:'Compared with a router, a switch:',
+ options:[
+  'Operates at the network layer using IP addresses',
+  'Operates at the link layer using MAC addresses (both are store-and-forward devices, but the switch forwards on L2 and the router on L3)',
+  'Cannot store and forward',
+  'Replaces the need for IP entirely'],
+ answer:1,
+ explain:'A <strong>switch</strong> is a <strong>layer-2</strong> store-and-forward device using <strong>MAC</strong> addresses; a <strong>router</strong> is layer-3 using <strong>IP</strong>. Both buffer and forward, but at different layers.'},
+
+{id:'c6-34',ch:'ch6',type:'mcq',
+ q:'A VLAN (virtual LAN) lets a single physical switch:',
+ options:[
+  'Increase its port speed',
+  'Be partitioned into multiple logical/virtual LANs, each its own isolated broadcast domain',
+  'Act as a router',
+  'Eliminate the need for MAC addresses'],
+ answer:1,
+ explain:'A <strong>VLAN</strong> logically segments one physical switch into several <strong>isolated broadcast domains</strong>, as if they were separate switches, improving isolation and management.'},
+
+{id:'c6-35',ch:'ch6',type:'mcq',
+ q:'To carry traffic for multiple VLANs over a single link between two switches, and to route <em>between</em> VLANs, you use:',
+ options:[
+  'A hub between the switches',
+  'An 802.1Q trunk link (frames tagged with VLAN IDs), with inter-VLAN traffic passing through a router (or L3 switch)',
+  'ARP only',
+  'A separate DNS server per VLAN'],
+ answer:1,
+ explain:'A <strong>trunk</strong> uses <strong>802.1Q VLAN tags</strong> to multiplex many VLANs over one link; because VLANs are separate IP subnets, traffic between them must go through a <strong>router / L3 switch</strong>.'},
+
+/* ---------------------- CHAPTER 6: FREE-RESPONSE ---------------------- */
+{id:'c6-frq-crc',ch:'ch6',type:'frq',
+ q:'<strong>CRC error detection.</strong> The data bits to send are <strong>D = 1010101</strong> and the generator is <strong>G = 1101</strong> (so r = 3 check bits). (a) Compute the CRC remainder R (the 3 bits to append). (b) Give the transmitted codeword. (c) Verify your answer by showing the receiver\'s check (the codeword must be divisible by G with remainder 0). Use modulo-2 (XOR) arithmetic.',
+ modelAnswer:'(a) Append r = 3 zeros to D: <strong>1010101000</strong>, then divide by G = 1101 using modulo-2 (XOR) division.<br>The remainder of 1010101000 ÷ 1101 is <strong>R = 011</strong>.<br><br>(b) Transmitted codeword = D followed by R = <strong>1010101 011</strong> = <strong>1010101011</strong>.<br><br>(c) Receiver divides 1010101011 by 1101 (mod 2). The remainder is <strong>000</strong>, so no error is detected. ✓<br><br>(Check of the division, step by step XOR-ing 1101 at each leading 1:<br>1010101000 ⊕ 1101… eventually leaves remainder 011, confirming R=011.)',
+ gradingNotes:'The correct remainder is R = 011, giving codeword 1010101011. The verification: dividing 1010101011 by 1101 mod-2 yields remainder 000. Grade on: (1) correct method — append 3 zeros (because r=3) before dividing; (2) modulo-2/XOR division (no borrows); (3) correct final remainder 011. If the student appends the wrong number of zeros or uses ordinary binary subtraction with borrows, flag it. The exact intermediate XOR steps may vary in presentation; what matters is R=011 and a codeword divisible by G. Accept leading-zero forms (e.g., "11" vs "011") only if they note R must be exactly 3 bits → 011.'},
+
+{id:'c6-frq-switch',ch:'ch6',type:'frq',
+ q:'<strong>Switch self-learning.</strong> A switch has four ports: host <strong>A</strong> on port 1, <strong>B</strong> on port 2, <strong>C</strong> on port 3, <strong>D</strong> on port 4. The switch table starts <em>empty</em>. The following frames are sent in order: (1) A→B, (2) B→A, (3) C→A, (4) A→C. For each frame, state (i) what the switch <em>learns</em> (adds/updates in its table) and (ii) whether it <em>forwards to a specific port</em> or <em>floods</em>. Then give the final table.',
+ svg:'switchlearn',
+ modelAnswer:'Process each frame — learn the SOURCE\'s port, then decide forwarding by looking up the DESTINATION:<br><br><strong>(1) A→B:</strong> learn <strong>A : port 1</strong>. Destination B is unknown → <strong>flood</strong> (out ports 2, 3, 4).<br><strong>(2) B→A:</strong> learn <strong>B : port 2</strong>. Destination A is known (port 1) → <strong>forward only to port 1</strong>.<br><strong>(3) C→A:</strong> learn <strong>C : port 3</strong>. Destination A known (port 1) → <strong>forward only to port 1</strong>.<br><strong>(4) A→C:</strong> A already known — refresh <strong>A : port 1</strong>. Destination C known (port 3) → <strong>forward only to port 3</strong>.<br><br><strong>Final table:</strong> A → port 1, B → port 2, C → port 3. (D was never a source, so it has no entry.)',
+ gradingNotes:'Core principle being tested: a switch learns the SOURCE MAC + incoming port, and forwards based on the DESTINATION lookup (flood if unknown). Correct trace: (1) learn A:1, flood (B unknown); (2) learn B:2, forward to port 1 (A known); (3) learn C:3, forward to port 1; (4) refresh A:1, forward to port 3 (C known). Final table {A:1, B:2, C:3}, no entry for D. Common errors to flag: learning the destination instead of the source; flooding frame (2) or (3) even though A is already known; adding a D entry. Only frame (1) floods.'}
+];
+
+/* =========================================================================
+   APPLICATION STATE + LOGIC
+   ========================================================================= */
+const CH_META = {
+  ch4:{label:'Chapter 4', title:'Network Layer: Data Plane'},
+  ch5:{label:'Chapter 5', title:'Network Layer: Control Plane'},
+  ch6:{label:'Chapter 6', title:'The Link Layer & LANs'}
+};
+
+const state = {
+  screen:'start',          // 'start' | 'quiz' | 'results'
+  filter:'all',            // 'all' | 'ch4' | 'ch5' | 'ch6'
+  pool:[],                 // active question list
+  idx:0,                   // current question index
+  mcqAnswers:{},           // qid -> chosen option index
+  frqText:{},              // qid -> typed answer
+  frqImage:{},             // qid -> {dataUrl, mediaType}
+  frqFeedback:{},          // qid -> feedback object/string
+  grading:{}               // qid -> bool (in-flight)
+};
+
+const app = document.getElementById('app');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function buildPool(){
+  state.pool = state.filter==='all'
+    ? QUESTIONS.slice()
+    : QUESTIONS.filter(q => q.ch===state.filter);
+}
+
+/* ---------------------------- START SCREEN ---------------------------- */
+function renderStart(){
+  const counts = {
+    all: QUESTIONS.length,
+    ch4: QUESTIONS.filter(q=>q.ch==='ch4').length,
+    ch5: QUESTIONS.filter(q=>q.ch==='ch5').length,
+    ch6: QUESTIONS.filter(q=>q.ch==='ch6').length
+  };
+  const mcqN = QUESTIONS.filter(q=>q.type==='mcq').length;
+  const frqN = QUESTIONS.filter(q=>q.type==='frq').length;
+  const mode = (key,label,sub,n)=>`
+    <button class="modecard ${state.filter===key?'sel':''}" data-mode="${key}">
+      <span class="modetop"><span class="modelabel">${label}</span><span class="modecount">${n} Q</span></span>
+      <span class="modesub">${sub}</span>
+    </button>`;
+  app.innerHTML = `
+  <header class="hero">
+    <div class="kicker">COMPUTER NETWORKING · KUROSE &amp; ROSS</div>
+    <h1>Network Layer &amp; Link Layer<br><span class="accent">Exam Trainer</span></h1>
+    <p class="lede">A full self-check covering <strong>every concept</strong> in the Chapter&nbsp;4–6 slides: the data plane, the control plane, and the link layer &amp; LANs. Multiple-choice, calculation, and written questions — with worked solutions and per-answer feedback at the end.</p>
+    <div class="statline">
+      <span><b>${mcqN}</b> multiple-choice</span>
+      <span class="dot">•</span>
+      <span><b>${frqN}</b> calculation / written</span>
+      <span class="dot">•</span>
+      <span><b>5</b> network diagrams</span>
+    </div>
+  </header>
+
+  <div class="panel">
+    <div class="panel-h">Choose your scope</div>
+    <div class="modes">
+      ${mode('all','All chapters','The complete set — full exam simulation', counts.all)}
+      ${mode('ch4','Chapter 4 · Data Plane','Forwarding, IP, NAT, SDN forwarding, IPv6', counts.ch4)}
+      ${mode('ch5','Chapter 5 · Control Plane','Routing, OSPF, BGP, SDN control, ICMP', counts.ch5)}
+      ${mode('ch6','Chapter 6 · Link Layer','MAC, CRC, multiple access, Ethernet, switches, VLANs', counts.ch6)}
+    </div>
+    <button class="btn-primary big" id="beginBtn">Begin&nbsp;→</button>
+    <p class="hint">Calculation &amp; written questions are graded by an AI tutor that reads your typed answer <em>or a photo of your handwritten work</em>, marks what is right and wrong, and shows corrections. (AI grading runs when this page is opened inside Claude.)</p>
+  </div>
+  <div class="fineprint">Built from the lecture slides · longest-prefix match · Dijkstra · Bellman-Ford · NAT · CRC · CSMA/CD · self-learning switches · BGP path-vector</div>
+  `;
+  app.querySelectorAll('.modecard').forEach(b=>{
+    b.onclick = ()=>{ state.filter=b.dataset.mode; renderStart(); };
+  });
+  document.getElementById('beginBtn').onclick = ()=>{
+    buildPool();
+    state.idx=0; state.screen='quiz';
+    render();
+  };
+}
+
+/* ---------------------------- QUIZ SCREEN ---------------------------- */
+function renderQuiz(){
+  const q = state.pool[state.idx];
+  const total = state.pool.length;
+  const answered = countAnswered();
+  const pct = Math.round((answered/total)*100);
+
+  // palette
+  let palette = state.pool.map((qq,i)=>{
+    const done = isAnswered(qq);
+    const cls = i===state.idx ? 'pcur' : (done ? 'pdone':'');
+    return `<button class="pdot ${cls}" data-i="${i}" title="Question ${i+1}">${i+1}</button>`;
+  }).join('');
+
+  app.innerHTML = `
+  <div class="topbar">
+    <div class="row">
+    <button class="link-btn" id="homeBtn">‹ Menu</button>
+    <div class="progress-wrap">
+      <div class="progress-meta"><span>${CH_META[q.ch].label} · ${q.type==='mcq'?'Multiple choice':'Written / calculation'}</span><span>${answered}/${total} answered</span></div>
+      <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <button class="btn-primary" id="submitBtn">Finish &amp; review</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qnum">Question ${state.idx+1} <span class="of">of ${total}</span></div>
+    <div class="qtext">${q.q}</div>
+    ${q.svg ? `<div class="diagram">${SVG[q.svg]}</div>` : ''}
+    <div id="answerArea">${q.type==='mcq'? mcqArea(q) : frqArea(q)}</div>
+  </div>
+
+  <div class="navrow">
+    <button class="btn-ghost" id="prevBtn" ${state.idx===0?'disabled':''}>← Previous</button>
+    <div class="palette">${palette}</div>
+    <button class="btn-ghost" id="nextBtn" ${state.idx===total-1?'disabled':''}>Next →</button>
+  </div>
+  `;
+
+  // wire palette + nav
+  app.querySelectorAll('.pdot').forEach(d=>d.onclick=()=>{ state.idx=+d.dataset.i; render(); });
+  document.getElementById('homeBtn').onclick=()=>{ state.screen='start'; render(); };
+  document.getElementById('submitBtn').onclick=submitQuiz;
+  const prev=document.getElementById('prevBtn'), next=document.getElementById('nextBtn');
+  if(prev) prev.onclick=()=>{ if(state.idx>0){state.idx--; render();} };
+  if(next) next.onclick=()=>{ if(state.idx<total-1){state.idx++; render();} };
+
+  if(q.type==='mcq') wireMcq(q); else wireFrq(q);
+}
+
+function mcqArea(q){
+  return `<div class="opts">` + q.options.map((opt,i)=>{
+    const sel = state.mcqAnswers[q.id]===i ? 'osel':'';
+    const letter = String.fromCharCode(65+i);
+    return `<button class="opt ${sel}" data-i="${i}">
+        <span class="oletter">${letter}</span>
+        <span class="otext">${opt}</span>
+      </button>`;
+  }).join('') + `</div>`;
+}
+function wireMcq(q){
+  app.querySelectorAll('.opt').forEach(o=>{
+    o.onclick=()=>{ state.mcqAnswers[q.id]=+o.dataset.i; renderQuiz(); };
+  });
+}
+
+function frqArea(q){
+  const txt = state.frqText[q.id]||'';
+  const img = state.frqImage[q.id];
+  const fb = state.frqFeedback[q.id];
+  const busy = state.grading[q.id];
+  return `
+    <textarea class="frq-input" id="frqInput" placeholder="Type your working and answer here… (or upload a photo of your handwritten solution below)">${esc(txt)}</textarea>
+    <div class="frq-tools">
+      <label class="upload-btn">
+        📷 ${img?'Change photo':'Upload handwritten photo'}
+        <input type="file" id="frqFile" accept="image/*" hidden>
+      </label>
+      ${img?`<span class="thumb-wrap"><img class="thumb" src="${img.dataUrl}" alt="your work"><button class="thumb-x" id="rmImg">✕</button></span>`:''}
+      <button class="btn-primary grade-btn" id="gradeBtn" ${busy?'disabled':''}>${busy?'Grading…':'Grade my answer'}</button>
+    </div>
+    <div id="fbArea">${fb? renderFeedback(fb, q) : ''}</div>
+  `;
+}
+function wireFrq(q){
+  const ta=document.getElementById('frqInput');
+  if(ta) ta.oninput=()=>{ state.frqText[q.id]=ta.value; };
+  const file=document.getElementById('frqFile');
+  if(file) file.onchange=e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=()=>{ state.frqImage[q.id]={dataUrl:r.result, mediaType:f.type||'image/jpeg'}; renderQuiz(); };
+    r.readAsDataURL(f);
+  };
+  const rm=document.getElementById('rmImg');
+  if(rm) rm.onclick=()=>{ delete state.frqImage[q.id]; renderQuiz(); };
+  const gb=document.getElementById('gradeBtn');
+  if(gb) gb.onclick=()=>gradeWithAI(q);
+}
+
+/* ---------------------------- AI GRADING ("Claude in Claude") ---------------------------- */
+async function gradeWithAI(q){
+  const typed = (state.frqText[q.id]||'').trim();
+  const img = state.frqImage[q.id];
+  if(!typed && !img){
+    state.frqFeedback[q.id] = {error:'Please type an answer or upload a photo of your work first.'};
+    renderQuiz(); return;
+  }
+  state.grading[q.id]=true; renderQuiz();
+
+  const prompt = `You are a strict but fair teaching assistant grading one exam answer in a computer-networking course (Kurose & Ross, chapters 4-6). Compare the student's work (typed text and/or the attached photo of handwritten work) against the model answer. Identify precisely which parts are correct and which are wrong, and give the correction for each error. Numeric/final answers must match for full credit.
+
+QUESTION (HTML, ignore tags):
+${q.q}
+
+MODEL ANSWER / KEY POINTS (HTML, ignore tags):
+${q.modelAnswer}
+
+GRADING NOTES (what to check, common errors):
+${q.gradingNotes}
+
+STUDENT'S TYPED ANSWER:
+${typed || '(none — see attached image)'}
+
+Respond with ONLY a JSON object, no markdown, no code fences, exactly this schema:
+{"score": <integer 0-100>, "verdict": "<correct|partially correct|incorrect>", "correct_points": ["..."], "errors": [{"mistake":"...","correction":"..."}], "summary":"<one or two sentences>"}`;
+
+  const content=[];
+  if(img){
+    const base64 = img.dataUrl.split(',')[1];
+    content.push({type:'image', source:{type:'base64', media_type:img.mediaType, data:base64}});
+  }
+  content.push({type:'text', text:prompt});
+
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user', content}]
+      })
+    });
+    const data = await res.json();
+    let text = (data.content||[]).map(b=>b.type==='text'?b.text:'').join('').trim();
+    text = text.replace(/```json|```/g,'').trim();
+    let parsed;
+    try{ parsed = JSON.parse(text); }
+    catch(e){
+      const m = text.match(/\{[\s\S]*\}/);
+      parsed = m ? JSON.parse(m[0]) : null;
+    }
+    if(!parsed) throw new Error('parse');
+    state.frqFeedback[q.id]=parsed;
+  }catch(err){
+    state.frqFeedback[q.id]={fallback:true};
+  }
+  state.grading[q.id]=false; renderQuiz();
+}
+
+function renderFeedback(fb, q){
+  if(fb.error){ return `<div class="fb fb-warn">${esc(fb.error)}</div>`; }
+  if(fb.fallback){
+    return `<div class="fb fb-warn">
+      <div class="fb-head">Automatic grading unavailable here</div>
+      <p>AI grading runs when this page is opened inside Claude. In the meantime, compare your work against the model solution:</p>
+      <div class="modelbox">${q.modelAnswer}</div>
+    </div>`;
+  }
+  const v=(fb.verdict||'').toLowerCase();
+  const vClass = v.includes('incorrect')?'v-bad':(v.includes('partial')?'v-mid':'v-good');
+  const cps=(fb.correct_points||[]).map(p=>`<li>${esc(p)}</li>`).join('');
+  const errs=(fb.errors||[]).map(e=>`<li><span class="err-m">${esc(e.mistake)}</span><span class="err-c">→ ${esc(e.correction)}</span></li>`).join('');
+  return `<div class="fb fb-graded">
+    <div class="fb-top">
+      <span class="verdict ${vClass}">${esc(fb.verdict||'graded')}</span>
+      <span class="scorepill">${fb.score}/100</span>
+    </div>
+    ${fb.summary?`<p class="fb-sum">${esc(fb.summary)}</p>`:''}
+    ${cps?`<div class="fb-block"><div class="fb-label good">✓ Correct</div><ul class="fb-list good">${cps}</ul></div>`:''}
+    ${errs?`<div class="fb-block"><div class="fb-label bad">✗ Needs fixing</div><ul class="fb-list bad">${errs}</ul></div>`:''}
+    <details class="modeldetails"><summary>Show full model solution</summary><div class="modelbox">${q.modelAnswer}</div></details>
+  </div>`;
+}
+
+/* ---------------------------- helpers ---------------------------- */
+function isAnswered(q){
+  if(q.type==='mcq') return state.mcqAnswers[q.id]!=null;
+  return (state.frqText[q.id]&&state.frqText[q.id].trim()) || state.frqImage[q.id] || state.frqFeedback[q.id];
+}
+function countAnswered(){ return state.pool.filter(isAnswered).length; }
+
+/* ---------------------------- SUBMIT + RESULTS ---------------------------- */
+function submitQuiz(){
+  const unanswered = state.pool.filter(q=>!isAnswered(q)).length;
+  if(unanswered>0){
+    const ok = confirm(`You have ${unanswered} unanswered question(s). Finish and review anyway?`);
+    if(!ok) return;
+  }
+  state.screen='results';
+  state.idx=0;
+  render();
+  window.scrollTo(0,0);
+}
+
+function renderResults(){
+  const mcqs = state.pool.filter(q=>q.type==='mcq');
+  const frqs = state.pool.filter(q=>q.type==='frq');
+  let correct=0, wrong=0, blank=0;
+  const wrongList=[];
+  mcqs.forEach(q=>{
+    const a=state.mcqAnswers[q.id];
+    if(a==null){ blank++; wrongList.push(q); }
+    else if(a===q.answer){ correct++; }
+    else { wrong++; wrongList.push(q); }
+  });
+  const attempted = correct+wrong;
+  const pct = attempted? Math.round((correct/attempted)*100) : 0;
+  const ring = `conic-gradient(var(--teal) ${pct*3.6}deg, rgba(255,255,255,.08) 0deg)`;
+
+  // FRQ summary
+  const frqGraded = frqs.filter(q=>{const f=state.frqFeedback[q.id]; return f && !f.error && !f.fallback;});
+  const frqAttempted = frqs.filter(q=>isAnswered(q));
+
+  let html = `
+  <header class="results-hero">
+    <div class="kicker">RESULTS · ${state.filter==='all'?'All chapters':CH_META[state.filter].label}</div>
+    <div class="score-row">
+      <div class="score-ring" style="background:${ring}"><div class="score-inner"><span class="score-pct">${pct}%</span><span class="score-sub">MCQ score</span></div></div>
+      <div class="score-stats">
+        <div class="stat good"><b>${correct}</b><span>correct</span></div>
+        <div class="stat bad"><b>${wrong}</b><span>wrong</span></div>
+        <div class="stat blank"><b>${blank}</b><span>skipped</span></div>
+        <div class="stat frq"><b>${frqAttempted.length}/${frqs.length}</b><span>written done</span></div>
+      </div>
+    </div>
+    <div class="results-actions">
+      <button class="btn-ghost" id="backQuizBtn">‹ Back to questions</button>
+      <button class="btn-primary" id="restartBtn">Restart ↻</button>
+    </div>
+  </header>`;
+
+  // ---- wrong-answer consolidation ----
+  html += `<div class="review-section"><h2 class="rev-h">Wrong-answer review &amp; explanations</h2>`;
+  if(wrongList.length===0){
+    html += `<div class="allgood">Perfect on the multiple-choice questions — every one correct. ✓</div>`;
+  } else {
+    html += `<p class="rev-intro">${wrongList.length} multiple-choice question(s) to revisit. Each shows your answer, the correct answer, and why.</p>`;
+    wrongList.forEach(q=>{
+      const a=state.mcqAnswers[q.id];
+      const yours = a==null ? '<em>(skipped)</em>' : `${String.fromCharCode(65+a)}. ${q.options[a]}`;
+      const right = `${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}`;
+      html += `
+      <div class="rev-card">
+        <div class="rev-tag">${CH_META[q.ch].label}</div>
+        <div class="rev-q">${q.q}</div>
+        ${q.svg?`<div class="diagram small">${SVG[q.svg]}</div>`:''}
+        <div class="rev-ans">
+          <div class="ra ra-wrong"><span class="ra-l">Your answer</span><span>${yours}</span></div>
+          <div class="ra ra-right"><span class="ra-l">Correct</span><span>${right}</span></div>
+        </div>
+        <div class="rev-explain"><span class="rx-l">Why</span>${q.explain}</div>
+      </div>`;
+    });
+  }
+  html += `</div>`;
+
+  // ---- FRQ consolidation ----
+  if(frqs.length){
+    html += `<div class="review-section"><h2 class="rev-h">Calculation &amp; written questions</h2>`;
+    frqs.forEach(q=>{
+      const fb=state.frqFeedback[q.id];
+      const typed=state.frqText[q.id];
+      const img=state.frqImage[q.id];
+      html += `<div class="rev-card frq-rev">
+        <div class="rev-tag">${CH_META[q.ch].label} · written</div>
+        <div class="rev-q">${q.q}</div>
+        ${q.svg?`<div class="diagram small">${SVG[q.svg]}</div>`:''}`;
+      if(typed && typed.trim()) html += `<div class="your-work"><span class="rx-l">Your typed answer</span><div class="yw-body">${esc(typed)}</div></div>`;
+      if(img) html += `<div class="your-work"><span class="rx-l">Your uploaded work</span><div><img class="thumb big" src="${img.dataUrl}" alt="your work"></div></div>`;
+      if(fb && !fb.error && !fb.fallback){
+        html += renderFeedback(fb,q);
+      } else {
+        html += `<details class="modeldetails" open><summary>Model solution</summary><div class="modelbox">${q.modelAnswer}</div></details>`;
+        if(!typed && !img) html += `<div class="fb fb-warn small">Not attempted — review the model solution above.</div>`;
+      }
+      html += `</div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `<div class="fineprint">Review complete · revisit any chapter from the menu to drill weak spots</div>`;
+  app.innerHTML = html;
+  document.getElementById('restartBtn').onclick=()=>{ resetAll(); };
+  document.getElementById('backQuizBtn').onclick=()=>{ state.screen='quiz'; render(); };
+}
+
+function resetAll(){
+  state.screen='start'; state.idx=0;
+  state.mcqAnswers={}; state.frqText={}; state.frqImage={};
+  state.frqFeedback={}; state.grading={};
+  render();
+}
+
+/* ---------------------------- ROUTER ---------------------------- */
+function render(){
+  if(state.screen==='start') renderStart();
+  else if(state.screen==='quiz') renderQuiz();
+  else renderResults();
+}
+render();
+</script>
+</body>
+</html>

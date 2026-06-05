@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<title>Macroeconomics Quiz · CH30–CH32</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light only;
+    --paper:#f6f1e7;
+    --paper-2:#efe8d8;
+    --ink:#1d2436;
+    --ink-soft:#3f4860;
+    --rule:#d9cfb8;
+    --burgundy:#8b2635;
+    --burgundy-soft:#b65560;
+    --green:#2f6b4f;
+    --green-soft:#e2efe6;
+    --red-soft:#f6e4e3;
+    --gold:#b8893b;
+    --shadow:rgba(29,36,54,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Spectral',Georgia,serif;
+    color:var(--ink);
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(184,137,59,.07), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(139,38,53,.05), transparent 40%),
+      repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(29,36,54,.025) 31px, rgba(29,36,54,.025) 32px);
+    line-height:1.55;
+    padding:0 0 80px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    max-width:880px;margin:0 auto;padding:54px 28px 26px;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:'Archivo',sans-serif;text-transform:uppercase;
+    letter-spacing:.32em;font-size:.72rem;font-weight:600;
+    color:var(--burgundy);margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(2.1rem,5.4vw,3.3rem);line-height:1.02;
+    letter-spacing:-.01em;color:var(--ink);
+  }
+  h1 em{font-style:italic;color:var(--burgundy);}
+  .sub{
+    font-size:1.04rem;color:var(--ink-soft);margin-top:14px;max-width:620px;
+  }
+  .meta{
+    display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;
+    font-family:'Archivo',sans-serif;font-size:.82rem;color:var(--ink-soft);
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:12px 0;
+  }
+  .meta b{color:var(--ink);font-weight:600;}
+
+  /* ---------- Controls ---------- */
+  .controls{
+    max-width:880px;margin:24px auto 0;padding:0 28px;
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  }
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;}
+  .tab{
+    font-family:'Archivo',sans-serif;font-size:.84rem;font-weight:600;
+    border:1.5px solid var(--ink);background:transparent;color:var(--ink);
+    padding:7px 15px;border-radius:999px;cursor:pointer;transition:.18s;
+    letter-spacing:.02em;
+  }
+  .tab:hover{background:var(--paper-2);}
+  .tab.active{background:var(--ink);color:var(--paper);}
+  .spacer{flex:1;}
+
+  /* ---------- Questions ---------- */
+  main{max-width:880px;margin:8px auto 0;padding:0 28px;}
+  .ch-head{
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.5rem;
+    margin:46px 0 4px;padding-bottom:6px;color:var(--ink);
+    display:flex;align-items:baseline;gap:12px;
+  }
+  .ch-head .ch-tag{
+    font-family:'Archivo',sans-serif;font-size:.7rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--paper);
+    background:var(--burgundy);padding:4px 9px;border-radius:5px;
+  }
+  .ch-sub{font-family:'Archivo',sans-serif;font-size:.86rem;color:var(--ink-soft);margin-bottom:8px;}
+
+  .q{
+    background:rgba(255,255,255,.45);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--ink);
+    border-radius:10px;
+    padding:22px 24px 20px;margin:18px 0;
+    box-shadow:0 2px 10px -6px var(--shadow);
+    transition:.2s;
+  }
+  .q.correct{border-left-color:var(--green);background:var(--green-soft);}
+  .q.wrong{border-left-color:var(--burgundy);background:var(--red-soft);}
+  .q-num{
+    font-family:'Archivo',sans-serif;font-size:.74rem;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--burgundy);
+    margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .verdict{font-size:.72rem;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:4px;display:none;}
+  .q.correct .verdict{display:inline-block;background:var(--green);color:#fff;}
+  .q.wrong .verdict{display:inline-block;background:var(--burgundy);color:#fff;}
+  .q-text{font-size:1.08rem;font-weight:500;color:var(--ink);margin-bottom:14px;}
+  .q-text .mono{font-family:'Archivo',monospace;background:rgba(29,36,54,.07);padding:1px 5px;border-radius:4px;font-size:.95em;}
+
+  .opt{
+    display:flex;gap:12px;align-items:flex-start;
+    padding:11px 14px;margin:7px 0;border:1px solid var(--rule);
+    border-radius:8px;cursor:pointer;transition:.14s;background:rgba(255,255,255,.5);
+  }
+  .opt:hover{border-color:var(--ink-soft);background:rgba(255,255,255,.85);}
+  .opt input{display:none;}
+  .opt .bullet{
+    flex:0 0 26px;height:26px;border-radius:50%;border:1.5px solid var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:.82rem;color:var(--ink-soft);
+    transition:.14s;
+  }
+  .opt.sel{border-color:var(--ink);background:#fff;box-shadow:inset 0 0 0 1px var(--ink);}
+  .opt.sel .bullet{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .opt .otext{flex:1;font-size:1rem;color:var(--ink);padding-top:1px;}
+
+  /* graded states */
+  .opt.ans-correct{border-color:var(--green);background:var(--green-soft);}
+  .opt.ans-correct .bullet{background:var(--green);color:#fff;border-color:var(--green);}
+  .opt.ans-wrong{border-color:var(--burgundy);background:var(--red-soft);}
+  .opt.ans-wrong .bullet{background:var(--burgundy);color:#fff;border-color:var(--burgundy);}
+  .locked .opt{cursor:default;}
+  .locked .opt:hover{background:rgba(255,255,255,.5);border-color:var(--rule);}
+  .locked .opt.sel:hover{background:#fff;}
+  .locked .opt.ans-correct:hover{background:var(--green-soft);border-color:var(--green);}
+  .locked .opt.ans-wrong:hover{background:var(--red-soft);border-color:var(--burgundy);}
+
+  .explain{
+    display:none;margin-top:13px;padding:13px 16px;border-radius:8px;
+    background:rgba(29,36,54,.05);border-left:3px solid var(--gold);
+    font-size:.95rem;color:var(--ink-soft);
+  }
+  .explain.show{display:block;}
+  .explain b{color:var(--ink);font-family:'Archivo',sans-serif;font-size:.72rem;
+    letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--gold);}
+
+  /* ---------- Sticky action bar ---------- */
+  .bar{
+    position:fixed;bottom:0;left:0;right:0;z-index:20;
+    background:rgba(246,241,231,.94);backdrop-filter:blur(8px);
+    border-top:1.5px solid var(--rule);
+    padding:13px 24px;
+    display:flex;align-items:center;gap:14px;justify-content:center;
+  }
+  .bar-inner{max-width:880px;width:100%;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;}
+  .progress{font-family:'Archivo',sans-serif;font-size:.86rem;color:var(--ink-soft);}
+  .progress b{color:var(--ink);}
+  .btns{display:flex;gap:10px;}
+  button.action{
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:.9rem;
+    letter-spacing:.02em;border:none;padding:11px 24px;border-radius:8px;cursor:pointer;transition:.16s;
+  }
+  .btn-primary{background:var(--burgundy);color:#fff;}
+  .btn-primary:hover{background:#73202d;}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)!important;}
+  .btn-ghost:hover{background:var(--paper-2);}
+
+  /* ---------- Score panel ---------- */
+  .scorecard{
+    display:none;max-width:880px;margin:32px auto 0;padding:0 28px;
+  }
+  .scorecard.show{display:block;animation:rise .5s ease;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  .score-box{
+    background:var(--ink);color:var(--paper);border-radius:14px;
+    padding:30px 32px;display:flex;flex-wrap:wrap;gap:28px;align-items:center;
+    box-shadow:0 14px 36px -16px var(--shadow);
+  }
+  .score-big{font-family:'Fraunces',serif;font-size:3.4rem;font-weight:600;line-height:1;}
+  .score-big small{font-size:1.3rem;opacity:.6;}
+  .score-label{font-family:'Archivo',sans-serif;text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;opacity:.7;margin-bottom:6px;}
+  .score-msg{font-size:1.05rem;flex:1;min-width:200px;}
+  .breakdown{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+  .bd{flex:1;min-width:140px;background:rgba(255,255,255,.5);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;}
+  .bd .t{font-family:'Archivo',sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--burgundy);font-weight:700;}
+  .bd .n{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:600;margin-top:2px;}
+  .bd .p{font-family:'Archivo',sans-serif;font-size:.8rem;color:var(--ink-soft);}
+
+  footer{max-width:880px;margin:46px auto 0;padding:0 28px;font-family:'Archivo',sans-serif;font-size:.78rem;color:var(--ink-soft);text-align:center;}
+
+  @media(max-width:560px){
+    header{padding:38px 20px 20px;}
+    main,.controls,.scorecard,footer{padding-left:20px;padding-right:20px;}
+    .score-box{padding:24px;}
+    .bar-inner{gap:10px;}
+    button.action{padding:10px 16px;font-size:.84rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">National Central University · Economics</div>
+  <h1>Money, Inflation &amp;<br>the <em>Open Economy</em></h1>
+  <p class="sub">A 45-question single-choice quiz covering Chapters 30–32. Every concept from the lecture slides is tested — at a step above the practice set. Pick one answer per question, then check your work for full explanations.</p>
+  <div class="meta">
+    <span><b>45</b> questions</span>
+    <span><b>3</b> chapters</span>
+    <span>Format · <b>single choice</b></span>
+    <span>Language · <b>English</b></span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-ch="all">All Chapters</button>
+    <button class="tab" data-ch="30">CH30 · Money &amp; Inflation</button>
+    <button class="tab" data-ch="31">CH31 · Open-Economy Basics</button>
+    <button class="tab" data-ch="32">CH32 · Open-Economy Theory</button>
+  </div>
+</div>
+
+<div class="scorecard" id="scorecard"></div>
+
+<main id="quiz"></main>
+
+<footer>Study tool for personal exam prep · Solutions follow the Mankiw framework used in the course slides.</footer>
+
+<div class="bar">
+  <div class="bar-inner">
+    <div class="progress" id="progress">Answered <b>0</b> / 45</div>
+    <div class="btns">
+      <button class="action btn-ghost" id="resetBtn">Reset</button>
+      <button class="action btn-primary" id="checkBtn" disabled>Check Answers</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== QUESTION BANK ===== */
+const QUESTIONS = [
+{ch:30, q:"The price level rises from $2.50 to $3.00 per basket of goods. The value of one dollar, measured in baskets, changes from:", o:["0.40 to 0.33 baskets — an increase","2.50 to 3.00 baskets — an increase","0.40 to 0.33 baskets — a decrease","an amount that cannot be found without knowing velocity"], a:2, e:"The value of money is 1/P. It falls from 1/2.50 = 0.40 to 1/3.00 ≈ 0.33. Inflation drives prices up and the value of money down."},
+{ch:30, q:"According to the quantity theory of money — first developed by David Hume and the classical economists and later championed by Milton Friedman — the quantity of money primarily determines:", o:["the value of money and the overall price level","the real interest rate in the long run","real GDP in the long run","the economy's relative prices"], a:0, e:"The quantity theory asserts that the quantity of money determines the value of money (and hence the price level). Real variables are determined by resources and technology, not money."},
+{ch:30, q:"On the money supply–demand diagram with the value of money (1/P) on the vertical axis, the money-demand curve slopes downward because:", o:["a higher value of money raises real GDP","the Fed raises the money supply as prices rise","money demand is positively related to the value of money","a lower value of money (higher P) raises the quantity of money people must hold to transact"], a:3, e:"Quantity of money demanded is negatively related to the value of money and positively related to P. When P rises (value of money falls), people need more money to buy goods, so quantity demanded rises — a downward-sloping curve."},
+{ch:30, q:"A change in bank regulation makes credit cards far more available, so households hold less cash. If the Fed does nothing, the model predicts that money demand:", o:["rises, raising the value of money and lowering the price level","falls, lowering the value of money and raising the price level","is unchanged because money is neutral","falls, but the price level is unaffected"], a:1, e:"Less need for cash shifts money demand left. The value of money falls and P rises. To keep P stable the Fed would have to reduce the money supply."},
+{ch:30, q:"Immediately after the Fed increases the money supply, before prices have fully adjusted, the economy first experiences:", o:["an excess demand for money satisfied by selling goods","an immediate one-for-one rise in real output","a permanent rise in the real interest rate","an excess supply of money that people spend and lend, raising the demand for goods"], a:3, e:"At the initial price level the extra money is an excess supply. People unload it by buying goods or lending to others who spend it. Goods demand rises but goods supply does not, so prices must rise."},
+{ch:30, q:"The classical dichotomy together with monetary neutrality implies that if a central bank triples the money supply in the long run:", o:["nominal variables triple while relative prices, the real wage, and real GDP are unchanged","all nominal and all real variables triple","the real wage triples while nominal GDP is unchanged","relative prices triple while the price level is unchanged"], a:0, e:"Money is neutral in the long run: nominal variables (prices, nominal wage, nominal GDP) move proportionally with money, while real variables (relative prices, real wage, employment, real GDP) are unaffected."},
+{ch:30, q:"In a given year, nominal GDP is $20 trillion, real GDP is $18 trillion, and the money supply is $5 trillion. The price level (deflator, base = 1) and the velocity of money are approximately:", o:["0.90 and 4.0","1.11 and 3.6","1.11 and 4.0","1.25 and 5.0"], a:2, e:"P = nominal/real = 20/18 ≈ 1.11. V = (P × Y)/M = nominal GDP / M = 20/5 = 4.0."},
+{ch:30, q:"Assume velocity is constant. If the money supply grows 9% per year while real GDP grows 3% per year, the quantity theory predicts inflation of about:", o:["3%","6%","9%","12%"], a:1, e:"From MV = PY in growth rates: %ΔM + %ΔV = inflation + %ΔY → 9% + 0 = inflation + 3% → inflation = 6%. When real GDP grows, inflation is below money growth."},
+{ch:30, q:"A government finances spending by printing money, causing inflation. This \"inflation tax\" falls most heavily on:", o:["holders of inflation-indexed bonds","borrowers with fixed-rate loans","exporters of goods","people who hold wealth as money"], a:3, e:"Printing money raises P and erodes the real value of cash. It is effectively a tax on everyone holding money."},
+{ch:30, q:"The Fisher effect states that, other things equal, a rise in the inflation rate will:", o:["raise the nominal interest rate one-for-one, leaving the real rate unchanged","raise the real interest rate one-for-one","lower the nominal interest rate one-for-one","leave both nominal and real interest rates unchanged"], a:0, e:"Nominal rate = real rate + inflation. By monetary neutrality the real rate is unaffected in the long run, so the nominal rate adjusts one-for-one with inflation."},
+{ch:30, q:"You earn a 12% nominal interest rate when inflation is 4%, and nominal interest income is taxed at 25%. The after-tax real interest rate is:", o:["9%","8%","5%","6%"], a:2, e:"After-tax nominal = 12% × (1 − 0.25) = 9%. After-tax real = 9% − 4% = 5%. Taxing the nominal return makes the inflation premium itself taxable."},
+{ch:30, q:"Compare two cases, each with a 25% tax on nominal interest. Case A: inflation 0%, nominal rate 6%. Case B: inflation 8%, nominal rate 14%. Compared with A, the saver's after-tax REAL interest rate in B is:", o:["higher","lower","the same","unchanged but the pre-tax real rate is lower"], a:1, e:"A: after-tax nominal 4.5%, real = 4.5%. B: after-tax nominal 10.5%, real = 10.5% − 8% = 2.5%. The pre-tax real rate is 6% in both, but inflation plus taxes lowers the after-tax real return in B."},
+{ch:30, q:"A homeowner takes a 30-year fixed-rate mortgage expecting 3% inflation, but inflation instead averages 6%. Relative to expectations:", o:["the homeowner is worse off and the lender is better off","neither party is affected because the contract is fixed","both parties are worse off","the homeowner is better off because the real value of the fixed payments falls"], a:3, e:"Unexpectedly high inflation redistributes purchasing power from creditors (the lender) to debtors (the borrower), because the fixed nominal repayments are worth less in real terms."},
+{ch:30, q:"\"Shoeleather costs\" of inflation refer to:", o:["resources wasted as people cut money holdings and make more frequent trips to the bank","the cost to firms of reprinting menus and price lists","the misallocation caused by relative-price variability","extra taxes paid on nominal capital gains"], a:0, e:"Shoeleather costs are the resources wasted when inflation pushes people to economize on cash holdings (more bank trips). Menu costs, relative-price distortion, and tax distortions are separate costs."},
+{ch:30, q:"The \"inflation fallacy\" is the mistaken belief that inflation robs people of purchasing power. Economists reject it because:", o:["inflation always lowers nominal wages","the central bank compensates households directly","when prices rise, sellers' incomes (including wages) tend to rise along with prices","inflation affects only nominal interest rates"], a:2, e:"Inflation raises the prices buyers pay AND the prices/incomes sellers receive. Over the long run wages and the CPI rise together, so inflation does not in itself reduce real purchasing power."},
+{ch:31, q:"A U.S.-based Fidelity mutual fund sells the Volkswagen (German company) stock it owns to a French investor. For the United States this transaction:", o:["increases net capital outflow; it is direct investment","increases net exports","decreases net capital outflow; it is portfolio investment","decreases net exports"], a:2, e:"A U.S. resident selling a foreign asset reduces U.S. net capital outflow (NCO). Buying/selling stock without managing the firm is portfolio investment, not direct investment."},
+{ch:31, q:"An American buys a share of Sony (a Japanese company) stock. In the U.S. accounts this is recorded as:", o:["an increase in net capital outflow","an increase in net exports","a decrease in net exports (an import)","a decrease in net capital outflow"], a:0, e:"Purchasing a foreign asset is a capital outflow, so NCO rises. It is NOT counted as an import — only goods and services count in net exports."},
+{ch:31, q:"The accounting identity NCO = NX holds because:", o:["saving always equals investment in an open economy","the central bank fixes the exchange rate","net exports are always positive when net capital outflow is positive","every international transaction trades a good/service for an asset, so the two sides must match"], a:3, e:"Each transaction that changes NX (a good crossing the border) is paid for with an asset, changing NCO by the same amount. So the two are equal as an identity."},
+{ch:31, q:"In an open economy, national saving S = $3.0 trillion and domestic investment I = $3.5 trillion. It follows that:", o:["NCO = +$0.5T and the country runs a trade surplus","NCO = −$0.5T and the country runs a trade deficit","NCO = +$0.5T and the country runs a trade deficit","NX = +$0.5T"], a:1, e:"S − I = NCO = NX = −$0.5T. Saving below investment means a capital inflow (NCO < 0) and a trade deficit (NX < 0)."},
+{ch:31, q:"Which statement about a country running a trade deficit is FALSE?", o:["its exports are less than its imports","its net capital outflow is negative","its output Y is less than domestic spending C + I + G","its domestic investment is less than its national saving"], a:3, e:"A trade deficit means NX < 0, so S − I < 0, i.e. I > S. Saying investment is LESS than saving is therefore false. All the others are true of a trade deficit."},
+{ch:31, q:"The nominal exchange rate moves from 100 yen per dollar to 115 yen per dollar. This means:", o:["the dollar appreciated and the yen depreciated","the dollar depreciated and the yen appreciated","both currencies appreciated","U.S. net exports must have risen"], a:0, e:"Each dollar now buys more yen, so the dollar appreciated (strengthened) and the yen depreciated. The effect on net exports works through the real, not nominal, rate."},
+{ch:31, q:"A Big Mac costs $5.00 in the U.S. and 500 yen in Japan; the nominal exchange rate is 120 yen per dollar. The real exchange rate, measured as Japanese Big Macs per U.S. Big Mac, is:", o:["0.83","1.0","1.2","2.4"], a:2, e:"Real exchange rate = (e × P)/P* = (120 × 5)/500 = 600/500 = 1.2 Japanese Big Macs per U.S. Big Mac — the U.S. Big Mac is the pricier of the two."},
+{ch:31, q:"A can of soda costs $1.50 in the United States and 30 pesos in Mexico. If purchasing-power parity holds, the nominal exchange rate is:", o:["45 pesos per dollar","20 pesos per dollar","2 pesos per dollar","0.05 pesos per dollar"], a:1, e:"Under PPP, e = P*/P = 30/1.50 = 20 pesos per dollar, so that the soda costs the same in both currencies."},
+{ch:31, q:"Continuing the soda example (PPP holds, initially 20 pesos per dollar): a Mexican monetary expansion doubles all Mexican prices, so the soda now costs 60 pesos. Under PPP the peso will:", o:["appreciate to 10 pesos per dollar","stay at 20 pesos per dollar","depreciate to 45 pesos per dollar","depreciate to 40 pesos per dollar"], a:3, e:"New e = 60/1.50 = 40 pesos per dollar. More pesos per dollar means the peso has depreciated — higher inflation produces a weaker currency."},
+{ch:31, q:"A corporation builds and operates a factory abroad, while an individual buys a handful of foreign shares. The best classification is:", o:["corporation → direct investment; individual → portfolio investment","corporation → portfolio investment; individual → direct investment","both are direct investment","both are portfolio investment"], a:0, e:"Direct investment involves owning and managing operations abroad (the corporation's factory). Portfolio investment is passive ownership of foreign assets (the individual's shares)."},
+{ch:31, q:"Other things equal, U.S. net capital outflow tends to RISE when:", o:["real interest rates on U.S. (domestic) assets increase","foreign assets are perceived as riskier","real interest rates available on foreign assets increase","the U.S. real exchange rate appreciates"], a:2, e:"Higher foreign returns make domestic residents buy more foreign assets, raising NCO. Higher domestic rates or riskier foreign assets would lower NCO."},
+{ch:31, q:"Purchasing-power parity often fails in practice mainly because:", o:["exchange rates are fixed by central banks everywhere","many goods are non-traded and tradable goods are not perfect substitutes","the law of one price applies only to financial assets","arbitrage is illegal in most countries"], a:1, e:"Non-traded goods cannot be arbitraged across borders, and even tradable goods differ enough (taste, branding) that price gaps persist. So PPP holds only loosely, especially short-run."},
+{ch:31, q:"A U.S. programmer sells software to a Japanese customer for 10,000 yen and immediately uses the yen to buy a Japanese camera. The combined effect on U.S. net exports is:", o:["net exports rise by the value of the software","net exports fall by the value of the camera","net capital outflow rises permanently","net exports are unchanged because the export and import offset"], a:3, e:"The software export raises NX; the camera import lowers NX by the same amount. Net effect on NX is zero (and NCO is unchanged too)."},
+{ch:31, q:"Under purchasing-power parity, a country with a relatively HIGH inflation rate should, over time, experience:", o:["a depreciating currency","an appreciating currency","an unchanged nominal exchange rate","a rising real exchange rate"], a:0, e:"If a country's price level rises faster, PPP requires its nominal exchange rate to fall — its currency depreciates relative to lower-inflation countries."},
+{ch:31, q:"Suppose U.S. residents wish to buy NO foreign assets, but foreigners want to buy stock in U.S. firms. To get the dollars they need, foreigners must:", o:["buy more U.S. goods, producing a U.S. trade surplus","borrow the dollars directly from the Federal Reserve","sell the U.S. more goods and services than they buy, producing a U.S. trade deficit","raise their own country's interest rates"], a:2, e:"The only way for foreigners to acquire dollars is to run a goods/services surplus with the U.S. — i.e. the U.S. runs a trade deficit. Those dollars then fund their purchase of U.S. assets, consistent with NX = NCO."},
+{ch:32, q:"In the open-economy loanable-funds model, the DEMAND for loanable funds comes from:", o:["national saving only","domestic investment only","domestic investment plus net capital outflow","net exports plus government spending"], a:2, e:"Supply of loanable funds = S. Demand = I + NCO, because funds are needed both for domestic investment and to acquire foreign assets (capital flowing abroad)."},
+{ch:32, q:"Net capital outflow is a downward-sloping function of the real interest rate r because a higher domestic r:", o:["makes domestic assets more attractive, so residents buy fewer foreign assets and foreigners buy more domestic assets","makes foreign assets more attractive than domestic assets","raises national saving directly","has no effect on asset allocation"], a:0, e:"A higher r raises the return on domestic assets, pulling capital home: NCO falls. A lower r pushes capital abroad: NCO rises. Hence NCO declines as r rises."},
+{ch:32, q:"Starting from a balanced budget and balanced trade, the government runs a budget deficit. The correct chain of effects is:", o:["saving rises → r falls → NCO rises → dollar depreciates → NX rises","saving falls → r falls → NCO rises → dollar depreciates → NX rises","investment rises → r rises → NCO rises → dollar appreciates → NX falls","saving falls → r rises → NCO falls → dollar appreciates → NX falls"], a:3, e:"A deficit cuts national saving, shifting the supply of loanable funds left and raising r. Higher r lowers NCO, cutting the supply of dollars, so the dollar appreciates and NX falls — the \"twin deficits.\""},
+{ch:32, q:"In the market for foreign-currency exchange used in this chapter, the SUPPLY of dollars comes from ___ and the DEMAND for dollars comes from ___.", o:["net exports; net capital outflow","net capital outflow; net exports","national saving; domestic investment","domestic investment; national saving"], a:1, e:"Supply of dollars = NCO (residents selling dollars to buy foreign assets). Demand for dollars = NX (foreigners needing dollars to buy U.S. net exports)."},
+{ch:32, q:"An increase in the U.S. real exchange rate E, holding everything else fixed, will:", o:["shift the supply of dollars (NCO) to the right","increase net capital outflow","raise national saving","reduce the quantity of dollars demanded, because U.S. goods become more expensive to foreigners"], a:3, e:"A higher E makes U.S. goods costlier abroad, cutting foreign demand for U.S. goods and thus the quantity of dollars demanded. E has no effect on saving/investment, so it does not shift NCO (the supply of dollars)."},
+{ch:32, q:"The government enacts an investment tax credit. Compared with a budget deficit of equal size, the investment tax credit:", o:["has similar effects on r, NCO, E, and NX, but raises investment and long-run living standards instead of lowering them","has the opposite effect on r and the exchange rate","lowers the real interest rate and depreciates the currency","has no effect on the trade balance"], a:0, e:"Both raise demand in the loanable-funds market, raising r and appreciating the dollar while cutting NX. The key difference: the tax credit boosts investment (and future productivity), whereas a deficit crowds investment out."},
+{ch:32, q:"The U.S. imposes an import quota on Japanese cars. According to the model, the effect on the U.S. trade balance (net exports) is:", o:["net exports rise by the value of the reduced car imports","net exports fall as exports collapse","net exports are unchanged, because the quota does not affect saving or investment and so leaves NCO unchanged","net exports rise only if the dollar depreciates"], a:2, e:"A quota does not change S or I, so NCO = S − I is unchanged. Since NX = NCO, net exports cannot change — the trade balance is unaffected."},
+{ch:32, q:"Why does an import quota leave net exports unchanged even though it directly cuts imports?", o:["foreign governments retaliate with equal quotas","the rise in demand for dollars appreciates the dollar, lowering exports and raising imports until NX returns to NCO","consumers simply switch to other imported goods","the quota lowers national saving"], a:1, e:"At the old exchange rate the quota would raise NX and the demand for dollars. But NCO (supply of dollars) is fixed, so E must rise. The stronger dollar shrinks exports and boosts other imports, restoring NX to its original level."},
+{ch:32, q:"An import quota that protects the domestic auto industry:", o:["raises total U.S. employment","has no effect on any industry","cuts the trade deficit and creates export jobs","saves auto-industry jobs but destroys jobs in U.S. export industries as the dollar appreciates"], a:3, e:"Fewer car imports mean more domestic auto production and jobs. But the dollar appreciates, hurting exporters, who shed jobs. The quota reshuffles jobs across industries without raising the total."},
+{ch:32, q:"Political instability triggers capital flight from Mexico. In the Mexican loanable-funds market this appears as:", o:["an increase in NCO at each interest rate, raising the demand for loanable funds and the Mexican real interest rate","a decrease in NCO, lowering the demand for loanable funds","an increase in the supply of loanable funds, lowering the interest rate","no change, because NCO = S − I is fixed"], a:0, e:"Investors dump Mexican assets and buy foreign ones, so NCO rises at every r. Since demand for loanable funds = I + NCO, demand shifts right and the Mexican real interest rate rises."},
+{ch:32, q:"Following that capital flight, in the market for foreign-currency exchange the peso will:", o:["appreciate as the supply of pesos falls","be unaffected","depreciate as the higher NCO raises the supply of pesos","appreciate as demand for pesos rises"], a:2, e:"Higher NCO increases the supply of pesos in the foreign-exchange market, so the real value of the peso falls — the currency depreciates. (Capital flight: rising r AND a weaker currency.)"},
+{ch:32, q:"Real interest rates rise sharply across Europe. The effect on the United States is best described as:", o:["U.S. NCO falls, the supply of dollars falls, the dollar appreciates, and U.S. net exports fall","U.S. NCO rises (Americans buy more European assets), the supply of dollars rises, the dollar depreciates, and U.S. net exports rise","U.S. NCO rises, the dollar appreciates, and net exports fall","there is no effect, because the U.S. interest rate is set purely domestically"], a:1, e:"Higher European returns make Americans buy more European assets, so U.S. NCO rises at each r. This increases the supply of dollars, depreciating the dollar and raising U.S. net exports."},
+{ch:32, q:"A senator proposes subsidizing U.S. exports to shrink the trade deficit. Because an export subsidy does not change saving or investment, the model predicts it will:", o:["reduce the trade deficit by raising net exports","depreciate the dollar and raise net exports","lower the real interest rate","raise the demand for dollars, appreciate the dollar, and leave net exports unchanged"], a:3, e:"Like an import restriction, an export subsidy raises NX at the old exchange rate and thus demand for dollars. But NCO is unchanged, so the dollar appreciates and NX returns to its original level — the deficit is not reduced."},
+{ch:32, q:"China buys large quantities of U.S. assets (e.g., U.S. government bonds) in order to hold down its own exchange rate. The most direct results for the United States are:", o:["the dollar appreciates against the renminbi, U.S. imports from China rise, and the U.S. trade deficit grows","the dollar depreciates against the renminbi and U.S. imports from China fall","U.S. national saving rises","U.S. net capital outflow rises"], a:0, e:"Chinese demand for U.S. assets props up the dollar (weakens the renminbi). A stronger dollar makes Chinese goods cheaper for Americans, raising imports and widening the U.S. trade deficit."},
+{ch:32, q:"Americans increase their private saving. If the elasticity of U.S. net capital outflow with respect to the real interest rate is very HIGH, the extra saving will have:", o:["a large effect on domestic investment and a small effect on NCO","no effect on either investment or NCO","a small effect on domestic investment, because much of the extra saving flows abroad as net capital outflow","a large effect on the real exchange rate"], a:2, e:"A highly elastic NCO means a tiny fall in r pulls lots of funds abroad. So extra saving is largely absorbed by higher NCO rather than higher domestic investment — domestic investment changes little."}
+];
+
+/* ===== STATE ===== */
+const answers = new Array(QUESTIONS.length).fill(null);
+let graded = false;
+let filter = "all";
+
+const chMeta = {
+  30:{title:"Chapter 30 · Money Growth and Inflation", sub:"Quantity theory · value of money · classical dichotomy & neutrality · velocity · Fisher effect · the costs of inflation"},
+  31:{title:"Chapter 31 · Open-Economy Macroeconomics: Basic Concepts", sub:"Net exports · net capital outflow · the NX = NCO identity · saving–investment · exchange rates · purchasing-power parity"},
+  32:{title:"Chapter 32 · A Macroeconomic Theory of the Open Economy", sub:"Loanable-funds & foreign-currency markets · budget deficits · trade policy · capital flight · investment incentives"}
+};
+
+const quiz = document.getElementById("quiz");
+const progress = document.getElementById("progress");
+const checkBtn = document.getElementById("checkBtn");
+const resetBtn = document.getElementById("resetBtn");
+const scorecard = document.getElementById("scorecard");
+
+function letter(i){return String.fromCharCode(97+i);}
+
+function render(){
+  quiz.innerHTML = "";
+  let lastCh = null;
+  QUESTIONS.forEach((item, idx)=>{
+    if(filter !== "all" && String(item.ch) !== filter) return;
+    if(item.ch !== lastCh){
+      lastCh = item.ch;
+      const h = document.createElement("div");
+      h.innerHTML = `<div class="ch-head"><span class="ch-tag">CH${item.ch}</span>${chMeta[item.ch].title.split("· ")[1]}</div><div class="ch-sub">${chMeta[item.ch].sub}</div>`;
+      quiz.appendChild(h);
+    }
+    const card = document.createElement("div");
+    card.className = "q";
+    card.id = "q"+idx;
+
+    let stateClass = "";
+    if(graded && answers[idx]!==null){
+      stateClass = answers[idx]===item.a ? "correct" : "wrong";
+    }
+    if(stateClass) card.classList.add(stateClass);
+    if(graded) card.classList.add("locked");
+
+    const qtext = item.q.replace(/(\$[\d.,]+|\d+%|[0-9]+ ?(yen|pesos|rubles)|NCO|NX)/g, m=>`<span class="mono">${m}</span>`);
+
+    let html = `<div class="q-num"><span>Question ${idx+1} · CH${item.ch}</span><span class="verdict">${stateClass==="correct"?"Correct":"Review"}</span></div>`;
+    html += `<div class="q-text">${qtext}</div>`;
+    item.o.forEach((opt,oi)=>{
+      let cls = "opt";
+      if(answers[idx]===oi) cls += " sel";
+      if(graded){
+        if(oi===item.a) cls += " ans-correct";
+        else if(answers[idx]===oi) cls += " ans-wrong";
+      }
+      html += `<label class="${cls}" data-q="${idx}" data-o="${oi}">
+        <span class="bullet">${letter(oi)}</span>
+        <span class="otext">${opt}</span>
+      </label>`;
+    });
+    html += `<div class="explain${graded?' show':''}"><b>Explanation · answer (${letter(item.a)})</b>${item.e}</div>`;
+    card.innerHTML = html;
+    quiz.appendChild(card);
+  });
+
+  // attach option handlers
+  if(!graded){
+    document.querySelectorAll(".opt").forEach(el=>{
+      el.addEventListener("click",()=>{
+        const q = +el.dataset.q, o = +el.dataset.o;
+        answers[q] = o;
+        render();
+        updateProgress();
+      });
+    });
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const done = answers.filter(a=>a!==null).length;
+  progress.innerHTML = graded
+    ? `Reviewing · <b>${done}</b> / ${QUESTIONS.length} answered`
+    : `Answered <b>${done}</b> / ${QUESTIONS.length}`;
+  checkBtn.disabled = (done===0) || graded;
+  checkBtn.textContent = graded ? "Checked" : "Check Answers";
+}
+
+function grade(){
+  graded = true;
+  let correct = 0;
+  const byCh = {30:[0,0],31:[0,0],32:[0,0]};
+  QUESTIONS.forEach((item,idx)=>{
+    byCh[item.ch][1]++;
+    if(answers[idx]===item.a){correct++; byCh[item.ch][0]++;}
+  });
+  const pct = Math.round(correct/QUESTIONS.length*100);
+  let msg;
+  if(pct>=90) msg="Outstanding — you have these three chapters locked down. Glance at any flagged items and you're exam-ready.";
+  else if(pct>=75) msg="Strong work. Focus your review on the questions marked for review below.";
+  else if(pct>=60) msg="A solid base with clear gaps. Re-read the explanations and revisit the relevant slides.";
+  else msg="Worth another full pass. Work through each explanation, then retake to lock in the chains of reasoning.";
+
+  scorecard.innerHTML = `
+    <div class="score-box">
+      <div>
+        <div class="score-label">Your Score</div>
+        <div class="score-big">${correct}<small>/${QUESTIONS.length}</small></div>
+        <div class="score-label" style="margin-top:6px">${pct}%</div>
+      </div>
+      <div class="score-msg">${msg}
+        <div class="breakdown">
+          <div class="bd"><div class="t">CH30</div><div class="n">${byCh[30][0]}/${byCh[30][1]}</div><div class="p">Money & Inflation</div></div>
+          <div class="bd"><div class="t">CH31</div><div class="n">${byCh[31][0]}/${byCh[31][1]}</div><div class="p">Open-Economy Basics</div></div>
+          <div class="bd"><div class="t">CH32</div><div class="n">${byCh[32][0]}/${byCh[32][1]}</div><div class="p">Open-Economy Theory</div></div>
+        </div>
+      </div>
+    </div>`;
+  scorecard.classList.add("show");
+  render();
+  if(scorecard.scrollIntoView) scorecard.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function reset(){
+  answers.fill(null);
+  graded = false;
+  scorecard.classList.remove("show");
+  scorecard.innerHTML = "";
+  render();
+  if(window.scrollTo) window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    filter = t.dataset.ch;
+    render();
+  });
+});
+checkBtn.addEventListener("click",grade);
+resetBtn.addEventListener("click",reset);
+
+render();
+</script>
+</body>
+</html>
