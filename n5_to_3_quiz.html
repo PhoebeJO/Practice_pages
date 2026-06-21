@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本語文法ドリル｜N5〜N3 文法測驗</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f1eee4;
+    --paper-card:#fbfaf5;
+    --ink:#23282f;
+    --ink-soft:#5a5f5a;
+    --indigo:#274064;
+    --indigo-deep:#1b2f4d;
+    --indigo-tint:#e6ebf2;
+    --shu:#c33a22;          /* 朱・紅筆 */
+    --shu-soft:#f7e3dd;
+    --midori:#2c7a5b;       /* 〇・正解 */
+    --midori-soft:#dfeee7;
+    --line:#d8d2c2;
+    --line-soft:#e7e2d4;
+    --kin:#b08243;
+    --shadow:0 1px 0 #fff inset, 0 14px 34px -22px rgba(27,47,77,.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New","Noto Sans TC",sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% -8%, #fbfaf5 0, transparent 42%),
+      radial-gradient(circle at 88% 108%, #e9e5d8 0, transparent 46%);
+    min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:26px 18px 80px;}
+
+  /* ---------- header ---------- */
+  header.masthead{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:14px;flex-wrap:wrap;
+    border-bottom:2px solid var(--indigo-deep);
+    padding-bottom:14px;margin-bottom:18px;
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;}
+  .brand .jp{
+    font-family:"Shippori Mincho B1",serif;font-weight:700;
+    font-size:clamp(26px,6vw,38px);color:var(--indigo-deep);
+    letter-spacing:.04em;line-height:1.1;
+  }
+  .brand .jp .accent{color:var(--shu);}
+  .brand .zh{
+    font-size:13px;color:var(--ink-soft);letter-spacing:.18em;font-weight:500;
+  }
+  .furi-btn{
+    font-family:"Shippori Mincho B1",serif;font-weight:500;
+    background:var(--paper-card);color:var(--indigo-deep);
+    border:1.5px solid var(--indigo);border-radius:999px;
+    padding:9px 16px 8px;font-size:14px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:.18s;box-shadow:var(--shadow);white-space:nowrap;
+  }
+  .furi-btn:hover{transform:translateY(-1px);}
+  .furi-btn .dot{
+    width:9px;height:9px;border-radius:50%;background:var(--line);
+    box-shadow:0 0 0 2px #fff;transition:.18s;
+  }
+  .furi-btn.on{background:var(--indigo);color:#fff;border-color:var(--indigo-deep);}
+  .furi-btn.on .dot{background:#7fe0b0;}
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex;gap:6px;margin-bottom:16px;}
+  .tab{
+    flex:1;text-align:center;cursor:pointer;user-select:none;
+    font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:16px;
+    padding:11px 8px;border:1.5px solid var(--line);border-bottom:none;
+    border-radius:10px 10px 0 0;background:#ece8db;color:var(--ink-soft);
+    position:relative;transition:.16s;
+  }
+  .tab .badge{
+    display:inline-flex;min-width:20px;height:20px;padding:0 5px;margin-left:6px;
+    align-items:center;justify-content:center;font-size:12px;font-weight:700;
+    font-family:"Zen Kaku Gothic New",sans-serif;
+    background:var(--shu);color:#fff;border-radius:999px;vertical-align:1px;
+  }
+  .tab.active{
+    background:var(--paper-card);color:var(--indigo-deep);
+    border-color:var(--indigo);box-shadow:0 -3px 0 var(--shu) inset;
+  }
+
+  /* ---------- filter bar ---------- */
+  .filters{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+  .filters .lab{font-size:13px;color:var(--ink-soft);letter-spacing:.1em;}
+  .chip{
+    cursor:pointer;font-size:14px;font-weight:500;
+    padding:5px 14px;border-radius:999px;border:1.5px solid var(--line);
+    background:#fff;color:var(--ink-soft);transition:.15s;
+  }
+  .chip.active{background:var(--indigo-deep);color:#fff;border-color:var(--indigo-deep);}
+
+  /* ---------- card ---------- */
+  .card{
+    background:var(--paper-card);border:1.5px solid var(--line);
+    border-radius:16px;padding:24px 22px 22px;box-shadow:var(--shadow);
+    position:relative;overflow:hidden;
+  }
+  .card::before{ /* 原稿用紙の縦罫 */
+    content:"";position:absolute;top:0;bottom:0;left:0;width:7px;
+    background:repeating-linear-gradient(#d9b9b0 0 6px,transparent 6px 13px);
+    opacity:.5;
+  }
+  .meta{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .lv{
+    font-family:"Shippori Mincho B1",serif;font-weight:700;font-size:13px;
+    letter-spacing:.06em;color:#fff;background:var(--indigo);
+    padding:3px 11px;border-radius:6px;
+  }
+  .lv.N5{background:#2c7a5b;}
+  .lv.N4{background:#356089;}
+  .lv.N3{background:var(--indigo-deep);}
+  .lv.custom{background:var(--kin);}
+  .cat{font-size:13px;color:var(--ink-soft);letter-spacing:.08em;
+    border:1px solid var(--line);padding:2px 9px;border-radius:6px;background:#fff;}
+  .counter{margin-left:auto;font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+
+  .question{
+    font-family:"Zen Kaku Gothic New",sans-serif;font-weight:500;
+    font-size:clamp(19px,4.4vw,23px);line-height:2.2;color:var(--ink);
+    margin:4px 0 20px;padding-left:6px;
+  }
+  .blank{
+    display:inline-block;min-width:62px;text-align:center;
+    border-bottom:2.5px solid var(--shu);margin:0 3px;color:transparent;
+    line-height:1;padding-bottom:2px;
+  }
+  .blank.filled{color:var(--indigo-deep);border-color:var(--indigo);font-weight:700;}
+
+  /* furigana */
+  ruby{ruby-position:over;}
+  rt{
+    font-family:"Zen Kaku Gothic New",sans-serif;font-weight:400;
+    font-size:.52em;color:var(--indigo);letter-spacing:.02em;
+    transition:opacity .2s;
+  }
+  .hide-furi rt{opacity:0;visibility:hidden;}
+
+  /* options */
+  .opts{display:flex;flex-direction:column;gap:10px;}
+  .opt{
+    text-align:left;cursor:pointer;border:1.5px solid var(--line);
+    background:#fff;border-radius:11px;padding:13px 16px;
+    font-family:"Zen Kaku Gothic New",sans-serif;font-size:17px;font-weight:500;
+    color:var(--ink);display:flex;align-items:center;gap:13px;transition:.14s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--indigo);background:#fafcff;}
+  .opt:disabled{cursor:default;}
+  .opt .key{
+    font-family:"Shippori Mincho B1",serif;font-weight:700;font-size:14px;
+    width:26px;height:26px;flex:0 0 26px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--indigo-tint);color:var(--indigo-deep);
+  }
+  .opt.correct{border-color:var(--midori);background:var(--midori-soft);}
+  .opt.correct .key{background:var(--midori);color:#fff;}
+  .opt.wrong{border-color:var(--shu);background:var(--shu-soft);}
+  .opt.wrong .key{background:var(--shu);color:#fff;}
+  .opt .mark{margin-left:auto;font-family:"Shippori Mincho B1",serif;font-size:22px;line-height:1;}
+  .opt.correct .mark{color:var(--midori);}
+  .opt.wrong .mark{color:var(--shu);}
+
+  /* feedback */
+  .feedback{margin-top:18px;border-top:1px dashed var(--line);padding-top:16px;display:none;}
+  .feedback.show{display:block;animation:rise .25s ease;}
+  @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .verdict{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+  .verdict .stamp{
+    font-family:"Shippori Mincho B1",serif;font-weight:700;font-size:30px;line-height:1;
+    width:46px;height:46px;flex:0 0 46px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;transform:rotate(-7deg);
+  }
+  .verdict.ok .stamp{color:var(--midori);border:3px solid var(--midori);}
+  .verdict.ng .stamp{color:var(--shu);border:3px solid var(--shu);}
+  .verdict .txt{font-family:"Shippori Mincho B1",serif;font-weight:700;font-size:19px;}
+  .verdict.ok .txt{color:var(--midori);}
+  .verdict.ng .txt{color:var(--shu);}
+  .verdict .sub{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:400;font-size:13px;color:var(--ink-soft);margin-left:4px;}
+
+  .explain{
+    background:#fff;border:1px solid var(--line-soft);border-left:4px solid var(--indigo);
+    border-radius:0 10px 10px 0;padding:13px 16px;font-size:15px;color:var(--ink);
+    font-family:"Noto Sans TC",sans-serif;line-height:1.85;
+  }
+  .explain b{color:var(--indigo-deep);}
+  .explain .jp{font-family:"Zen Kaku Gothic New",sans-serif;color:var(--shu);font-weight:500;}
+
+  .actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+  .btn{
+    font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:15px;
+    border-radius:10px;padding:11px 20px;cursor:pointer;border:1.5px solid transparent;transition:.15s;
+  }
+  .btn.primary{background:var(--indigo-deep);color:#fff;}
+  .btn.primary:hover{background:var(--indigo);}
+  .btn.ghost{background:#fff;color:var(--indigo-deep);border-color:var(--indigo);}
+  .btn.ghost:hover{background:var(--indigo-tint);}
+  .btn.danger{background:#fff;color:var(--shu);border-color:var(--shu);}
+  .btn.danger:hover{background:var(--shu-soft);}
+  .btn:disabled{opacity:.4;cursor:default;}
+
+  /* stats strip */
+  .stats{display:flex;gap:18px;margin-top:16px;padding:0 4px;font-size:13px;color:var(--ink-soft);}
+  .stats b{font-family:"Shippori Mincho B1",serif;color:var(--indigo-deep);font-size:17px;font-variant-numeric:tabular-nums;}
+
+  /* ---------- notebook ---------- */
+  .nb-intro{font-size:14px;color:var(--ink-soft);margin:2px 4px 14px;}
+  .nb-empty{
+    text-align:center;color:var(--ink-soft);padding:46px 20px;
+    border:1.5px dashed var(--line);border-radius:14px;background:var(--paper-card);
+  }
+  .nb-empty .big{font-family:"Shippori Mincho B1",serif;font-size:21px;color:var(--indigo-deep);margin-bottom:6px;}
+  .nb-item{
+    background:var(--paper-card);border:1.5px solid var(--line);border-radius:13px;
+    padding:16px 16px 14px;margin-bottom:12px;box-shadow:var(--shadow);position:relative;
+  }
+  .nb-q{font-family:"Zen Kaku Gothic New",sans-serif;font-size:17px;font-weight:500;line-height:2;margin:8px 0;}
+  .nb-ans{font-size:14px;margin-top:6px;}
+  .nb-ans .label{color:var(--ink-soft);}
+  .nb-ans .val{color:var(--midori);font-weight:700;font-family:"Zen Kaku Gothic New",sans-serif;}
+  .nb-exp{font-family:"Noto Sans TC",sans-serif;font-size:14px;color:var(--ink);line-height:1.8;
+    background:#fff;border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:9px 13px;margin-top:9px;}
+  .nb-exp .jp{font-family:"Zen Kaku Gothic New",sans-serif;color:var(--shu);}
+  .nb-tools{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .nb-tools .btn{font-size:13px;padding:7px 14px;}
+  .nb-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+
+  /* add form */
+  .add-form{
+    background:var(--paper-card);border:1.5px solid var(--indigo);border-radius:14px;
+    padding:18px;margin-bottom:16px;box-shadow:var(--shadow);
+  }
+  .add-form h3{font-family:"Shippori Mincho B1",serif;color:var(--indigo-deep);margin:0 0 4px;font-size:18px;}
+  .add-form .hint{font-size:12.5px;color:var(--ink-soft);margin-bottom:14px;}
+  .fld{margin-bottom:12px;}
+  .fld label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:5px;letter-spacing:.04em;}
+  .fld input,.fld textarea,.fld select{
+    width:100%;border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;
+    font-family:"Zen Kaku Gothic New","Noto Sans TC",sans-serif;font-size:15px;background:#fff;color:var(--ink);
+  }
+  .fld textarea{min-height:62px;resize:vertical;line-height:1.7;}
+  .fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--indigo);}
+  .opt-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+  .opt-row input[type=radio]{width:18px;height:18px;accent-color:var(--shu);flex:0 0 auto;}
+  .opt-row .num{font-family:"Shippori Mincho B1",serif;font-weight:700;color:var(--indigo);width:18px;}
+  .opt-row input[type=text]{flex:1;}
+  .grid2{display:flex;gap:10px;}
+  .grid2 .fld{flex:1;}
+
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--indigo-deep);color:#fff;padding:11px 20px;border-radius:999px;
+    font-size:14px;font-family:"Zen Kaku Gothic New",sans-serif;font-weight:500;
+    box-shadow:0 12px 30px -10px rgba(0,0,0,.5);opacity:0;pointer-events:none;
+    transition:.3s;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .hidden{display:none !important;}
+  footer{text-align:center;margin-top:28px;font-size:12px;color:var(--ink-soft);letter-spacing:.06em;}
+
+  @media (max-width:520px){
+    .question{line-height:2;}
+    .verdict .stamp{font-size:26px;width:40px;height:40px;flex-basis:40px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="brand">
+      <div class="jp">文法<span class="accent">添削</span>ドリル</div>
+      <div class="zh">N5 ・ N4 ・ N3 文法測驗 ｜ 即時批改</div>
+    </div>
+    <button id="furiBtn" class="furi-btn" onclick="toggleFuri()">
+      <span class="dot"></span><span id="furiLabel">ふりがな OFF</span>
+    </button>
+  </header>
+
+  <nav class="tabs">
+    <div class="tab active" id="tabQuiz" onclick="switchTab('quiz')">測驗</div>
+    <div class="tab" id="tabNote" onclick="switchTab('note')">錯題本<span class="badge" id="nbBadge">0</span></div>
+  </nav>
+
+  <!-- ============ QUIZ VIEW ============ -->
+  <section id="quizView">
+    <div class="filters">
+      <span class="lab">程度</span>
+      <span class="chip active" data-lv="all" onclick="setLevel('all')">全部</span>
+      <span class="chip" data-lv="N5" onclick="setLevel('N5')">N5</span>
+      <span class="chip" data-lv="N4" onclick="setLevel('N4')">N4</span>
+      <span class="chip" data-lv="N3" onclick="setLevel('N3')">N3</span>
+    </div>
+
+    <div id="quizHost"></div>
+
+    <div class="stats">
+      <span>已作答 <b id="stTotal">0</b></span>
+      <span>答對 <b id="stCorrect">0</b></span>
+      <span>正確率 <b id="stRate">—</b></span>
+    </div>
+  </section>
+
+  <!-- ============ NOTEBOOK VIEW ============ -->
+  <section id="noteView" class="hidden">
+    <p class="nb-intro">答錯的題目會自動收進這裡。你也可以手動新增想複習的題目。</p>
+    <div class="nb-toolbar">
+      <button class="btn primary" id="reviewBtn" onclick="startReview()">練習錯題</button>
+      <button class="btn ghost" onclick="toggleAddForm()">＋ 手動新增</button>
+      <button class="btn danger" onclick="clearNotebook()">清空錯題本</button>
+    </div>
+
+    <div id="addFormHost" class="hidden">
+      <div class="add-form">
+        <h3>新增一題到錯題本</h3>
+        <p class="hint">句中要挖空的地方，請用兩個底線 <b>＿＿</b> 標示（半形 __ 或全形 ＿＿ 皆可）。</p>
+        <div class="grid2">
+          <div class="fld">
+            <label>程度</label>
+            <select id="afLevel"><option>N5</option><option>N4</option><option>N3</option><option value="custom">自訂</option></select>
+          </div>
+          <div class="fld">
+            <label>分類（例：助詞 / 文型）</label>
+            <input id="afCat" type="text" placeholder="文型">
+          </div>
+        </div>
+        <div class="fld">
+          <label>題目句子</label>
+          <textarea id="afQ" placeholder="例：日本語が話せる＿＿、毎日練習しています。"></textarea>
+        </div>
+        <div class="fld">
+          <label>選項（點圓鈕標出正解）</label>
+          <div class="opt-row"><input type="radio" name="afCorrect" value="0" checked><span class="num">①</span><input type="text" id="afO0" placeholder="ように"></div>
+          <div class="opt-row"><input type="radio" name="afCorrect" value="1"><span class="num">②</span><input type="text" id="afO1" placeholder="ために"></div>
+          <div class="opt-row"><input type="radio" name="afCorrect" value="2"><span class="num">③</span><input type="text" id="afO2" placeholder="ことに"></div>
+          <div class="opt-row"><input type="radio" name="afCorrect" value="3"><span class="num">④</span><input type="text" id="afO3" placeholder="そうに"></div>
+        </div>
+        <div class="fld">
+          <label>解釋（繁體中文，可留空）</label>
+          <textarea id="afExp" placeholder="可說明用法與易混淆的對比…"></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn primary" onclick="addCustom()">加入錯題本</button>
+          <button class="btn ghost" onclick="toggleAddForm()">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="noteList"></div>
+  </section>
+
+  <footer>づつ積み重ねれば、必ず力になる。 🖋️ がんばって、Phoebe</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =================================================================
+   題庫：N5〜N3 文法。furigana 以 <ruby>漢字<rt>かな</rt></ruby> 標記。
+   挖空處用 ＿＿（兩個全形底線）。
+   ================================================================= */
+const QUESTIONS = [
+  /* ---------- N5 ---------- */
+  {id:"n5-1",lv:"N5",cat:"助詞",q:"<ruby>私<rt>わたし</rt></ruby>＿＿<ruby>学生<rt>がくせい</rt></ruby>です。",o:["は","が","を","に"],a:0,
+   exp:"<b>は</b>提示主題，陳述「我」的身分（我是學生）。<b>が</b>則用於描述新資訊或回答「誰」<span class='jp'>（だれが学生ですか）</span>。單純說明身分用は。"},
+  {id:"n5-2",lv:"N5",cat:"助詞",q:"<ruby>毎朝<rt>まいあさ</rt></ruby>コーヒー＿＿<ruby>飲<rt>の</rt></ruby>みます。",o:["を","が","に","で"],a:0,
+   exp:"<b>を</b>標示動作的對象（受詞）。被「喝」的咖啡是動作對象，故用を。"},
+  {id:"n5-3",lv:"N5",cat:"助詞",q:"<ruby>朝<rt>あさ</rt></ruby><ruby>7<rt>しち</rt></ruby><ruby>時<rt>じ</rt></ruby>＿＿<ruby>起<rt>お</rt></ruby>きます。",o:["に","で","を","へ"],a:0,
+   exp:"具體的時間點用<b>に</b><span class='jp'>（7時に）</span>。注意：<span class='jp'>「きょう・あした」</span>等相對時間詞前不加に。"},
+  {id:"n5-4",lv:"N5",cat:"助詞",q:"<ruby>図書館<rt>としょかん</rt></ruby>＿＿<ruby>勉強<rt>べんきょう</rt></ruby>します。",o:["で","に","を","へ"],a:0,
+   exp:"<b>で</b>表示「動作進行的場所」（在圖書館念書）。<b>に</b>則表示存在或到達地點<span class='jp'>（図書館にいます＝在圖書館）</span>。動作發生地用で。"},
+  {id:"n5-5",lv:"N5",cat:"助詞",q:"<ruby>友<rt>とも</rt></ruby>だち＿＿<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>書<rt>か</rt></ruby>きます。",o:["に","で","を","から"],a:0,
+   exp:"<b>に</b>標示單向動作的對象（寫信<u>給</u>朋友）。與雙向的<span class='jp'>「友だちと話す」</span>不同，「寫給」是單向，用に。"},
+  {id:"n5-6",lv:"N5",cat:"形容詞",q:"この<ruby>映画<rt>えいが</rt></ruby>はあまり＿＿。",o:["おもしろくないです","おもしろいです","おもしろじゃないです","おもしろいくない"],a:0,
+   exp:"い形容詞否定＝去掉い＋くない。<span class='jp'>おもしろい→おもしろくない（です）</span>。「あまり〜ない」＝「不太〜」。"},
+  {id:"n5-7",lv:"N5",cat:"形容詞",q:"ここは＿＿<ruby>町<rt>まち</rt></ruby>です。",o:["しずかな","しずかの","しずかい","しずかだ"],a:0,
+   exp:"な形容詞修飾名詞要加<b>な</b><span class='jp'>（静かな町）</span>。の用於名詞接名詞、だ是常體句尾，都不能直接接名詞。"},
+  {id:"n5-8",lv:"N5",cat:"文型",q:"<ruby>昨日<rt>きのう</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>＿＿。",o:["でした","です","だったです","ではありました"],a:0,
+   exp:"名詞句過去肯定用<b>でした</b>（昨天是雨天）。です的過去式即でした；<span class='jp'>「だったです」</span>為錯誤說法。"},
+  {id:"n5-9",lv:"N5",cat:"存在",q:"<ruby>公園<rt>こうえん</rt></ruby>に<ruby>子<rt>こ</rt></ruby>どもが＿＿。",o:["います","あります","です","なります"],a:0,
+   exp:"有生命（人、動物）用<b>います</b>；無生命（物、植物）用<b>あります</b>。小孩是人，故用います。"},
+  {id:"n5-10",lv:"N5",cat:"指示詞",q:"（指著離兩人都很遠的傘）＿＿は<ruby>誰<rt>だれ</rt></ruby>の<ruby>傘<rt>かさ</rt></ruby>ですか。",o:["あれ","これ","それ","どれ"],a:0,
+   exp:"これ＝靠近說話者；それ＝靠近聽話者；<b>あれ</b>＝離雙方都遠；どれ＝哪一個。離雙方都遠用あれ。"},
+  {id:"n5-11",lv:"N5",cat:"比較",q:"<ruby>電車<rt>でんしゃ</rt></ruby>はバス＿＿<ruby>速<rt>はや</rt></ruby>いです。",o:["より","から","まで","ほど"],a:0,
+   exp:"<b>「ＡはＢより〜」</b>＝「Ａ比Ｂ更〜」，より接在比較的基準後。電車比公車快。"},
+  {id:"n5-12",lv:"N5",cat:"文型",q:"<ruby>日本<rt>にほん</rt></ruby>へ＿＿たいです。",o:["行き","行く","行って","行った"],a:0,
+   exp:"<b>「〜たい」</b>（想要）接動詞ます形語幹。<span class='jp'>行きます→行き＋たい＝行きたい</span>（想去）。"},
+
+  /* ---------- N4 ---------- */
+  {id:"n4-1",lv:"N4",cat:"動詞變化",q:"<ruby>窓<rt>まど</rt></ruby>を＿＿ください。",o:["開けて","開けって","開いて","開けた"],a:0,
+   exp:"<b>「〜てください」</b>用て形。下一段動詞<span class='jp'>開ける→開けて</span>。注意他動詞<span class='jp'>開ける</span>（人去開窗）vs 自動詞<span class='jp'>開く</span>（窗自己開）。"},
+  {id:"n4-2",lv:"N4",cat:"動詞變化",q:"<ruby>今<rt>いま</rt></ruby>、<ruby>本<rt>ほん</rt></ruby>を＿＿。",o:["読んでいます","読みています","読んています","読むています"],a:0,
+   exp:"<b>「〜ている」</b>表正在進行。<span class='jp'>読む</span>的て形音便為<span class='jp'>読んで</span>＋います＝<span class='jp'>読んでいます</span>（正在讀）。む結尾動詞て形變んで。"},
+  {id:"n4-3",lv:"N4",cat:"可能形",q:"<ruby>私<rt>わたし</rt></ruby>は<ruby>漢字<rt>かんじ</rt></ruby>が＿＿。",o:["書けます","書きます","書けります","書かれます"],a:0,
+   exp:"五段動詞可能形：う段→え段＋る。<span class='jp'>書く→書ける</span>（會寫）。可能的對象常用<b>が</b>標示。<span class='jp'>書かれます</span>是被動形，意思不同。"},
+  {id:"n4-4",lv:"N4",cat:"文型",q:"<ruby>学生<rt>がくせい</rt></ruby>はルールを<ruby>守<rt>まも</rt></ruby>ら＿＿。",o:["なければなりません","なくてもいいです","てもいいです","ないでください"],a:0,
+   exp:"<b>「〜なければならない」</b>＝義務、必須（必須遵守規則）。相對地<span class='jp'>「〜なくてもいい」</span>＝「不〜也可以」（不必）。"},
+  {id:"n4-5",lv:"N4",cat:"文型",q:"<ruby>風邪<rt>かぜ</rt></ruby>のときは<ruby>薬<rt>くすり</rt></ruby>を＿＿ほうがいいです。",o:["飲んだ","飲む","飲んで","飲み"],a:0,
+   exp:"<b>「〜たほうがいい」</b>（最好〜）用た形表建議。<span class='jp'>飲む→飲んだほうがいい</span>。若用<span class='jp'>「飲まないほうがいい」</span>則是「最好別〜」。"},
+  {id:"n4-6",lv:"N4",cat:"授受",q:"<ruby>友<rt>とも</rt></ruby>だちが<ruby>私<rt>わたし</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を＿＿。",o:["くれました","あげました","もらいました","やりました"],a:0,
+   exp:"<b>くれる</b>＝別人給「我方」；<b>あげる</b>＝我給別人；<b>もらう</b>＝我從別人得到。主語是朋友、對象是我，用くれました。"},
+  {id:"n4-7",lv:"N4",cat:"受身",q:"<ruby>授業<rt>じゅぎょう</rt></ruby>で<ruby>先生<rt>せんせい</rt></ruby>に＿＿。",o:["ほめられました","ほめました","ほめさせました","ほめます"],a:0,
+   exp:"被動形：<span class='jp'>「先生に＋被動」</span>＝被老師〜（被稱讚）。<span class='jp'>ほめる→ほめられる</span>。<b>に</b>標示動作的施行者（被誰）。"},
+  {id:"n4-8",lv:"N4",cat:"文型",q:"<ruby>日曜日<rt>にちようび</rt></ruby>は<ruby>掃除<rt>そうじ</rt></ruby>を＿＿、<ruby>洗濯<rt>せんたく</rt></ruby>をしたりします。",o:["したり","して","しても","したら"],a:0,
+   exp:"<b>「〜たり〜たりする」</b>列舉動作（做做打掃、洗洗衣服之類）。表示從眾多動作中舉例，非完整列出。"},
+  {id:"n4-9",lv:"N4",cat:"條件",q:"<ruby>春<rt>はる</rt></ruby>に＿＿、<ruby>桜<rt>さくら</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>きます。",o:["なると","なっても","なるのに","なるから"],a:0,
+   exp:"<b>「〜と」</b>表必然、自然的結果（一到春天，櫻花就開）。常用於恆常事實與自然規律。"},
+  {id:"n4-10",lv:"N4",cat:"自他動詞",q:"<ruby>風<rt>かぜ</rt></ruby>でドアが＿＿。",o:["開きました","開けました","開かれました","開けられました"],a:0,
+   exp:"自動詞<span class='jp'>開く（あく）</span>＝門自己開（無人為對象）；他動詞<span class='jp'>開ける（あける）</span>＝有人去開。風吹門開是自然現象，用自動詞。"},
+
+  /* ---------- N3 ---------- */
+  {id:"n3-1",lv:"N3",cat:"文型",q:"<ruby>先月<rt>せんげつ</rt></ruby>この<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>った＿＿で、まだ<ruby>仕事<rt>しごと</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れていない。",o:["ばかり","ところ","とたん","うち"],a:0,
+   exp:"<b>「〜たばかり」</b>＝「才剛〜（感覺不久）」，可搭配「上個月」等較長時間。<span class='jp'>「〜たところ」</span>僅限「此刻剛剛」的瞬間，不能配「先月」。"},
+  {id:"n3-2",lv:"N3",cat:"文型",q:"<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>せる＿＿、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>しています。",o:["ように","ために","ことに","そうに"],a:0,
+   exp:"<b>「〜ように」</b>前接無意志／可能動詞，表目標（為了能夠〜）。<span class='jp'>「〜ために」</span>前接意志動詞或名詞。<span class='jp'>話せる</span>是可能動詞，故用ように。"},
+  {id:"n3-3",lv:"N3",cat:"文型",q:"<ruby>10年<rt>じゅうねん</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいたのか。<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>な＿＿だ。",o:["わけ","はず","つもり","よう"],a:0,
+   exp:"<b>「〜わけだ」</b>＝由前述理由得出「難怪、原來如此」的合理結論（住了十年，難怪日語好）。<span class='jp'>「〜はずだ」</span>是推測「按理應該〜」，語感不同。"},
+  {id:"n3-4",lv:"N3",cat:"文型",q:"<ruby>冬<rt>ふゆ</rt></ruby>は<ruby>風邪<rt>かぜ</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>き＿＿だ。",o:["がち","っぽい","ぎみ","がる"],a:0,
+   exp:"<b>「ます形語幹＋がち」</b>＝容易、動不動就（容易感冒），多用於負面傾向。<span class='jp'>「ぎみ」</span>＝略有〜的感覺<span class='jp'>（風邪ぎみ）</span>，程度較輕。"},
+  {id:"n3-5",lv:"N3",cat:"文型",q:"もう<ruby>大人<rt>おとな</rt></ruby>なのに、<ruby>彼<rt>かれ</rt></ruby>は<ruby>子<rt>こ</rt></ruby>ども＿＿<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>をする。",o:["っぽい","らしい","がち","ぎみ"],a:0,
+   exp:"<b>「名詞＋っぽい」</b>＝帶有〜傾向、像〜似的，常含負面（明明是大人卻孩子氣）。<span class='jp'>「子どもらしい」</span>則為正面，指「有孩子該有的純真」。"},
+  {id:"n3-6",lv:"N3",cat:"文型",q:"<ruby>熱<rt>あつ</rt></ruby>い＿＿、<ruby>食<rt>た</rt></ruby>べてください。",o:["うちに","あいだに","ながら","まえに"],a:0,
+   exp:"<b>「〜うちに」</b>＝趁著某狀態還持續（之後會改變），含把握時機之意（趁熱吃）。<span class='jp'>「〜あいだに」</span>只是某時段之內，無「狀態將變」的語感。"},
+  {id:"n3-7",lv:"N3",cat:"文型",q:"<ruby>今<rt>いま</rt></ruby>ちょうど<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>る＿＿です。",o:["ところ","ばかり","とたん","うち"],a:0,
+   exp:"<b>「辭書形＋ところ」</b>＝正要做〜的當下（正要出門）。<span class='jp'>ている＋ところ</span>＝正在進行；<span class='jp'>た＋ところ</span>＝剛做完。「正要」用辭書形＋ところ。"},
+  {id:"n3-8",lv:"N3",cat:"文型",q:"この<ruby>地方<rt>ちほう</rt></ruby>は<ruby>季節<rt>きせつ</rt></ruby>＿＿、<ruby>景色<rt>けしき</rt></ruby>が<ruby>変<rt>か</rt></ruby>わる。",o:["によって","について","に対して","にとって"],a:0,
+   exp:"<b>「〜によって」</b>＝依〜而不同／因〜而異（隨季節而變）。について＝關於；に対して＝對於、相對於；にとって＝對〜來說。"},
+  {id:"n3-9",lv:"N3",cat:"文型",q:"<ruby>環境<rt>かんきょう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>＿＿、<ruby>多<rt>おお</rt></ruby>くの<ruby>研究<rt>けんきゅう</rt></ruby>が<ruby>行<rt>おこな</rt></ruby>われている。",o:["について","によって","において","に対して"],a:0,
+   exp:"<b>「〜について」</b>＝就〜這個主題（談論、研究）。<span class='jp'>「〜に対して」</span>則強調對某對象的態度／對比<span class='jp'>（子どもに対して優しい）</span>。研究主題用について。"},
+  {id:"n3-10",lv:"N3",cat:"文型",q:"ベルが<ruby>鳴<rt>な</rt></ruby>った＿＿、<ruby>学生<rt>がくせい</rt></ruby>たちは<ruby>教室<rt>きょうしつ</rt></ruby>を<ruby>出<rt>で</rt></ruby>て<ruby>行<rt>い</rt></ruby>った。",o:["とたん","うちに","ところ","まま"],a:0,
+   exp:"<b>「〜たとたん（に）」</b>＝一〜就立刻（往往出乎意料）發生後項（鈴一響學生就衝出）。前後幾乎同時，後項多為瞬間變化。"},
+  {id:"n3-11",lv:"N3",cat:"文型",q:"<ruby>練習<rt>れんしゅう</rt></ruby>すれば＿＿、<ruby>上手<rt>じょうず</rt></ruby>になります。",o:["するほど","するだけ","したら","すると"],a:0,
+   exp:"<b>「〜ば〜ほど」</b>＝越〜就越〜（越練習越熟練）。前用ば形、後重複動詞辭書形＋ほど。"},
+  {id:"n3-12",lv:"N3",cat:"文型",q:"<ruby>寝坊<rt>ねぼう</rt></ruby>した＿＿、<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れた。",o:["せいで","おかげで","ために","ように"],a:0,
+   exp:"<b>「〜せいで」</b>＝因負面原因造成不好結果（因為睡過頭沒趕上車）。相對地<span class='jp'>「〜おかげで」</span>用於正面、感謝的結果（多虧〜）。"},
+  {id:"n3-13",lv:"N3",cat:"文型",q:"<ruby>約束<rt>やくそく</rt></ruby>したのだから、<ruby>守<rt>まも</rt></ruby>る＿＿だ。",o:["べき","はず","わけ","つもり"],a:0,
+   exp:"<b>「〜べきだ」</b>＝應該、理當（基於常理或義務，既然約定就該遵守）。<span class='jp'>「〜はずだ」</span>是推測「按理應該會〜」，語意不同。"},
+  {id:"n3-14",lv:"N3",cat:"文型",q:"お<ruby>金<rt>かね</rt></ruby>があれば<ruby>幸<rt>しあわ</rt></ruby>せだ＿＿。",o:["とは限らない","に違いない","に決まっている","はずだ"],a:0,
+   exp:"<b>「〜とは限らない」</b>＝未必、不一定〜（有錢未必幸福），部分否定。<span class='jp'>「に違いない／に決まっている」</span>則是強烈肯定推測，意思相反。"},
+  {id:"n3-15",lv:"N3",cat:"文型",q:"<ruby>医者<rt>いしゃ</rt></ruby>に<ruby>言<rt>い</rt></ruby>われた＿＿、お<ruby>酒<rt>さけ</rt></ruby>をやめた。",o:["とおりに","ように","ところ","まま"],a:0,
+   exp:"<b>「〜とおりに」</b>＝按照〜那樣去做（照醫生說的戒酒）。前接動詞た形或<span class='jp'>名詞＋の（説明のとおり）</span>。"},
+];
+
+/* =================================================================
+   儲存：優先 localStorage，失敗則退回記憶體（claude 預覽中亦可運作）
+   ================================================================= */
+const store = {
+  mem:{},
+  get(k){ try{return localStorage.getItem(k);}catch(e){return (k in this.mem)?this.mem[k]:null;} },
+  set(k,v){ try{localStorage.setItem(k,v);}catch(e){this.mem[k]=v;} }
+};
+function loadJSON(k,def){ const v=store.get(k); if(!v) return def; try{return JSON.parse(v);}catch(e){return def;} }
+function saveJSON(k,o){ store.set(k,JSON.stringify(o)); }
+
+/* ---------- state ---------- */
+let wrongList = loadJSON("jp_wronglist", []);   // 錯題本
+let stats     = loadJSON("jp_stats", {total:0,correct:0});
+let furiOn    = false;
+let level     = "all";
+let mode      = "quiz";          // quiz | review
+let order     = [];              // 目前題序（id 陣列）
+let pos       = 0;
+let answered  = false;
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function byId(id){ return QUESTIONS.find(q=>q.id===id) || wrongList.find(q=>q.id===id); }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1900); }
+
+/* 把句子中的 ＿＿ / __ 換成可填入的空格 span */
+function renderSentence(q, filled){
+  const blank = `<span class="blank ${filled!=null?'filled':''}">${filled!=null?filled:'　'}</span>`;
+  return q.q.replace(/(＿＿|__)/, blank);
+}
+
+/* =================================================================
+   QUIZ
+   ================================================================= */
+function poolForLevel(){
+  if(mode==="review") return wrongList.slice();
+  return QUESTIONS.filter(q => level==="all" ? true : q.lv===level);
+}
+function buildOrder(){
+  const pool = poolForLevel();
+  order = shuffle(pool.map(q=>q.id));
+  pos = 0;
+}
+function renderQuiz(){
+  const host = $("#quizHost");
+  if(order.length===0){
+    host.innerHTML = `<div class="nb-empty"><div class="big">沒有題目</div>${mode==="review"?"錯題本是空的，先去測驗練幾題吧。":"此程度暫無題目。"}</div>`;
+    return;
+  }
+  if(pos>=order.length){ renderDone(); return; }
+
+  const q = byId(order[pos]);
+  answered = false;
+  const total = order.length;
+  host.innerHTML = `
+    <div class="card ${furiOn?'':'hide-furi'}" id="qcard">
+      <div class="meta">
+        <span class="lv ${q.lv}">${q.lv==="custom"?"自訂":q.lv}</span>
+        <span class="cat">${q.cat||"文型"}</span>
+        <span class="counter">${mode==="review"?"複習":"第"} ${pos+1} / ${total}</span>
+      </div>
+      <div class="question" id="qsen">${renderSentence(q)}</div>
+      <div class="opts" id="opts">
+        ${q.o.map((opt,i)=>`
+          <button class="opt" data-i="${i}" onclick="answer(${i})">
+            <span class="key">${["①","②","③","④"][i]}</span>
+            <span class="otext">${opt}</span>
+            <span class="mark"></span>
+          </button>`).join("")}
+      </div>
+      <div class="feedback" id="fb"></div>
+      <div class="actions" id="qactions"></div>
+    </div>`;
+}
+
+function answer(i){
+  if(answered) return;
+  answered = true;
+  const q = byId(order[pos]);
+  const correct = (i===q.a);
+
+  // 填入空格、標示選項
+  $("#qsen").innerHTML = renderSentence(q, q.o[q.a]);
+  const opts = document.querySelectorAll("#opts .opt");
+  opts.forEach((el,idx)=>{
+    el.disabled = true;
+    if(idx===q.a){ el.classList.add("correct"); el.querySelector(".mark").textContent="〇"; }
+    if(idx===i && !correct){ el.classList.add("wrong"); el.querySelector(".mark").textContent="✕"; }
+  });
+
+  // 計分（review 模式不重複計入總體統計）
+  if(mode==="quiz"){
+    stats.total++; if(correct) stats.correct++;
+    saveJSON("jp_stats",stats); renderStats();
+  }
+
+  // 答錯 → 自動收進錯題本
+  if(!correct && mode==="quiz") addToWrong(q);
+  // review 答對 → 可移除
+  let reviewRemove = "";
+  if(mode==="review" && correct){
+    reviewRemove = `<button class="btn ghost" onclick="removeWrong('${q.id}');nextQ();">✓ 已掌握，移除此題</button>`;
+  }
+
+  const fb = $("#fb");
+  fb.innerHTML = `
+    <div class="verdict ${correct?'ok':'ng'}">
+      <span class="stamp">${correct?'〇':'✕'}</span>
+      <span class="txt">${correct?'正解！':'不正解'}</span>
+      <span class="sub">${correct?'よくできました':'下次注意這個用法'}</span>
+    </div>
+    ${q.exp?`<div class="explain">${q.exp}</div>`:`<div class="explain">（此題尚無解釋）</div>`}`;
+  fb.classList.add("show");
+
+  const last = (pos>=order.length-1);
+  $("#qactions").innerHTML = `
+    ${reviewRemove}
+    <button class="btn primary" onclick="nextQ()" ${last?'':''}>${last?'看結果':'下一題 →'}</button>`;
+}
+
+function nextQ(){ pos++; renderQuiz(); }
+
+function renderDone(){
+  const host = $("#quizHost");
+  const acc = mode==="review" ? "" :
+     (stats.total? Math.round(stats.correct/stats.total*100)+"%" : "—");
+  host.innerHTML = `
+    <div class="card">
+      <div class="meta"><span class="lv N3">完了</span><span class="cat">${mode==="review"?"複習一輪":"練習一輪"}</span></div>
+      <div class="question" style="line-height:1.9">辛苦了！這一輪 ${order.length} 題做完了。<br>
+      ${mode==="review"
+        ? `錯題本還剩 <b style="color:var(--shu)">${wrongList.length}</b> 題。`
+        : `目前累計正確率 <b style="color:var(--indigo-deep)">${acc}</b>。`}</div>
+      <div class="actions">
+        <button class="btn primary" onclick="${mode==='review'?'startReview()':'restartQuiz()'}">再來一輪</button>
+        ${mode==="review"?`<button class="btn ghost" onclick="switchTab('quiz');mode='quiz';restartQuiz();">回到測驗</button>`:`<button class="btn ghost" onclick="switchTab('note')">看錯題本</button>`}
+      </div>
+    </div>`;
+}
+function restartQuiz(){ mode="quiz"; buildOrder(); renderQuiz(); }
+
+function renderStats(){
+  $("#stTotal").textContent = stats.total;
+  $("#stCorrect").textContent = stats.correct;
+  $("#stRate").textContent = stats.total? Math.round(stats.correct/stats.total*100)+"%" : "—";
+}
+
+/* =================================================================
+   WRONG NOTEBOOK
+   ================================================================= */
+function addToWrong(q){
+  if(wrongList.some(w=>w.id===q.id)) return;
+  wrongList.push({id:q.id,lv:q.lv,cat:q.cat,q:q.q,o:q.o,a:q.a,exp:q.exp});
+  saveJSON("jp_wronglist",wrongList); updateBadge();
+}
+function removeWrong(id){
+  wrongList = wrongList.filter(w=>w.id!==id);
+  saveJSON("jp_wronglist",wrongList); updateBadge(); renderNotebook();
+}
+function clearNotebook(){
+  if(wrongList.length===0){ toast("錯題本已經是空的"); return; }
+  if(!confirm("確定要清空整本錯題本嗎？此動作無法復原。")) return;
+  wrongList=[]; saveJSON("jp_wronglist",wrongList); updateBadge(); renderNotebook(); toast("錯題本已清空");
+}
+function updateBadge(){
+  const b=$("#nbBadge"); b.textContent=wrongList.length;
+  b.style.display = wrongList.length? "inline-flex":"none";
+}
+function renderNotebook(){
+  const list=$("#noteList");
+  if(wrongList.length===0){
+    list.innerHTML = `<div class="nb-empty"><div class="big">錯題本是空的</div>答錯的題目會自動進來，<br>也可以按上方「＋ 手動新增」加入想複習的題目。</div>`;
+    return;
+  }
+  list.innerHTML = wrongList.map(q=>`
+    <div class="nb-item ${furiOn?'':'hide-furi'}">
+      <div class="meta">
+        <span class="lv ${q.lv}">${q.lv==="custom"?"自訂":q.lv}</span>
+        <span class="cat">${q.cat||"文型"}</span>
+      </div>
+      <div class="nb-q">${renderSentence(q, q.o[q.a])}</div>
+      <div class="nb-ans"><span class="label">正解：</span><span class="val">${q.o[q.a]}</span></div>
+      ${q.exp?`<div class="nb-exp">${q.exp}</div>`:""}
+      <div class="nb-tools">
+        <button class="btn danger" onclick="removeWrong('${q.id}')">移除</button>
+      </div>
+    </div>`).join("");
+}
+function startReview(){
+  if(wrongList.length===0){ toast("錯題本是空的，先去練幾題"); return; }
+  mode="review"; switchTab('quiz',true); buildOrder(); renderQuiz();
+  toast("開始複習錯題");
+}
+
+/* ---------- 手動新增 ---------- */
+function toggleAddForm(){ $("#addFormHost").classList.toggle("hidden"); }
+function addCustom(){
+  const q = $("#afQ").value.trim();
+  const opts = [0,1,2,3].map(i=>$("#afO"+i).value.trim());
+  const a = parseInt(document.querySelector('input[name=afCorrect]:checked').value,10);
+  if(!q){ toast("請輸入題目句子"); return; }
+  if(!/(＿＿|__)/.test(q)){ toast("題目要用 ＿＿ 標出挖空處"); return; }
+  if(opts.filter(Boolean).length<2){ toast("至少要填兩個選項"); return; }
+  if(!opts[a]){ toast("正解選項不能空白"); return; }
+  const item = {
+    id:"c"+Date.now(),
+    lv:$("#afLevel").value,
+    cat:$("#afCat").value.trim()||"自訂",
+    q, o:opts.map(o=>o||"—"), a,
+    exp:$("#afExp").value.trim()
+  };
+  wrongList.push(item); saveJSON("jp_wronglist",wrongList); updateBadge(); renderNotebook();
+  // 清空表單
+  $("#afQ").value=""; $("#afCat").value=""; $("#afExp").value="";
+  [0,1,2,3].forEach(i=>$("#afO"+i).value="");
+  document.querySelector('input[name=afCorrect][value="0"]').checked=true;
+  toggleAddForm(); toast("已加入錯題本");
+}
+
+/* =================================================================
+   UI 切換
+   ================================================================= */
+function toggleFuri(){
+  furiOn = !furiOn;
+  $("#furiBtn").classList.toggle("on",furiOn);
+  $("#furiLabel").textContent = furiOn? "ふりがな ON" : "ふりがな OFF";
+  // 即時套用到目前畫面
+  document.querySelectorAll(".card,.nb-item").forEach(el=>el.classList.toggle("hide-furi",!furiOn));
+}
+function setLevel(lv){
+  level=lv; mode="quiz";
+  document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",c.dataset.lv===lv));
+  buildOrder(); renderQuiz();
+}
+function switchTab(t, silent){
+  $("#tabQuiz").classList.toggle("active",t==="quiz");
+  $("#tabNote").classList.toggle("active",t==="note");
+  $("#quizView").classList.toggle("hidden",t!=="quiz");
+  $("#noteView").classList.toggle("hidden",t!=="note");
+  if(t==="note"){ renderNotebook(); }
+  if(t==="quiz" && !silent && mode==="review"){ mode="quiz"; buildOrder(); renderQuiz(); }
+}
+
+/* ---------- init ---------- */
+updateBadge(); renderStats(); buildOrder(); renderQuiz();
+</script>
+</body>
+</html>
