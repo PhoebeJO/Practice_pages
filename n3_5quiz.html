@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>日本語文法ドリル ｜ N5〜N3 文法測驗</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#274064; --indigo-deep:#1b2f4d; --indigo-soft:#3a5d86;
+  --shu:#c33a22; --shu-soft:#e7644b;
+  --midori:#2c7a5b; --midori-soft:#e3f1ea;
+  --paper:#f7f3e9; --paper-2:#fdfbf4; --line:#d8cdb4;
+  --ink:#22303f; --ink-soft:#5b6675; --gold:#b8924a;
+  --shadow:0 10px 30px rgba(27,47,77,.12), 0 2px 6px rgba(27,47,77,.08);
+  --jp:"Zen Kaku Gothic New","Noto Sans TC",sans-serif;
+  --mincho:"Shippori Mincho B1",serif;
+  --tc:"Noto Sans TC",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--tc);
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 12% -10%, #fefcf5 0%, rgba(254,252,245,0) 55%),
+    radial-gradient(1000px 700px at 110% 0%, #eef4f1 0%, rgba(238,244,241,0) 50%),
+    var(--paper);
+  min-height:100vh;
+  line-height:1.65;
+  padding:0 0 64px;
+}
+ruby rt{font-family:var(--jp);font-weight:500;color:var(--indigo-soft);font-size:.62em;letter-spacing:0;transition:opacity .18s}
+body.hide-furi rt{visibility:hidden}
+.jp{font-family:var(--jp)}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+
+/* Header */
+header{
+  position:relative;
+  padding:26px 0 16px;
+  text-align:center;
+}
+.brand{
+  display:inline-flex;align-items:center;gap:12px;
+}
+.seal{
+  width:46px;height:46px;border-radius:9px;
+  background:linear-gradient(150deg,var(--shu),var(--shu-soft));
+  color:#fff;font-family:var(--mincho);font-weight:800;font-size:22px;
+  display:grid;place-items:center;
+  box-shadow:0 6px 16px rgba(195,58,34,.32);
+  transform:rotate(-4deg);
+}
+h1{font-family:var(--mincho);font-weight:800;font-size:clamp(22px,5.4vw,30px);margin:0;color:var(--indigo-deep);letter-spacing:.02em}
+.subtitle{margin:6px 0 0;color:var(--ink-soft);font-size:13.5px;letter-spacing:.04em}
+
+/* furigana toggle */
+.furi-toggle{
+  position:absolute;top:24px;right:8px;
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--paper-2);border:1.5px solid var(--line);
+  border-radius:999px;padding:7px 13px;cursor:pointer;
+  font-family:var(--tc);font-size:12.5px;color:var(--indigo);font-weight:600;
+  box-shadow:var(--shadow);transition:.15s;
+}
+.furi-toggle:hover{border-color:var(--indigo-soft)}
+.furi-toggle .dot{width:30px;height:17px;border-radius:999px;background:var(--midori);position:relative;transition:.18s}
+.furi-toggle .dot::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff;transition:.18s}
+body.hide-furi .furi-toggle .dot{background:#c2b89e}
+body.hide-furi .furi-toggle .dot::after{left:15px}
+
+/* Tabs */
+.tabs{display:flex;gap:8px;justify-content:center;margin:18px 0 6px}
+.tab{
+  font-family:var(--tc);font-weight:700;font-size:14.5px;
+  border:1.5px solid var(--line);background:var(--paper-2);color:var(--ink-soft);
+  padding:9px 20px;border-radius:999px;cursor:pointer;transition:.15s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.tab.active{background:var(--indigo);color:#fff;border-color:var(--indigo);box-shadow:0 6px 16px rgba(39,64,100,.25)}
+.tab .badge{background:var(--shu);color:#fff;border-radius:999px;font-size:11px;min-width:19px;height:19px;padding:0 5px;display:grid;place-items:center;font-weight:700}
+.tab.active .badge{background:#fff;color:var(--shu)}
+
+/* Filters */
+.filters{
+  background:var(--paper-2);border:1.5px solid var(--line);border-radius:16px;
+  padding:13px 14px;margin:14px 0 16px;box-shadow:var(--shadow);
+}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filter-row + .filter-row{margin-top:11px}
+.flabel{font-size:12px;color:var(--ink-soft);font-weight:700;letter-spacing:.05em;min-width:42px}
+.chip{
+  font-family:var(--tc);font-weight:600;font-size:13px;
+  border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);
+  padding:6px 14px;border-radius:999px;cursor:pointer;transition:.13s;
+}
+.chip:hover{border-color:var(--indigo-soft)}
+.chip.active{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+select.cat-select{
+  flex:1;min-width:160px;font-family:var(--tc);font-size:13.5px;font-weight:600;color:var(--indigo);
+  border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M3 4.5L6 8l3-3.5' stroke='%23274064' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;
+}
+.filter-meta{font-size:12px;color:var(--ink-soft);margin-left:auto}
+
+/* Stats */
+.stats{display:flex;gap:10px;margin-bottom:14px}
+.stat{
+  flex:1;background:var(--paper-2);border:1.5px solid var(--line);border-radius:14px;
+  padding:11px 12px;text-align:center;box-shadow:var(--shadow);
+}
+.stat b{display:block;font-family:var(--mincho);font-size:22px;color:var(--indigo-deep);line-height:1.2}
+.stat span{font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
+
+/* Card (原稿用紙) */
+.card{
+  position:relative;background:var(--paper-2);
+  border:1.5px solid var(--line);border-radius:18px;
+  padding:22px 22px 20px;box-shadow:var(--shadow);overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px);
+  background-size:100% 34px;background-position:0 64px;
+  mask:linear-gradient(180deg,transparent 0,#000 70px);
+  -webkit-mask:linear-gradient(180deg,transparent 0,#000 70px);
+}
+.card>*{position:relative}
+.card-top{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tag{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:7px;letter-spacing:.04em}
+.tag.lv{background:var(--indigo);color:#fff}
+.tag.cat{background:#eee7d4;color:var(--indigo-deep);border:1px solid var(--line)}
+.qcount{margin-left:auto;font-size:12px;color:var(--ink-soft);font-weight:600}
+
+.question{
+  font-family:var(--jp);font-size:clamp(18px,4.6vw,21px);font-weight:500;
+  line-height:2;color:var(--ink);margin:6px 0 18px;
+}
+.blank{color:var(--shu);font-weight:700;border-bottom:2px dashed var(--shu-soft);padding:0 2px}
+
+.options{display:flex;flex-direction:column;gap:10px}
+.opt{
+  font-family:var(--jp);font-size:16.5px;font-weight:500;text-align:left;
+  background:#fff;border:1.5px solid var(--line);border-radius:12px;
+  padding:13px 15px;cursor:pointer;transition:.13s;color:var(--ink);
+  display:flex;align-items:center;gap:12px;width:100%;
+}
+.opt:hover:not(:disabled){border-color:var(--indigo-soft);transform:translateX(2px)}
+.opt:disabled{cursor:default}
+.opt .mark{
+  width:26px;height:26px;border-radius:50%;border:1.6px solid var(--line);
+  display:grid;place-items:center;font-family:var(--mincho);font-weight:700;font-size:14px;color:var(--ink-soft);flex:none;
+}
+.opt.correct{border-color:var(--midori);background:var(--midori-soft)}
+.opt.correct .mark{border-color:var(--midori);color:var(--midori);background:#fff}
+.opt.wrong{border-color:var(--shu);background:#fbe9e4}
+.opt.wrong .mark{border-color:var(--shu);color:var(--shu);background:#fff}
+/* red-pen marks */
+.opt.correct::after{content:"〇";margin-left:auto;font-family:var(--mincho);color:var(--midori);font-size:22px;font-weight:700}
+.opt.wrong::after{content:"✕";margin-left:auto;font-family:var(--mincho);color:var(--shu);font-size:20px;font-weight:700}
+
+.feedback{margin-top:16px;border-radius:13px;padding:14px 16px;display:none;border:1.5px solid}
+.feedback.show{display:block;animation:pop .22s ease}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.feedback.ok{background:var(--midori-soft);border-color:var(--midori)}
+.feedback.ng{background:#fbe9e4;border-color:var(--shu)}
+.fb-head{font-family:var(--mincho);font-weight:800;font-size:16px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.feedback.ok .fb-head{color:var(--midori)}
+.feedback.ng .fb-head{color:var(--shu)}
+.fb-ans{font-family:var(--jp);font-size:15px;margin-bottom:8px;color:var(--ink)}
+.fb-ans b{color:var(--indigo-deep)}
+.fb-exp{font-size:14px;color:var(--ink);line-height:1.7}
+.fb-exp b{color:var(--shu)}
+
+.actions{display:flex;gap:10px;margin-top:18px}
+.btn{
+  font-family:var(--tc);font-weight:700;font-size:15px;cursor:pointer;
+  border-radius:12px;padding:13px 22px;border:1.5px solid transparent;transition:.14s;flex:1;
+}
+.btn-primary{background:var(--indigo);color:#fff;box-shadow:0 6px 16px rgba(39,64,100,.25)}
+.btn-primary:hover{background:var(--indigo-deep)}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--indigo);flex:none}
+.btn-ghost:hover{border-color:var(--indigo-soft)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* Notebook */
+.nb-intro{font-size:13.5px;color:var(--ink-soft);margin:0 2px 14px;line-height:1.7}
+.nb-tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.nb-item{
+  background:var(--paper-2);border:1.5px solid var(--line);border-left:4px solid var(--shu);
+  border-radius:12px;padding:14px 15px;margin-bottom:11px;box-shadow:var(--shadow);
+}
+.nb-item .nb-q{font-family:var(--jp);font-size:16px;font-weight:500;line-height:1.9;margin-bottom:7px}
+.nb-item .nb-meta{display:flex;gap:7px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.nb-ans{font-family:var(--jp);font-size:14px;color:var(--midori);font-weight:600}
+.nb-exp{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.6}
+.nb-exp b{color:var(--shu)}
+.nb-del{margin-left:auto;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:18px;line-height:1;padding:2px 6px;border-radius:6px}
+.nb-del:hover{color:var(--shu);background:#fbe9e4}
+.empty{text-align:center;color:var(--ink-soft);padding:46px 20px;font-size:14px}
+.empty .big{font-family:var(--mincho);font-size:30px;color:var(--line);display:block;margin-bottom:10px}
+
+/* manual add form */
+.add-form{background:var(--paper-2);border:1.5px dashed var(--indigo-soft);border-radius:14px;padding:16px;margin-bottom:16px;display:none}
+.add-form.show{display:block}
+.add-form label{display:block;font-size:12.5px;font-weight:700;color:var(--indigo);margin:0 0 5px}
+.add-form .fld{margin-bottom:12px}
+.add-form input,.add-form textarea{
+  width:100%;font-family:var(--jp);font-size:14.5px;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;background:#fff;resize:vertical;
+}
+.add-form textarea{min-height:46px}
+.add-form .hint{font-size:11.5px;color:var(--ink-soft);font-weight:400;margin-top:4px}
+.add-form .form-actions{display:flex;gap:9px;margin-top:4px}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:var(--indigo-deep);color:#fff;padding:11px 20px;border-radius:999px;
+  font-size:13.5px;font-weight:600;box-shadow:0 10px 30px rgba(27,47,77,.35);
+  opacity:0;pointer-events:none;transition:.25s;z-index:50;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.hidden{display:none!important}
+footer{text-align:center;color:var(--ink-soft);font-size:11.5px;margin-top:30px;line-height:1.7;opacity:.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="seal">語</div>
+      <div>
+        <h1>日本語文法ドリル</h1>
+        <p class="subtitle">JLPT　N5 〜 N3　文法測驗 ・ 錯題本</p>
+      </div>
+    </div>
+    <button class="furi-toggle" id="furiBtn" title="切換振假名顯示">
+      <span class="dot"></span><span id="furiLabel">振假名 ON</span>
+    </button>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" id="tabQuiz">📝 測驗</button>
+    <button class="tab" id="tabNote">📕 錯題本 <span class="badge" id="nbCount">0</span></button>
+  </div>
+
+  <!-- ============ QUIZ VIEW ============ -->
+  <section id="quizView">
+    <div class="filters">
+      <div class="filter-row">
+        <span class="flabel">等級</span>
+        <button class="chip active" data-lv="ALL">全部</button>
+        <button class="chip" data-lv="N5">N5</button>
+        <button class="chip" data-lv="N4">N4</button>
+        <button class="chip" data-lv="N3">N3</button>
+      </div>
+      <div class="filter-row">
+        <span class="flabel">主題</span>
+        <select class="cat-select" id="catSelect"><option value="ALL">全部主題</option></select>
+        <span class="filter-meta" id="poolMeta">—</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="sDone">0</b><span>已作答</span></div>
+      <div class="stat"><b id="sRate">—</b><span>正確率</span></div>
+      <div class="stat"><b id="sWrong">0</b><span>錯題收錄</span></div>
+    </div>
+
+    <div class="card" id="quizCard"></div>
+  </section>
+
+  <!-- ============ NOTEBOOK VIEW ============ -->
+  <section id="noteView" class="hidden">
+    <p class="nb-intro">答錯的題目會自動收進這裡。你也可以手動加入想練的題目，或點「練習錯題」針對錯題複習；複習答對後可移除。</p>
+    <div class="nb-tools">
+      <button class="btn btn-primary" id="practiceBtn" style="flex:1">▶ 練習錯題</button>
+      <button class="btn btn-ghost" id="toggleAddBtn">＋ 手動加入</button>
+    </div>
+
+    <div class="add-form" id="addForm">
+      <div class="fld">
+        <label>題目（可用全形 ＿＿ 當空格；漢字可直接打，無需振假名）</label>
+        <textarea id="afQ" placeholder="例：私はコーヒー＿＿します。"></textarea>
+      </div>
+      <div class="fld">
+        <label>選項（每行一個，2〜4 個）</label>
+        <textarea id="afOpts" placeholder="にします&#10;がします&#10;になります&#10;とします"></textarea>
+      </div>
+      <div class="fld">
+        <label>正解（直接貼上正確選項的文字）</label>
+        <input id="afAns" placeholder="にします">
+      </div>
+      <div class="fld">
+        <label>解釋（選填）</label>
+        <textarea id="afExp" placeholder="決定要…（點餐常用）"></textarea>
+        <div class="hint">解釋可用 &lt;b&gt;…&lt;/b&gt; 標重點。</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="afSave">儲存到錯題本</button>
+        <button class="btn btn-ghost" id="afCancel">取消</button>
+      </div>
+    </div>
+
+    <div id="nbList"></div>
+  </section>
+
+  <footer>
+    題庫涵蓋《N4-N5 文法筆記》與《N3 文法重點整理》全部觀念 ・ 共 <span id="totalQ">0</span> 題<br>
+    錯題本儲存在此瀏覽器本機（localStorage）。題庫集中在程式開頭的 QUESTIONS 陣列，可自行擴充。
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   題庫：涵蓋「N4-N5 文法筆記」與「N3 文法重點整理」全部觀念
+   格式：{id, lv, cat, q(含 ruby 與 ＿＿ 空格), o:[選項], a:正解index, exp:繁中解釋}
+   ============================================================ */
+const QUESTIONS = [
+
+/* ========== N5：助詞 ========== */
+{id:"p-wa",lv:"N5",cat:"助詞",q:"<ruby>山田<rt>やまだ</rt></ruby>さん＿＿<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。",o:["は","が","を","に"],a:0,exp:"<b>は</b>提示「討論主題」，後面描述其內容。が用於強調動作主或新資訊。"},
+{id:"p-ga",lv:"N5",cat:"助詞",q:"<ruby>私<rt>わたし</rt></ruby>はアニメ＿＿<ruby>好<rt>す</rt></ruby>きです。",o:["が","を","は","に"],a:0,exp:"好き・ほしい・上手、以及可能動詞的「對象」用<b>が</b>標示。"},
+{id:"p-wo1",lv:"N5",cat:"助詞",q:"チョコレート＿＿<ruby>食<rt>た</rt></ruby>べます。",o:["を","が","に","で"],a:0,exp:"<b>を</b>＋他動詞，標示動作涉及的對象（受詞）。"},
+{id:"p-wo2",lv:"N5",cat:"助詞",q:"<ruby>鳥<rt>とり</rt></ruby>が<ruby>空<rt>そら</rt></ruby>＿＿<ruby>飛<rt>と</rt></ruby>びます。",o:["を","に","で","へ"],a:0,exp:"🔸 を 另一用法：<b>通過・移動的場所</b>＋自動詞（飛過天空）；「家を出る」的離開點也用を。"},
+{id:"p-ni1",lv:"N5",cat:"助詞",q:"<ruby>加藤<rt>かとう</rt></ruby>さんは<ruby>公園<rt>こうえん</rt></ruby>＿＿います。",o:["に","で","を","へ"],a:0,exp:"存在的地點用<b>に</b>（に＋います／あります）。動作場所才用で。"},
+{id:"p-ni2",lv:"N5",cat:"助詞",q:"<ruby>飛行機<rt>ひこうき</rt></ruby>が<ruby>空港<rt>くうこう</rt></ruby>＿＿<ruby>着<rt>つ</rt></ruby>きます。",o:["に","で","を","から"],a:0,exp:"到達點用<b>に</b>（著く・入る・乗る等）。"},
+{id:"p-ni3",lv:"N5",cat:"助詞",q:"<ruby>靴<rt>くつ</rt></ruby>を<ruby>買<rt>か</rt></ruby>い＿＿<ruby>行<rt>い</rt></ruby>きます。",o:["に","を","で","へ"],a:0,exp:"動詞ます形＋<b>に</b>＋行く／来る＝「去／來做某事」（目的）。"},
+{id:"p-ni4",lv:"N5",cat:"助詞",q:"<ruby>友<rt>とも</rt></ruby>だち＿＿<ruby>電話<rt>でんわ</rt></ruby>をかけます。",o:["に","と","を","で"],a:0,exp:"單向動作的對象（打電話給）用<b>に</b>。雙向互動才用と。"},
+{id:"p-de1",lv:"N5",cat:"助詞",q:"カフェ＿＿コーヒーを<ruby>飲<rt>の</rt></ruby>みます。",o:["で","に","を","へ"],a:0,exp:"<b>で</b>＝動作發生的場所。存在地點才用に。"},
+{id:"p-de2",lv:"N5",cat:"助詞",q:"<ruby>英語<rt>えいご</rt></ruby>＿＿<ruby>日記<rt>にっき</rt></ruby>を<ruby>書<rt>か</rt></ruby>きます。",o:["で","に","を","から"],a:0,exp:"<b>で</b>＝方法・手段（用英語）。"},
+{id:"p-de3",lv:"N5",cat:"助詞",q:"ガラス＿＿<ruby>靴<rt>くつ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ります。",o:["で","から","に","を"],a:0,exp:"<b>で</b>＝製作材料（看得出原料時用で；化學變化看不出原料才用から）。"},
+{id:"p-he",lv:"N5",cat:"助詞",q:"<ruby>私<rt>わたし</rt></ruby>は<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>＿＿<ruby>行<rt>い</rt></ruby>きます。",o:["へ","を","が","と"],a:0,exp:"方向用<b>へ</b>（に 也可）。🔸 へ偏「方向」、に偏「明確目的地」。"},
+{id:"p-to-q",lv:"N5",cat:"助詞",q:"「コンサートはどうだった」＿＿<ruby>聞<rt>き</rt></ruby>きました。",o:["と","に","を","が"],a:0,exp:"<b>と</b>＝引用內容（說／問／想的內容）。"},
+{id:"p-toiu",lv:"N5",cat:"助詞",q:"「<ruby>鯛<rt>たい</rt></ruby>」＿＿<ruby>字<rt>じ</rt></ruby>は「たい」と<ruby>読<rt>よ</rt></ruby>みます。",o:["という","との","として","とは"],a:0,exp:"<b>～という＋名詞</b>＝叫做…的…（介紹名稱）。"},
+{id:"p-kara",lv:"N5",cat:"助詞",q:"<ruby>私<rt>わたし</rt></ruby>は<ruby>台湾<rt>たいわん</rt></ruby>＿＿<ruby>来<rt>き</rt></ruby>ました。",o:["から","まで","に","で"],a:0,exp:"起點（從…）用<b>から</b>。"},
+{id:"p-zutsu",lv:"N5",cat:"助詞",q:"バナナを<ruby>一人<rt>ひとり</rt></ruby><ruby>1本<rt>いっぽん</rt></ruby>＿＿もらいます。",o:["ずつ","だけ","しか","ごろ"],a:0,exp:"<b>ずつ</b>＝每／各（平均分配）。"},
+{id:"p-mo",lv:"N5",cat:"助詞",q:"<ruby>私<rt>わたし</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby><ruby>12時間<rt>じゅうにじかん</rt></ruby>＿＿<ruby>働<rt>はたら</rt></ruby>きます。",o:["も","は","が","を"],a:0,exp:"數量＋<b>も</b>＝強調「竟然這麼多」。"},
+{id:"p-karamade",lv:"N5",cat:"助詞",q:"アニメは<ruby>10時<rt>じゅうじ</rt></ruby>から<ruby>12時<rt>じゅうにじ</rt></ruby>＿＿です。",o:["まで","から","に","で"],a:0,exp:"<b>から～まで</b>＝從…到…（起點到終點）。"},
+{id:"p-shika",lv:"N5",cat:"助詞",q:"お<ruby>金<rt>かね</rt></ruby>は<ruby>1000円<rt>せんえん</rt></ruby>＿＿ありません。",o:["しか","だけ","ずつ","も"],a:0,exp:"🔸 <b>しか＋否定</b>＝只有…（帶不足、可惜的消極語氣）。だけ則中性表限定。"},
+{id:"p-dake",lv:"N5",cat:"助詞",q:"この<ruby>本<rt>ほん</rt></ruby>＿＿<ruby>読<rt>よ</rt></ruby>みます。",o:["だけ","しか","ずつ","まで"],a:0,exp:"🔸 <b>だけ</b>＝只（中性限定，後接肯定）。しか必須接否定。"},
+{id:"p-madeni",lv:"N5",cat:"助詞",q:"<ruby>今月<rt>こんげつ</rt></ruby>の<ruby>末<rt>すえ</rt></ruby>＿＿、<ruby>家<rt>いえ</rt></ruby>を<ruby>見<rt>み</rt></ruby>つけたい。",o:["までに","まで","から","に"],a:0,exp:"🔸 <b>までに</b>＝期限（在…之前完成）。まで＝持續到某時點。"},
+{id:"p-sugi",lv:"N5",cat:"助詞",q:"<ruby>今<rt>いま</rt></ruby>、<ruby>9時<rt>くじ</rt></ruby>＿＿です。",o:["すぎ","ごろ","まで","ぐらい"],a:0,exp:"<b>すぎ</b>＝過了…（9時すぎ＝九點多）。"},
+{id:"p-ya",lv:"N5",cat:"助詞",q:"<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>＿＿ノートなどがあります。",o:["や","と","も","か"],a:0,exp:"🔸 <b>や</b>＝部分列舉（除了列出的還有別的，常配など）。と＝完全列舉。"},
+{id:"p-dochira",lv:"N5",cat:"疑問詞",q:"コーヒーと<ruby>紅茶<rt>こうちゃ</rt></ruby>、＿＿がいいですか。",o:["どちら","どれ","どこ","だれ"],a:0,exp:"🔸 <b>どちら</b>＝二選一。どれ＝三個以上選一。"},
+{id:"p-ikura",lv:"N5",cat:"疑問詞",q:"このかばんは＿＿ですか。（<ruby>値段<rt>ねだん</rt></ruby>を<ruby>聞<rt>き</rt></ruby>く）",o:["いくら","いくつ","どんな","どう"],a:0,exp:"<b>いくら</b>＝多少錢。いくつ＝幾個／幾歲。"},
+
+/* ========== N5：名詞・指示詞 ========== */
+{id:"n-past",lv:"N5",cat:"名詞句",q:"<ruby>昨日<rt>きのう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>み＿＿。",o:["でした","です","だったです","ではある"],a:0,exp:"名詞句過去肯定＝<b>でした</b>。"},
+{id:"n-naru",lv:"N5",cat:"名詞句",q:"<ruby>今年<rt>ことし</rt></ruby>、<ruby>30歳<rt>さんじゅっさい</rt></ruby>＿＿なりました。",o:["に","を","が","で"],a:0,exp:"🔸 N＋<b>に＋なる</b>＝自然變化（主語自己變）。"},
+{id:"n-suru",lv:"N5",cat:"名詞句",q:"<ruby>髪<rt>かみ</rt></ruby>を<ruby>茶色<rt>ちゃいろ</rt></ruby>＿＿します。",o:["に","を","が","で"],a:0,exp:"🔸 N＋<b>に＋する</b>＝人為使其變成（有人去改變）。對比なる的自然變化。"},
+{id:"shiji-kore",lv:"N5",cat:"指示詞",q:"（<ruby>自分<rt>じぶん</rt></ruby>の<ruby>手元<rt>てもと</rt></ruby>を<ruby>指<rt>さ</rt></ruby>して）＿＿は<ruby>私<rt>わたし</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。",o:["これ","それ","あれ","どれ"],a:0,exp:"<b>これ</b>＝靠近說話者；それ＝靠近聽話者；あれ＝雙方都遠。"},
+{id:"shiji-are",lv:"N5",cat:"指示詞",q:"（<ruby>二人<rt>ふたり</rt></ruby>から<ruby>遠<rt>とお</rt></ruby>い<ruby>傘<rt>かさ</rt></ruby>）＿＿は<ruby>誰<rt>だれ</rt></ruby>の<ruby>傘<rt>かさ</rt></ruby>ですか。",o:["あれ","これ","それ","どれ"],a:0,exp:"離說話者與聽話者都遠的事物用<b>あれ</b>。"},
+
+/* ========== N5：形容詞 ========== */
+{id:"adj-i-neg",lv:"N5",cat:"形容詞",q:"このスープはあまり<ruby>熱<rt>あつ</rt></ruby>＿＿です。",o:["くない","じゃない","くなくない","ない"],a:0,exp:"い形容詞否定＝去い＋<b>くない</b>（熱い→熱くない）。"},
+{id:"adj-i-past",lv:"N5",cat:"形容詞",q:"<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>楽<rt>たの</rt></ruby>し＿＿です。",o:["かった","くた","いだった","だった"],a:0,exp:"い形容詞過去肯定＝去い＋<b>かった</b>（楽しい→楽しかった）。"},
+{id:"adj-na-neg",lv:"N5",cat:"形容詞",q:"ここは<ruby>静<rt>しず</rt></ruby>か＿＿。",o:["ではありません","くないです","いです","だないです"],a:0,exp:"な形容詞現在否定＝<b>ではありません</b>（じゃありません）。"},
+{id:"adj-na-rentai",lv:"N5",cat:"形容詞",q:"<ruby>彼<rt>かれ</rt></ruby>は<ruby>大切<rt>たいせつ</rt></ruby>＿＿<ruby>人<rt>ひと</rt></ruby>です。",o:["な","の","だ","に"],a:0,exp:"な形容詞修飾名詞要加<b>な</b>（大切な人）。"},
+{id:"adj-i-kute",lv:"N5",cat:"形容詞",q:"あの<ruby>映画<rt>えいが</rt></ruby>は<ruby>長<rt>なが</rt></ruby>＿＿つまらないです。",o:["くて","いで","かって","で"],a:0,exp:"い形容詞接續（停頓／因果）＝去い＋<b>くて</b>（長くて）。"},
+{id:"adj-na-de",lv:"N5",cat:"形容詞",q:"<ruby>彼<rt>かれ</rt></ruby>はハンサム＿＿すてきな<ruby>人<rt>ひと</rt></ruby>です。",o:["で","くて","だで","にて"],a:0,exp:"な形容詞接續（並列）＝だ→<b>で</b>（ハンサムで）。"},
+{id:"adj-i-ku",lv:"N5",cat:"形容詞",q:"<ruby>風<rt>かぜ</rt></ruby>が<ruby>強<rt>つよ</rt></ruby>＿＿<ruby>吹<rt>ふ</rt></ruby>いています。",o:["く","くて","に","で"],a:0,exp:"い形容詞副詞化＝去い＋<b>く</b>＋動詞（強く吹く）。"},
+{id:"adj-na-ni",lv:"N5",cat:"形容詞",q:"ドアを<ruby>静<rt>しず</rt></ruby>か＿＿<ruby>閉<rt>し</rt></ruby>めてください。",o:["に","く","で","と"],a:0,exp:"な形容詞副詞化＝だ→<b>に</b>＋動詞（静かに閉める）。"},
+{id:"adj-i-no",lv:"N5",cat:"形容詞",q:"<ruby>私<rt>わたし</rt></ruby>の<ruby>傘<rt>かさ</rt></ruby>はあの<ruby>白<rt>しろ</rt></ruby>＿＿です。",o:["いの","の","な","く"],a:0,exp:"い形容詞＋<b>の</b>（の代替名詞「傘」）＝白いの。"},
+{id:"adj-ku-naru",lv:"N5",cat:"形容詞",q:"<ruby>古<rt>ふる</rt></ruby>く＿＿<ruby>服<rt>ふく</rt></ruby>を<ruby>捨<rt>す</rt></ruby>てた。",o:["なった","した","あった","いた"],a:0,exp:"い形容詞＋く＋<b>なる</b>＝變…（古くなった＝變舊）。"},
+{id:"adj-sa",lv:"N5",cat:"形容詞名詞化",q:"<ruby>健康<rt>けんこう</rt></ruby>の<ruby>大切<rt>たいせつ</rt></ruby>＿＿が<ruby>分<rt>わ</rt></ruby>かった。",o:["さ","み","け","く"],a:0,exp:"🔸 形容詞＋<b>さ</b>＝客觀的性質／程度（大切さ＝重要性）。み則偏主觀感受。"},
+
+/* ========== N5/N4：動詞分類・活用 ========== */
+{id:"v-class",lv:"N5",cat:"動詞分類",q:"<ruby>動詞<rt>どうし</rt></ruby>「<ruby>食<rt>た</rt></ruby>べる」は<ruby>何<rt>なに</rt></ruby>類ですか。",o:["一段（二類）","五段（一類）","サ變","カ變"],a:0,exp:"字尾る、前一音為 e／i 段→<b>一段動詞</b>（食べる、起きる、見る）。"},
+{id:"v-exception",lv:"N4",cat:"動詞分類",q:"<ruby>動詞<rt>どうし</rt></ruby>「<ruby>帰<rt>かえ</rt></ruby>る」は<ruby>何<rt>なに</rt></ruby>類ですか。",o:["五段（一類）","一段（二類）","サ變","カ變"],a:0,exp:"形似一段卻是<b>五段</b>的例外：帰る・入る・走る・切る・知る。"},
+{id:"v-nai-wa",lv:"N4",cat:"動詞活用",q:"<ruby>動詞<rt>どうし</rt></ruby>「<ruby>買<rt>か</rt></ruby>う」の<ruby>否定形<rt>ひていけい</rt></ruby>は？",o:["買わない","買あない","買らない","買いない"],a:0,exp:"字尾う的五段，未然形變<b>わ</b>：買う→買わない、会う→会わない。"},
+{id:"v-aru-nai",lv:"N4",cat:"動詞活用",q:"<ruby>動詞<rt>どうし</rt></ruby>「ある」の<ruby>否定形<rt>ひていけい</rt></ruby>は？",o:["ない","あらない","あるない","なくない"],a:0,exp:"「ある」的否定是特殊的<b>ない</b>（不是あらない）。"},
+{id:"v-volition",lv:"N4",cat:"動詞活用",q:"<ruby>動詞<rt>どうし</rt></ruby>「<ruby>書<rt>か</rt></ruby>く」の<ruby>意志形<rt>いしけい</rt></ruby>は？",o:["書こう","書きう","書かう","書けう"],a:0,exp:"五段意志形＝u→o段＋う：書く→<b>書こう</b>。"},
+{id:"v-nagara",lv:"N5",cat:"動詞活用",q:"コーラを<ruby>飲<rt>の</rt></ruby>み＿＿、テレビを<ruby>見<rt>み</rt></ruby>ます。",o:["ながら","たり","ても","つつ"],a:0,exp:"ます形語幹＋<b>ながら</b>＝一邊…一邊…（同一人同時）。"},
+{id:"v-tai",lv:"N5",cat:"動詞活用",q:"<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>き＿＿です。",o:["たい","たくて","たいたい","た"],a:0,exp:"ます形語幹＋<b>たい</b>＝（我）想做。"},
+
+/* ========== N5：存在 ========== */
+{id:"exist-imasu",lv:"N5",cat:"存在",q:"<ruby>公園<rt>こうえん</rt></ruby>に<ruby>犬<rt>いぬ</rt></ruby>が＿＿。",o:["います","あります","です","なります"],a:0,exp:"🔸 有生命（人、動物）用<b>います</b>；無生命（物、植物）用あります。"},
+
+/* ========== N4：て形 ========== */
+{id:"te-form",lv:"N4",cat:"て形",q:"<ruby>窓<rt>まど</rt></ruby>を＿＿ください。",o:["開けて","開けって","開いて","開けた"],a:0,exp:"「てください」用て形。下一段開ける→<b>開けて</b>。注意他動詞開ける vs 自動詞開く。"},
+{id:"te-iru",lv:"N4",cat:"て形",q:"<ruby>母<rt>はは</rt></ruby>は<ruby>台所<rt>だいどころ</rt></ruby>でご<ruby>飯<rt>はん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っ＿＿。",o:["ています","てあります","ておきます","てきます"],a:0,exp:"動詞て＋<b>います</b>＝現在進行／反覆。"},
+{id:"te-aru",lv:"N4",cat:"て形",q:"<ruby>黒板<rt>こくばん</rt></ruby>に<ruby>絵<rt>え</rt></ruby>が<ruby>描<rt>か</rt></ruby>い＿＿。",o:["てあります","ています","ておきます","ていきます"],a:0,exp:"🔸 他動詞て＋<b>てあります</b>＝有意圖造成的狀態。自動詞て＋ています則是自然狀態。"},
+{id:"te-kara",lv:"N4",cat:"て形",q:"<ruby>手<rt>て</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>っ＿＿ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。",o:["てから","まえに","ながら","たり"],a:0,exp:"動詞て＋<b>から</b>＝先…再…（強調先後順序）。"},
+{id:"te-atode",lv:"N4",cat:"て形",q:"<ruby>授業<rt>じゅぎょう</rt></ruby>が<ruby>終<rt>お</rt></ruby>わっ＿＿、<ruby>友<rt>とも</rt></ruby>だちと<ruby>出<rt>で</rt></ruby>かけます。",o:["たあとで","るまえに","ているあいだ","ながら"],a:0,exp:"動詞た＋<b>あとで</b>＝…之後。"},
+{id:"te-moii",lv:"N4",cat:"て形",q:"<ruby>今<rt>いま</rt></ruby>トイレに<ruby>行<rt>い</rt></ruby>っ＿＿ですか。",o:["てもいい","てはいけない","なくてもいい","たほうがいい"],a:0,exp:"動詞て＋<b>もいい</b>＝可以…（許可）。"},
+{id:"te-oku",lv:"N4",cat:"て形",q:"パーティーの<ruby>前<rt>まえ</rt></ruby>に、ビールを<ruby>冷<rt>ひ</rt></ruby>やし＿＿。",o:["ておく","てある","ていく","てくる"],a:0,exp:"🔸 動詞て＋<b>ておく</b>＝事先做好準備（動作）。てある則是已處於被準備好的狀態。"},
+{id:"te-iku",lv:"N4",cat:"て形",q:"<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>犬<rt>いぬ</rt></ruby>を<ruby>散歩<rt>さんぽ</rt></ruby>に<ruby>連<rt>つ</rt></ruby>れ＿＿。",o:["ていきます","てきます","ておきます","てあります"],a:0,exp:"動詞て＋<b>いく</b>＝…去（動作朝遠方／未來）。"},
+{id:"te-kuru",lv:"N4",cat:"て形",q:"お<ruby>祭<rt>まつ</rt></ruby>りの<ruby>日<rt>ひ</rt></ruby>が、<ruby>近<rt>ちか</rt></ruby>づい＿＿。",o:["てきた","ていった","ておいた","てあった"],a:0,exp:"動詞て＋<b>くる</b>＝…起來／逐漸…（朝近處／現在發展）。"},
+{id:"te-tari",lv:"N4",cat:"て形",q:"<ruby>子<rt>こ</rt></ruby>どもたちは<ruby>歌<rt>うた</rt></ruby>っ＿＿<ruby>踊<rt>おど</rt></ruby>っ＿＿しています。",o:["たり","ても","てから","ながら"],a:0,exp:"動詞た＋<b>たり…たり（する）</b>＝列舉動作（又…又…）。"},
+
+/* ========== N4：授受・願望・請求 ========== */
+{id:"give-ageru",lv:"N4",cat:"授受",q:"<ruby>私<rt>わたし</rt></ruby>は<ruby>彼女<rt>かのじょ</rt></ruby>に<ruby>指輪<rt>ゆびわ</rt></ruby>を＿＿。",o:["あげます","もらいます","くれます","くださいます"],a:0,exp:"🔸 我給別人用<b>あげる</b>；別人給我用くれる；我得到用もらう。"},
+{id:"give-morau",lv:"N4",cat:"授受",q:"<ruby>母<rt>はは</rt></ruby>は<ruby>小野<rt>おの</rt></ruby>さんに<ruby>本<rt>ほん</rt></ruby>を＿＿。",o:["もらいます","あげます","くれます","やります"],a:0,exp:"從別人那裡得到用<b>もらう</b>（主語是接受者）。"},
+{id:"give-kureru",lv:"N4",cat:"授受",q:"<ruby>友<rt>とも</rt></ruby>だちが<ruby>私<rt>わたし</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を＿＿。",o:["くれました","あげました","もらいました","やりました"],a:0,exp:"別人給「我方」用<b>くれる</b>（主語是給予者，接受者是我）。"},
+{id:"want-hoshii",lv:"N5",cat:"願望",q:"<ruby>私<rt>わたし</rt></ruby>はスマホ＿＿です。",o:["がほしい","をほしい","にほしい","でほしい"],a:0,exp:"<b>N＋がほしい</b>＝（我）想要某物（對象用が）。"},
+{id:"want-tehoshii",lv:"N4",cat:"願望",q:"<ruby>電話<rt>でんわ</rt></ruby>でピザを<ruby>注文<rt>ちゅうもん</rt></ruby>し＿＿です。",o:["てほしい","がほしい","たい","てある"],a:0,exp:"動詞て＋<b>ほしい</b>＝希望別人做…。"},
+{id:"req-kudasai",lv:"N5",cat:"請求",q:"<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>い＿＿。",o:["てください","てほしい","てもいい","ないでください"],a:0,exp:"動詞て＋<b>ください</b>＝請（您做）…。"},
+{id:"req-masenka",lv:"N4",cat:"請求",q:"もう<ruby>一度<rt>いちど</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>し＿＿。",o:["てくださいませんか","てください","てもいい","てほしい"],a:0,exp:"動詞て＋<b>くださいませんか</b>＝能不能請您…（更客氣）。"},
+{id:"req-naide",lv:"N5",cat:"請求",q:"<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ら＿＿。",o:["ないでください","てください","なくてもいい","ないといけない"],a:0,exp:"動詞ない＋<b>でください</b>＝請不要…。"},
+
+/* ========== N4：意志・推測・邀約 ========== */
+{id:"vol-toomou",lv:"N4",cat:"意志",q:"<ruby>来年<rt>らいねん</rt></ruby>、<ruby>留学<rt>りゅうがく</rt></ruby>し＿＿と<ruby>思<rt>おも</rt></ruby>います。",o:["よう","たい","たく","る"],a:0,exp:"意志形＋<b>と思う</b>＝（我）打算／想要（する→しようと思う）。"},
+{id:"vol-tsumori",lv:"N4",cat:"意志",q:"ボーナスで<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>う＿＿です。",o:["つもり","よう","ため","こと"],a:0,exp:"動詞辭書形＋<b>つもり</b>＝打算…（意志較堅定、非短期）。"},
+{id:"vol-tahougaii",lv:"N4",cat:"意志",q:"<ruby>寒<rt>さむ</rt></ruby>いから、コートを<ruby>着<rt>き</rt></ruby>＿＿。",o:["たほうがいい","るほうがいい","てもいい","たがる"],a:0,exp:"動詞た＋<b>ほうがいい</b>＝最好…（建議）。否定則用ないほうがいい。"},
+{id:"vol-masenka",lv:"N4",cat:"邀約",q:"<ruby>今晩<rt>こんばん</rt></ruby>、<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>野球<rt>やきゅう</rt></ruby>を<ruby>見<rt>み</rt></ruby>＿＿。",o:["ませんか","たいですか","てください","ましたか"],a:0,exp:"動詞ます形＋<b>ませんか</b>＝要不要…（邀約）。"},
+{id:"vol-mashouka",lv:"N4",cat:"邀約",q:"<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ち＿＿。（<ruby>申<rt>もう</rt></ruby>し<ruby>出<rt>で</rt></ruby>る）",o:["ましょうか","ませんか","たいです","てください"],a:0,exp:"動詞ます形＋<b>ましょうか</b>＝我來…吧／我們…吧（提議幫忙）。"},
+{id:"vol-deshou",lv:"N4",cat:"推測",q:"<ruby>明日<rt>あした</rt></ruby>もいい<ruby>天気<rt>てんき</rt></ruby>＿＿。",o:["でしょう","ました","ません","です"],a:0,exp:"<b>でしょう</b>＝也許／大概…（推測）。"},
+
+/* ========== N4：決定・感官・第三人稱 ========== */
+{id:"dec-nisuru",lv:"N4",cat:"決定",q:"<ruby>私<rt>わたし</rt></ruby>はうなぎ＿＿。（<ruby>注文<rt>ちゅうもん</rt></ruby>）",o:["にします","がします","になります","とします"],a:0,exp:"<b>N＋にする</b>＝決定要…（常用於點餐）。"},
+{id:"dec-gasuru",lv:"N4",cat:"感官",q:"うなぎのにおい＿＿。",o:["がします","にします","をします","でします"],a:0,exp:"感官名詞（におい・音・味）＋<b>がする</b>＝感到、聞到…。"},
+{id:"dec-kotonisuru",lv:"N4",cat:"決定",q:"<ruby>明日<rt>あした</rt></ruby>から<ruby>早起<rt>はやお</rt></ruby>きする＿＿。",o:["ことにする","ことになる","ようにする","ようになる"],a:0,exp:"🔸 <b>ことにする</b>＝自己主動決定。ことになる則是被決定／結果如此（非自己）。"},
+{id:"dec-kotoninaru",lv:"N4",cat:"決定",q:"このたび、<ruby>結婚<rt>けっこん</rt></ruby>する＿＿。",o:["ことになりました","ことにしました","ようになりました","ものにしました"],a:0,exp:"<b>ことになる</b>＝（說話人之外的安排）決定…，自動詞語感較客觀。"},
+{id:"dec-temiru",lv:"N4",cat:"嘗試",q:"この<ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>＿＿。（ためしに）",o:["てみる","てみせる","ておく","てある"],a:0,exp:"動詞て＋<b>みる</b>＝試著做做看。"},
+{id:"third-garu",lv:"N4",cat:"第三人稱",q:"<ruby>人<rt>ひと</rt></ruby>がいや＿＿ことをしてはいけない。",o:["がる","たがる","そう","らしい"],a:0,exp:"形容詞／形容動詞詞幹＋<b>がる</b>＝（第三人稱）顯露某情緒（いやがる）。"},
+{id:"third-tagaru",lv:"N4",cat:"第三人稱",q:"<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>理由<rt>りゆう</rt></ruby>を<ruby>言<rt>い</rt></ruby>い＿＿ない。",o:["たがら","がら","たく","たい"],a:0,exp:"ます形語幹＋<b>たがる</b>＝（第三人稱）想做某事的願望。"},
+
+/* ========== N4：傳聞・樣態・難易 ========== */
+{id:"hear-souda",lv:"N4",cat:"傳聞",q:"<ruby>天気<rt>てんき</rt></ruby><ruby>予報<rt>よほう</rt></ruby>によると、<ruby>午後<rt>ごご</rt></ruby>から<ruby>雨<rt>あめ</rt></ruby>になる＿＿。",o:["そうだ","そうな","ような","らしく"],a:0,exp:"🔸 動詞終止形＋<b>そうだ</b>＝聽說（傳聞，常配「…によると」）。"},
+{id:"appear-sou",lv:"N4",cat:"樣態",q:"どうしたの。<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>＿＿。",o:["そうだ","だそうだ","らしい","ようだ"],a:0,exp:"🔸 形容詞去い＋<b>そう</b>＝看起來…（樣態）。對比傳聞的「終止形＋そうだ」。"},
+{id:"appear-mitai",lv:"N4",cat:"樣態",q:"<ruby>体<rt>からだ</rt></ruby>がだるい。<ruby>風邪<rt>かぜ</rt></ruby>をひいた＿＿。（<ruby>自分<rt>じぶん</rt></ruby>の<ruby>感覚<rt>かんかく</rt></ruby>）",o:["みたいだ","そうだ","とか","って"],a:0,exp:"<b>みたいだ／ようだ</b>＝依自身感覺、經驗的不確定推測。"},
+{id:"easy-yasui",lv:"N4",cat:"難易",q:"このペンは<ruby>書<rt>か</rt></ruby>き＿＿です。",o:["やすい","にくい","がたい","づらい"],a:0,exp:"ます形語幹＋<b>やすい</b>＝容易…。"},
+{id:"easy-nikui",lv:"N4",cat:"難易",q:"このペンは<ruby>細<rt>ほそ</rt></ruby>くて<ruby>持<rt>も</rt></ruby>ち＿＿です。",o:["にくい","やすい","がち","っぽい"],a:0,exp:"ます形語幹＋<b>にくい</b>＝不容易…。"},
+
+/* ========== N4：時間・狀態 ========== */
+{id:"time-maeni",lv:"N4",cat:"時間",q:"<ruby>学校<rt>がっこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>く＿＿、ジョギングをします。",o:["まえに","あとで","てから","ながら"],a:0,exp:"動詞辭書形＋<b>まえに</b>＝…之前（前面動詞用辭書形，不受句末時態影響）。"},
+{id:"time-chuu",lv:"N4",cat:"時間",q:"<ruby>今<rt>いま</rt></ruby>、<ruby>会議<rt>かいぎ</rt></ruby>＿＿です。",o:["中（ちゅう）","前（まえ）","後（あと）","間（あいだ）"],a:0,exp:"名詞＋<b>中（ちゅう）</b>＝正在…期間（会議中、話し中）。"},
+{id:"time-dasu",lv:"N4",cat:"時間",q:"<ruby>先生<rt>せんせい</rt></ruby>が<ruby>急<rt>きゅう</rt></ruby>に<ruby>怒<rt>おこ</rt></ruby>り＿＿。",o:["だした","はじめた","つづけた","おわった"],a:0,exp:"ます形語幹＋<b>だす</b>＝（突然）開始…／…出來。"},
+{id:"time-takoro",lv:"N4",cat:"時間",q:"<ruby>父<rt>ちち</rt></ruby>は<ruby>今<rt>いま</rt></ruby>ちょうど<ruby>出<rt>で</rt></ruby>かけた＿＿だ。",o:["ところ","つもり","こと","もの"],a:0,exp:"動詞た＋<b>ところ</b>＝剛做完（此刻、瞬間）。"},
+{id:"time-bakari",lv:"N4",cat:"時間",q:"このパソコンは<ruby>先週<rt>せんしゅう</rt></ruby><ruby>買<rt>か</rt></ruby>った＿＿です。",o:["ばかり","ところ","まま","だけ"],a:0,exp:"🔸 動詞た＋<b>ばかり</b>＝才剛…（時間感較鬆，可隔較久）。たところ僅限此刻剛剛。"},
+{id:"time-zuni",lv:"N4",cat:"狀態",q:"<ruby>何<rt>なに</rt></ruby>も<ruby>言<rt>い</rt></ruby>わ＿＿、<ruby>出<rt>で</rt></ruby>て<ruby>行<rt>い</rt></ruby>った。",o:["ずに","なくて","なしに","ないに"],a:0,exp:"動詞ない（去ない）＋<b>ずに</b>＝不…地（する→せずに）。書面語感。"},
+{id:"time-mama",lv:"N4",cat:"狀態",q:"<ruby>鍵<rt>かぎ</rt></ruby>をかけない＿＿<ruby>出<rt>で</rt></ruby>かけた。",o:["まま","ながら","まえに","ところ"],a:0,exp:"<b>まま</b>＝維持前一狀態（沒鎖門就…）。"},
+{id:"time-tara-ta",lv:"N4",cat:"狀態",q:"トイレに<ruby>入<rt>はい</rt></ruby>っ＿＿、<ruby>紙<rt>かみ</rt></ruby>がなかった。",o:["たら","ても","から","ながら"],a:0,exp:"動詞た＋<b>ら…た</b>＝做了之後（才）發現…（意外發現）。"},
+{id:"time-younisuru",lv:"N4",cat:"狀態",q:"<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きる＿＿しています。",o:["ように","ことに","ために","そうに"],a:0,exp:"🔸 動詞辭書形＋<b>ようにする</b>＝努力做到（持續習慣用ようにしている）。對比自然變化的ようになる。"},
+{id:"time-younaru",lv:"N4",cat:"狀態",q:"うちの<ruby>子<rt>こ</rt></ruby>は、やっと<ruby>自分<rt>じぶん</rt></ruby>で<ruby>起<rt>お</rt></ruby>きる＿＿。",o:["ようになった","ようにした","ことにした","ものにした"],a:0,exp:"動詞辭書形＋<b>ようになる</b>＝變得會…／養成習慣（能力或習慣的變化）。"},
+
+/* ========== N4：經驗・について ========== */
+{id:"exp-takotogaaru",lv:"N4",cat:"經驗",q:"フカヒレを<ruby>食<rt>た</rt></ruby>べ＿＿。（<ruby>経験<rt>けいけん</rt></ruby>）",o:["たことがある","ることがある","たばかり","たところ"],a:0,exp:"🔸 動詞た＋<b>ことがある</b>＝過去經驗。辭書形＋ことがある則是「有時會」。"},
+{id:"exp-rukotogaaru",lv:"N4",cat:"經驗",q:"<ruby>仕事<rt>しごと</rt></ruby>で<ruby>遅<rt>おそ</rt></ruby>くなる＿＿。（ときどき）",o:["ことがある","たことがある","わけがある","はずがある"],a:0,exp:"動詞辭書形＋<b>ことがある</b>＝有時會做…。"},
+{id:"exp-nitsuite",lv:"N4",cat:"關連",q:"<ruby>日本<rt>にほん</rt></ruby>のアニメ＿＿<ruby>研究<rt>けんきゅう</rt></ruby>しています。",o:["について","にとって","にたいして","によって"],a:0,exp:"🔸 <b>について</b>＝關於（提出話題加以說明）。に対して則是針對某對象的態度／行為。"},
+{id:"exp-nitaishite",lv:"N4",cat:"關連",q:"<ruby>彼<rt>かれ</rt></ruby>の<ruby>考<rt>かんが</rt></ruby>え＿＿、<ruby>私<rt>わたし</rt></ruby>は<ruby>反対<rt>はんたい</rt></ruby><ruby>意見<rt>いけん</rt></ruby>を<ruby>述<rt>の</rt></ruby>べた。",o:["に対して","について","にとって","によって"],a:0,exp:"<b>に対して</b>＝向…／對於…（動作、感情施予的對象）。"},
+
+/* ========== N4：連接・原因・轉折 ========== */
+{id:"conj-node",lv:"N4",cat:"連接",q:"<ruby>道<rt>みち</rt></ruby>が<ruby>込<rt>こ</rt></ruby>んでいた＿＿、<ruby>遅<rt>おく</rt></ruby>れました。",o:["ので","のに","でも","けど"],a:0,exp:"🔸 <b>ので</b>＝因為（客觀、較委婉）。から則較主觀。"},
+{id:"conj-ga",lv:"N5",cat:"連接",q:"<ruby>安<rt>やす</rt></ruby>いです＿＿、おいしくないです。",o:["が","から","ので","と"],a:0,exp:"<b>が</b>＝但是（逆接），也用於請求前的鋪墊。"},
+{id:"conj-shi",lv:"N4",cat:"連接",q:"<ruby>安<rt>やす</rt></ruby>い＿＿、おいしい＿＿、この<ruby>店<rt>みせ</rt></ruby>が<ruby>好<rt>す</rt></ruby>きだ。",o:["し","て","から","と"],a:0,exp:"<b>し</b>＝既…又…（列舉理由）。"},
+{id:"conj-nakute",lv:"N4",cat:"連接",q:"<ruby>子<rt>こ</rt></ruby>どもが<ruby>言<rt>い</rt></ruby>うことを<ruby>聞<rt>き</rt></ruby>か＿＿、<ruby>困<rt>こま</rt></ruby>っている。",o:["なくて","ないで","ずに","なし"],a:0,exp:"🔸 <b>Vなくて</b>＝因為沒…（表原因）。Vないで則是「不做…而做別的」（附帶狀況）。"},
+
+/* ========== N5/N4：比較 ========== */
+{id:"comp-yori",lv:"N5",cat:"比較",q:"<ruby>新幹線<rt>しんかんせん</rt></ruby>は<ruby>車<rt>くるま</rt></ruby>＿＿ずっと<ruby>速<rt>はや</rt></ruby>いです。",o:["より","から","ほど","まで"],a:0,exp:"<b>ＡはＢより</b>＝Ａ比Ｂ更…（より接比較基準）。"},
+{id:"comp-houga",lv:"N5",cat:"比較",q:"<ruby>紅茶<rt>こうちゃ</rt></ruby>よりコーヒーの＿＿<ruby>好<rt>す</rt></ruby>きです。",o:["ほうが","より","ばかり","だけ"],a:0,exp:"<b>より～ほうが</b>＝比起…，更…（被選的用が）。"},
+{id:"comp-onaji",lv:"N4",cat:"比較",q:"<ruby>八百屋<rt>やおや</rt></ruby>はスーパー＿＿ではありません。",o:["と同じ","より","ほど","から"],a:0,exp:"<b>N＋と同じ</b>＝跟…一樣。"},
+{id:"comp-chigatte",lv:"N4",cat:"比較",q:"<ruby>私<rt>わたし</rt></ruby>＿＿、<ruby>彼女<rt>かのじょ</rt></ruby>はきれいです。",o:["と違って","と同じ","より","について"],a:0,exp:"<b>N＋と違って</b>＝跟…不同。"},
+{id:"comp-hodonai",lv:"N4",cat:"比較",q:"<ruby>田中<rt>たなか</rt></ruby>は<ruby>中山<rt>なかやま</rt></ruby>＿＿<ruby>真面目<rt>まじめ</rt></ruby>ではない。",o:["ほど","より","くらい","から"],a:0,exp:"<b>ＡはＢほど…ない</b>＝Ａ不像Ｂ那麼…（以Ｂ為基準）。"},
+
+/* ========== N4：義務・許可・必要 ========== */
+{id:"ob-nakereba",lv:"N4",cat:"義務許可",q:"<ruby>学生<rt>がくせい</rt></ruby>は<ruby>勉強<rt>べんきょう</rt></ruby>し＿＿。",o:["なければならない","なくてもいい","てはいけない","ないでください"],a:0,exp:"<b>なければならない</b>＝必須、應該（基於規則或當時狀況）。"},
+{id:"ob-bekida",lv:"N4",cat:"義務許可",q:"<ruby>弱<rt>よわ</rt></ruby>い<ruby>者<rt>もの</rt></ruby>をいじめるのは、やめる＿＿。",o:["べきだ","はずだ","つもりだ","ものだ"],a:0,exp:"🔸 <b>べきだ</b>＝應該（基於常理／義務）。はずだ則是推測「按理應該會」。"},
+{id:"ob-nakutewa",lv:"N4",cat:"義務許可",q:"<ruby>子<rt>こ</rt></ruby>どもはもう<ruby>寝<rt>ね</rt></ruby>＿＿。",o:["なくてはいけません","なくてもいいです","てはいけません","ないでください"],a:0,exp:"<b>なくてはいけない</b>＝必須（多用於個別場合，常上對下）。"},
+{id:"ob-nakutemoii",lv:"N4",cat:"義務許可",q:"<ruby>友<rt>とも</rt></ruby>だちと<ruby>会<rt>あ</rt></ruby>うだけだから、ネクタイはし＿＿。",o:["なくてもいい","なければならない","てはいけない","ないとだめだ"],a:0,exp:"<b>なくてもいい</b>＝不…也行（不必要）。"},
+{id:"ob-naikotomonai",lv:"N4",cat:"義務許可",q:"<ruby>一人<rt>ひとり</rt></ruby><ruby>暮<rt>ぐ</rt></ruby>らしが<ruby>寂<rt>さび</rt></ruby>しいと<ruby>思<rt>おも</rt></ruby>わ＿＿。",o:["ないこともない","ないわけにはいかない","ねばならない","てはいけない"],a:0,exp:"<b>ないこともない</b>＝也不是不…（雙重否定、委婉肯定）。"},
+{id:"ob-gimonmo",lv:"N4",cat:"義務許可",q:"<ruby>私<rt>わたし</rt></ruby>は<ruby>今朝<rt>けさ</rt></ruby><ruby>何<rt>なに</rt></ruby>＿＿<ruby>食<rt>た</rt></ruby>べませんでした。",o:["も","が","を","は"],a:0,exp:"🔸 疑問詞＋<b>も</b>＋否定＝全否定（什麼都沒…）。接肯定則為全肯定。"},
+
+/* ========== N4：頻率・程度 ========== */
+{id:"freq-goro",lv:"N5",cat:"程度",q:"<ruby>彼<rt>かれ</rt></ruby>は<ruby>9時<rt>くじ</rt></ruby>＿＿<ruby>帰<rt>かえ</rt></ruby>りました。",o:["ごろ","ぐらい","まで","しか"],a:0,exp:"🔸 <b>ごろ</b>＝大約（只接時間點，9時ごろ）。ぐらい接數量／程度。"},
+{id:"freq-gurai",lv:"N5",cat:"程度",q:"<ruby>1週間<rt>いっしゅうかん</rt></ruby>に<ruby>2回<rt>にかい</rt></ruby>＿＿<ruby>飲<rt>の</rt></ruby>みに<ruby>行<rt>い</rt></ruby>きます。",o:["ぐらい","ごろ","までに","しか"],a:0,exp:"<b>ぐらい／くらい</b>＝大約（接數量、程度、範圍）。"},
+{id:"freq-mou",lv:"N5",cat:"程度",q:"メールは＿＿<ruby>書<rt>か</rt></ruby>きました。",o:["もう","まだ","ごろ","ずつ"],a:0,exp:"🔸 <b>もう</b>＋肯定＝已經…。まだ＋否定＝還沒…。"},
+{id:"freq-mada",lv:"N5",cat:"程度",q:"<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>は＿＿<ruby>食<rt>た</rt></ruby>べていません。",o:["まだ","もう","ごろ","しか"],a:0,exp:"<b>まだ</b>＋否定＝還（沒）…。"},
+
+/* ========== N3 Chapter 1：時の表現 ========== */
+{id:"n3-uchini",lv:"N3",cat:"時の表現",q:"<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>らない＿＿、<ruby>帰<rt>かえ</rt></ruby>ろう。",o:["うちに","あいだに","まえに","てから"],a:0,exp:"🔸 <b>うちに</b>＝趁著某狀態還持續（之後會改變），把握時機。まえに只是單純的先後。"},
+{id:"n3-sai",lv:"N3",cat:"時の表現",q:"<ruby>東京<rt>とうきょう</rt></ruby>でお<ruby>会<rt>あ</rt></ruby>いした＿＿、<ruby>名刺<rt>めいし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>した。",o:["際","うち","最中","とたん"],a:0,exp:"<b>さい（際）</b>＝…的時候、之際（＝ときに，較鄭重）。"},
+{id:"n3-saichuu",lv:"N3",cat:"時の表現",q:"<ruby>例<rt>れい</rt></ruby>の<ruby>件<rt>けん</rt></ruby>は、<ruby>今<rt>いま</rt></ruby><ruby>検討<rt>けんとう</rt></ruby>している＿＿だ。",o:["最中","際","うち","ばかり"],a:0,exp:"<b>さいちゅう（最中）</b>＝正在…的當下（常於此時突然發生某事）。"},
+{id:"n3-totan",lv:"N3",cat:"時の表現",q:"<ruby>歌手<rt>かしゅ</rt></ruby>がステージに<ruby>出<rt>で</rt></ruby>てきた＿＿、<ruby>地震<rt>じしん</rt></ruby>が<ruby>起<rt>お</rt></ruby>きた。",o:["とたんに","うちに","さいに","まえに"],a:0,exp:"動詞た＋<b>とたん(に)</b>＝剛…一瞬間就…（當場目睹，帶意外語感）。"},
+{id:"n3-irai",lv:"N3",cat:"時の表現",q:"<ruby>手術<rt>しゅじゅつ</rt></ruby>をして＿＿、ずっと<ruby>調子<rt>ちょうし</rt></ruby>がいい。",o:["以来","うちに","とたん","ばかり"],a:0,exp:"動詞て＋<b>いらい（以来）</b>＝自從…以來一直…（書面語）。"},
+{id:"n3-tokoroni",lv:"N3",cat:"時の表現",q:"<ruby>出<rt>で</rt></ruby>かけようとした＿＿、<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>った。",o:["ところに","うちに","さいに","いらい"],a:0,exp:"<b>ところに</b>＝正在／正要…時，發生了別的事（多妨礙進展）。"},
+
+/* ========== N3 Chapter 2：原因・理由 ========== */
+{id:"n3-okagede",lv:"N3",cat:"原因・理由",q:"<ruby>手伝<rt>てつだ</rt></ruby>ってもらった＿＿、<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わった。",o:["おかげで","せいで","くせに","わりに"],a:0,exp:"🔸 <b>おかげで</b>＝多虧…（正面、感謝）。せいで則用於負面結果。"},
+{id:"n3-seika",lv:"N3",cat:"原因・理由",q:"<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がった＿＿、<ruby>生活<rt>せいかつ</rt></ruby>が<ruby>苦<rt>くる</rt></ruby>しい。",o:["せいか","おかげか","につき","ものだから"],a:0,exp:"<b>せいか</b>＝或許是因為…（負面，且原因不太確定）。"},
+{id:"n3-nitsuki",lv:"N3",cat:"原因・理由",q:"<ruby>5時<rt>ごじ</rt></ruby><ruby>以降<rt>いこう</rt></ruby>は<ruby>不在<rt>ふざい</rt></ruby>＿＿、<ruby>早<rt>はや</rt></ruby>めにお<ruby>越<rt>こ</rt></ruby>しください。",o:["につき","について","にとって","にたいして"],a:0,exp:"N＋<b>につき</b>＝因…（書信等鄭重的書面用法）。"},
+{id:"n3-niyotte-r",lv:"N3",cat:"原因・理由",q:"<ruby>実例<rt>じつれい</rt></ruby>＿＿、やり<ruby>方<rt>かた</rt></ruby>を<ruby>示<rt>しめ</rt></ruby>す。",o:["によって","について","にとって","として"],a:0,exp:"<b>によって</b>＝依據的方法／手段；也表因果（後項因前項而成立）。"},
+{id:"n3-monodakara",lv:"N3",cat:"原因・理由",q:"<ruby>足<rt>あし</rt></ruby>が<ruby>痺<rt>しび</rt></ruby>れた＿＿、<ruby>立<rt>た</rt></ruby>てませんでした。",o:["ものだから","おかげで","くせに","かわりに"],a:0,exp:"<b>ものだから</b>＝就是因為…（為意料外、身不由己的理由辯白，結果多消極，後不接命令／意志）。"},
+
+/* ========== N3 Chapter 3：推量・判斷 ========== */
+{id:"n3-mitaida",lv:"N3",cat:"推量・判斷",q:"<ruby>体<rt>からだ</rt></ruby>がだるい。<ruby>風邪<rt>かぜ</rt></ruby>をひいた＿＿。",o:["みたいだ","そうだ","とか","って"],a:0,exp:"<b>みたいだ</b>＝（依自身感覺的）不確定推測，亦可表比喻。"},
+{id:"n3-rashii",lv:"N3",cat:"推量・判斷",q:"<ruby>地面<rt>じめん</rt></ruby>が<ruby>濡<rt>ぬ</rt></ruby>れている。<ruby>夜中<rt>よなか</rt></ruby>に<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>った＿＿。",o:["らしい","たい","つもり","べき"],a:0,exp:"<b>らしい</b>＝依所見所聞等外界情報做客觀推測。"},
+{id:"n3-hazuda",lv:"N3",cat:"推量・判斷",q:"<ruby>彼<rt>かれ</rt></ruby>はイスラム<ruby>教徒<rt>きょうと</rt></ruby>だから、<ruby>豚肉<rt>ぶたにく</rt></ruby>は<ruby>食<rt>た</rt></ruby>べない＿＿です。",o:["はず","わけがない","みたい","かもしれない"],a:0,exp:"<b>はずだ</b>＝依知識／事實的有把握推斷（按理應該…），主觀色彩強。"},
+{id:"n3-wakeganai",lv:"N3",cat:"推量・判斷",q:"こんな<ruby>簡単<rt>かんたん</rt></ruby>なことをできない＿＿。",o:["わけがない","わけではない","はずだ","にちがいない"],a:0,exp:"🔸 <b>わけがない</b>＝從道理上強烈否定可能性（不可能…）。わけではない則是部分／委婉否定。"},
+{id:"n3-wakedewanai",lv:"N3",cat:"推量・判斷",q:"けんかばかりしていても、<ruby>互<rt>たが</rt></ruby>いに<ruby>嫌<rt>きら</rt></ruby>っている＿＿。",o:["わけでもない","わけがない","はずがない","にちがいない"],a:0,exp:"<b>わけではない</b>＝並不是…（不能一概而論的委婉、部分否定）。"},
+{id:"n3-wakeniwaikanai3",lv:"N3",cat:"推量・判斷",q:"<ruby>友<rt>とも</rt></ruby>だちを<ruby>裏切<rt>うらぎ</rt></ruby>る＿＿。",o:["わけにはいかない","わけがない","わけではない","ほかない"],a:0,exp:"<b>わけにはいかない</b>＝（基於常識、道德）不能那麼做。"},
+{id:"n3-nichigainai",lv:"N3",cat:"推量・判斷",q:"この<ruby>写真<rt>しゃしん</rt></ruby>は、ハワイで<ruby>撮影<rt>さつえい</rt></ruby>された＿＿。",o:["にちがいない","わけがない","かもしれない","みたいだ"],a:0,exp:"<b>にちがいない</b>＝依經驗／直覺做出非常肯定的判斷（一定是…）。"},
+
+/* ========== N3 Chapter 4：様態・傾向 ========== */
+{id:"n3-kake",lv:"N3",cat:"様態・傾向",q:"メールを<ruby>書<rt>か</rt></ruby>き＿＿とき、<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>った。",o:["かけた","だした","おわった","きった"],a:0,exp:"ます形語幹＋<b>かけ(た)</b>＝才剛開始…、…到一半（尚未結束）。"},
+{id:"n3-gachi",lv:"N3",cat:"様態・傾向",q:"<ruby>子<rt>こ</rt></ruby>どもは、ゲームに<ruby>熱中<rt>ねっちゅう</rt></ruby>し＿＿だ。",o:["がち","ぎみ","っぽい","だらけ"],a:0,exp:"🔸 ます形語幹／N＋<b>がち</b>＝容易、往往會…（多用於負面傾向）。ぎみ程度較輕。"},
+{id:"n3-gimi",lv:"N3",cat:"様態・傾向",q:"ちょっと<ruby>風邪<rt>かぜ</rt></ruby>＿＿で、<ruby>微熱<rt>びねつ</rt></ruby>がある。",o:["ぎみ","がち","だらけ","っぽい"],a:0,exp:"N／ます形語幹＋<b>ぎみ</b>＝有點…、稍微…的趨勢（主觀、多負面）。"},
+{id:"n3-darake",lv:"N3",cat:"様態・傾向",q:"あの<ruby>人<rt>ひと</rt></ruby>は<ruby>借金<rt>しゃっきん</rt></ruby>＿＿だ。",o:["だらけ","がち","ぎみ","ばかり"],a:0,exp:"🔸 N＋<b>だらけ</b>＝滿是…、到處是…（常含髒、不好的貶意）。ばかり則是限定／重複。"},
+{id:"n3-ippouda",lv:"N3",cat:"様態・傾向",q:"<ruby>都市<rt>とし</rt></ruby>の<ruby>環境<rt>かんきょう</rt></ruby>は<ruby>悪<rt>わる</rt></ruby>くなる＿＿だ。",o:["一方","がち","ぎみ","だらけ"],a:0,exp:"動詞辭書形＋<b>いっぽう（一方）だ</b>＝一直朝一個方向發展（多為不利傾向）。"},
+{id:"n3-ppoi",lv:"N3",cat:"様態・傾向",q:"その<ruby>本<rt>ほん</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>は、<ruby>子<rt>こ</rt></ruby>ども＿＿すぎる。",o:["っぽ","らし","みたい","がち"],a:0,exp:"N／ます形語幹＋<b>っぽい</b>＝感覺像…、有此傾向（多帶否定評價）。らしい則為肯定評價。"},
+{id:"n3-mukino",lv:"N3",cat:"様態・傾向",q:"<ruby>南<rt>みなみ</rt></ruby>＿＿の<ruby>部屋<rt>へや</rt></ruby>は<ruby>暖<rt>あたた</rt></ruby>かい。",o:["向き","向け","っぽい","がち"],a:0,exp:"🔸 N＋<b>むき（向き）</b>＝朝向…；適合…（非刻意設定對象）。むけ則是特意以某對象為目標。"},
+{id:"n3-mukeno",lv:"N3",cat:"様態・傾向",q:"<ruby>若者<rt>わかもの</rt></ruby>＿＿の<ruby>商品<rt>しょうひん</rt></ruby>が、ますます<ruby>増<rt>ふ</rt></ruby>えている。",o:["向け","向き","がち","っぽい"],a:0,exp:"N＋<b>むけ（向け）</b>＝針對…、面向…（以前項為對象而做）。"},
+
+/* ========== N3 Chapter 5：程度 ========== */
+{id:"n3-kuraida",lv:"N3",cat:"程度",q:"<ruby>女房<rt>にょうぼう</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>になったときは、<ruby>嬉<rt>うれ</rt></ruby>しくて<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>る＿＿だった。",o:["くらい","ばかり","だらけ","ぎみ"],a:0,exp:"<b>くらい（だ）</b>＝舉具體事例說明程度（高興得幾乎…）。"},
+{id:"n3-bahodo",lv:"N3",cat:"程度",q:"<ruby>字<rt>じ</rt></ruby>は、<ruby>練習<rt>れんしゅう</rt></ruby>すれば<ruby>練習<rt>れんしゅう</rt></ruby>する＿＿、きれいに<ruby>書<rt>か</rt></ruby>ける。",o:["ほど","だけ","ばかり","くらい"],a:0,exp:"<b>ば…ほど</b>＝越…越…（同詞重複）。"},
+{id:"n3-hodo",lv:"N3",cat:"程度",q:"<ruby>成績<rt>せいせき</rt></ruby>がいい<ruby>学生<rt>がくせい</rt></ruby>＿＿、<ruby>机<rt>つくえ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かう<ruby>時間<rt>じかん</rt></ruby>が<ruby>長<rt>なが</rt></ruby>いとは<ruby>限<rt>かぎ</rt></ruby>らない。",o:["ほど","くらい","だけ","より"],a:0,exp:"<b>ほど</b>＝後項隨前項程度而變化（越…越…）。"},
+
+/* ========== N3 Chapter 6：状況の一致と変化 ========== */
+{id:"n3-toori",lv:"N3",cat:"一致・変化",q:"<ruby>先生<rt>せんせい</rt></ruby>に<ruby>習<rt>なら</rt></ruby>った＿＿に、<ruby>送<rt>おく</rt></ruby>り<ruby>仮名<rt>がな</rt></ruby>をつけた。",o:["とおり","まま","どおり","ほど"],a:0,exp:"🔸 動詞る／た＋<b>とおり(に)</b>＝按照…那樣。名詞則用「どおり」。"},
+{id:"n3-doori",lv:"N3",cat:"一致・変化",q:"<ruby>結果<rt>けっか</rt></ruby>は、<ruby>予想<rt>よそう</rt></ruby>＿＿だった。",o:["どおり","とおり","のまま","ほど"],a:0,exp:"N＋<b>どおり(に)</b>＝正如…那樣（接尾詞，接名詞）。"},
+{id:"n3-nishitagatte",lv:"N3",cat:"一致・変化",q:"<ruby>医学<rt>いがく</rt></ruby>が<ruby>進歩<rt>しんぽ</rt></ruby>する＿＿、<ruby>平均<rt>へいきん</rt></ruby><ruby>寿命<rt>じゅみょう</rt></ruby>も<ruby>延<rt>の</rt></ruby>びた。",o:["にしたがって","について","にたいして","にとって"],a:0,exp:"<b>にしたがって</b>＝隨著…而（後項相應變化）；也表「依照、遵循」。"},
+{id:"n3-nitsurete",lv:"N3",cat:"一致・変化",q:"<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>活動<rt>かつどう</rt></ruby>する＿＿、みんな<ruby>仲<rt>なか</rt></ruby>良くなった。",o:["につれて","にくわえて","にたいして","について"],a:0,exp:"🔸 <b>につれて</b>＝隨著…（自然、長期、持續的變化），不與「ば」共用。"},
+{id:"n3-nitomonatte",lv:"N3",cat:"一致・変化",q:"この<ruby>物質<rt>ぶっしつ</rt></ruby>は、<ruby>温度<rt>おんど</rt></ruby>の<ruby>変化<rt>へんか</rt></ruby>＿＿<ruby>色<rt>いろ</rt></ruby>が<ruby>変<rt>か</rt></ruby>わる。",o:["に伴って","について","にとって","に反して"],a:0,exp:"<b>にともなって</b>＝伴隨著…（隨前項變化而進展）。"},
+
+/* ========== N3 Chapter 7：立場・状況・関連 ========== */
+{id:"n3-karaiuto",lv:"N3",cat:"立場・関連",q:"<ruby>環境<rt>かんきょう</rt></ruby><ruby>破壊<rt>はかい</rt></ruby>という<ruby>点<rt>てん</rt></ruby>＿＿、リゾートは<ruby>作<rt>つく</rt></ruby>るべきではない。",o:["から言うと","について","にとって","として"],a:0,exp:"<b>からいうと</b>＝從…來看／就…而言（判斷的立場、角度）。"},
+{id:"n3-karaniwa",lv:"N3",cat:"立場・関連",q:"コンクールに<ruby>出<rt>で</rt></ruby>る＿＿、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>しなければ。",o:["からには","からといって","とすれば","について"],a:0,exp:"<b>からには</b>＝既然…就（要貫徹到底），後接決心、命令、勸誘等。"},
+{id:"n3-toshite",lv:"N3",cat:"立場・関連",q:"<ruby>責任者<rt>せきにんしゃ</rt></ruby>＿＿、<ruby>状況<rt>じょうきょう</rt></ruby>を<ruby>説明<rt>せつめい</rt></ruby>してください。",o:["として","にとって","について","にたいして"],a:0,exp:"N＋<b>として</b>＝以…身份、作為…（身份、資格、立場）。"},
+{id:"n3-nioite",lv:"N3",cat:"立場・関連",q:"<ruby>我<rt>わ</rt></ruby>が<ruby>社<rt>しゃ</rt></ruby>＿＿、<ruby>有能<rt>ゆうのう</rt></ruby>な<ruby>社員<rt>しゃいん</rt></ruby>はどんどん<ruby>昇進<rt>しょうしん</rt></ruby>できます。",o:["においては","について","にとって","にたいして"],a:0,exp:"N＋<b>において</b>＝在…（時間、地點、範圍、狀況；書面語，口語用で）。"},
+{id:"n3-nikanshite",lv:"N3",cat:"立場・関連",q:"<ruby>経済<rt>けいざい</rt></ruby>＿＿<ruby>本<rt>ほん</rt></ruby>をたくさん<ruby>読<rt>よ</rt></ruby>んでいます。",o:["に関する","にとって","にたいして","につき"],a:0,exp:"N＋<b>にかんして／にかんする</b>＝關於…（後多接言う、考える、研究する等）。"},
+{id:"n3-nitaishite",lv:"N3",cat:"立場・関連",q:"この<ruby>問題<rt>もんだい</rt></ruby>＿＿、ご<ruby>意見<rt>いけん</rt></ruby>を<ruby>聞<rt>き</rt></ruby>かせてください。",o:["に対して","について","にとって","として"],a:0,exp:"🔸 <b>にたいして</b>＝針對某對象的態度／動作。について則是「就某話題」。"},
+{id:"n3-nitotte",lv:"N3",cat:"立場・関連",q:"この<ruby>事件<rt>じけん</rt></ruby>は、<ruby>彼女<rt>かのじょ</rt></ruby>＿＿ショックだったに<ruby>違<rt>ちが</rt></ruby>いない。",o:["にとって","について","にたいして","として"],a:0,exp:"N＋<b>にとって</b>＝對…來說（站在該立場做判斷、評價）。"},
+
+/* ========== N3 Chapter 8：素材・手段・媒介・代替 ========== */
+{id:"n3-nimotozuite",lv:"N3",cat:"素材・手段",q:"<ruby>違反者<rt>いはんしゃ</rt></ruby>は<ruby>法律<rt>ほうりつ</rt></ruby>＿＿<ruby>処罰<rt>しょばつ</rt></ruby>されます。",o:["に基づいて","について","にとって","として"],a:0,exp:"<b>にもとづいて</b>＝根據…、基於…（須如實依照前項）。"},
+{id:"n3-womotoni",lv:"N3",cat:"素材・手段",q:"<ruby>彼女<rt>かのじょ</rt></ruby>のデザイン＿＿、<ruby>青<rt>あお</rt></ruby>いワンピースを<ruby>作<rt>つく</rt></ruby>った。",o:["をもとに","について","にとって","に対して"],a:0,exp:"🔸 <b>をもとに</b>＝以…為基礎、參考（內容可有變化、可創作）。に基づいて則須如實遵照。"},
+{id:"n3-wochuushinni",lv:"N3",cat:"素材・手段",q:"<ruby>海洋<rt>かいよう</rt></ruby><ruby>開発<rt>かいはつ</rt></ruby>＿＿、<ruby>討論<rt>とうろん</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めました。",o:["を中心に","をもとに","をはじめ","について"],a:0,exp:"<b>をちゅうしんに</b>＝以…為中心、圍繞著…。"},
+{id:"n3-wotsuujite",lv:"N3",cat:"素材・手段",q:"<ruby>彼女<rt>かのじょ</rt></ruby>＿＿、<ruby>間接的<rt>かんせつてき</rt></ruby>に<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いた。",o:["を通じて","について","によって","として"],a:0,exp:"<b>をつうじて／をとおして</b>＝透過…（媒介）；或表整段期間／範圍。"},
+{id:"n3-kawarini",lv:"N3",cat:"素材・手段",q:"<ruby>正月<rt>しょうがつ</rt></ruby>は、<ruby>海外<rt>かいがい</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>く＿＿<ruby>近<rt>ちか</rt></ruby>くの<ruby>温泉<rt>おんせん</rt></ruby>に<ruby>行<rt>い</rt></ruby>った。",o:["かわりに","ついでに","うえに","とともに"],a:0,exp:"🔸 <b>かわりに</b>＝代替…／雖然…但相對…。ついでに則是「順便」。"},
+
+/* ========== N3 Chapter 9：希望・意志・感情 ========== */
+{id:"n3-youni",lv:"N3",cat:"希望・意志",q:"<ruby>首<rt>くび</rt></ruby>が<ruby>楽<rt>らく</rt></ruby>な＿＿<ruby>枕<rt>まくら</rt></ruby>を<ruby>低<rt>ひく</rt></ruby>くした。",o:["ように","ために","ような","らしく"],a:0,exp:"🔸 <b>ように</b>＝為了…（前接無意志／可能動詞，前後主語可不同）。ために前接意志動詞、主語須一致。"},
+{id:"n3-temiseru",lv:"N3",cat:"希望・意志",q:"<ruby>今度<rt>こんど</rt></ruby>こそ<ruby>合格<rt>ごうかく</rt></ruby>して＿＿。（<ruby>決意<rt>けつい</rt></ruby>）",o:["みせる","みる","おく","ある"],a:0,exp:"🔸 動詞て＋<b>みせる</b>＝（強烈決心）一定要做到／做給人看。てみる則是「試試看」。"},
+{id:"n3-monoka",lv:"N3",cat:"希望・意志",q:"<ruby>勝敗<rt>しょうはい</rt></ruby>なんか、<ruby>気<rt>き</rt></ruby>にする＿＿。",o:["ものか","ものだから","もので","ことか"],a:0,exp:"動詞辭書形＋<b>ものか</b>＝才不…呢／決不…（強烈否定情緒，句尾下降）。"},
+{id:"n3-tetamaranai",lv:"N3",cat:"希望・意志",q:"<ruby>婚約<rt>こんやく</rt></ruby>したので、<ruby>嬉<rt>うれ</rt></ruby>し＿＿。",o:["くてたまらない","くてはならない","くなくない","がちだ"],a:0,exp:"形容詞くて＋<b>たまらない</b>＝…得受不了（強烈的感情／感覺）。"},
+{id:"n3-tenaranai",lv:"N3",cat:"希望・意志",q:"<ruby>彼女<rt>かのじょ</rt></ruby>のことが<ruby>気<rt>き</rt></ruby>になっ＿＿。",o:["てならない","てたまらない","てみせる","てある"],a:0,exp:"🔸 動詞て＋<b>ならない</b>＝…得不得了（常與「思える」等自發詞共用，てたまらない則不行）。"},
+{id:"n3-wokomete",lv:"N3",cat:"希望・意志",q:"みんなの<ruby>幸<rt>しあわ</rt></ruby>せのために、<ruby>願<rt>ねが</rt></ruby>い＿＿<ruby>鐘<rt>かね</rt></ruby>を<ruby>鳴<rt>な</rt></ruby>らした。",o:["を込めて","を通じて","によって","として"],a:0,exp:"N＋<b>をこめて</b>＝傾注（心、力、愛等）；常用心を込めて、力を込めて。"},
+
+/* ========== N3 Chapter 10：義務・不必要 ========== */
+{id:"n3-naiwakeniwa",lv:"N3",cat:"義務・不必要",q:"<ruby>弟<rt>おとうと</rt></ruby>の<ruby>結婚式<rt>けっこんしき</rt></ruby>だから、ネクタイを<ruby>締<rt>し</rt></ruby>め＿＿。",o:["ないわけにはいかない","わけにはいかない","ほかない","しかない"],a:0,exp:"🔸 <b>ないわけにはいかない</b>＝不能不…（受社會規範、義務所迫）。わけにはいかない則是「不能做」。"},
+{id:"n3-hokanai",lv:"N3",cat:"義務・不必要",q:"こうなったら、<ruby>徹夜<rt>てつや</rt></ruby>してでもやる＿＿。",o:["ほかない","わけがない","はずがない","がちだ"],a:0,exp:"動詞辭書形＋<b>ほかない</b>＝只好…（沒有別的選擇）。"},
+{id:"n3-yorinai",lv:"N3",cat:"義務・不必要",q:"こうなったら<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby>やる＿＿。",o:["よりない","わけがない","ものか","がち"],a:0,exp:"動詞辭書形＋<b>より(ほか)ない</b>＝除了…別無他法（後伴否定語感）。"},
+
+/* ========== N3 Chapter 11：条件・仮定 ========== */
+{id:"n3-saeba",lv:"N3",cat:"条件・仮定",q:"やる<ruby>気<rt>き</rt></ruby>＿＿あれば、<ruby>年齢<rt>ねんれい</rt></ruby>や<ruby>経験<rt>けいけん</rt></ruby>は<ruby>問<rt>と</rt></ruby>わない。",o:["さえ","こそ","しか","だけ"],a:0,exp:"<b>さえ…ば</b>＝只要…（就），強調只需這個最低、唯一的條件。"},
+{id:"n3-tatoetemo",lv:"N3",cat:"条件・仮定",q:"＿＿<ruby>費用<rt>ひよう</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くても、かまいません。",o:["たとえ","まるで","もし","きっと"],a:0,exp:"<b>たとえ…ても</b>＝即使…也…（極端條件下後項仍成立的讓步）。"},
+{id:"n3-tekaradenaito",lv:"N3",cat:"条件・仮定",q:"ファイルを<ruby>保存<rt>ほぞん</rt></ruby>して＿＿、<ruby>電源<rt>でんげん</rt></ruby>を<ruby>切<rt>き</rt></ruby>ってはだめだ。",o:["からでないと","からには","ところで","とともに"],a:0,exp:"動詞て＋<b>からでないと</b>＝不先做…就不能…。"},
+{id:"n3-tosureba",lv:"N3",cat:"条件・仮定",q:"この<ruby>中<rt>なか</rt></ruby>から<ruby>選<rt>えら</rt></ruby>ぶ＿＿、<ruby>赤<rt>あか</rt></ruby>いのがいい。",o:["としたら","としても","とともに","について"],a:0,exp:"<b>とすれば／としたら</b>＝如果…的話（在前提下進行判斷）。"},
+{id:"n3-bayokatta",lv:"N3",cat:"条件・仮定",q:"もう<ruby>売<rt>う</rt></ruby>り<ruby>切<rt>き</rt></ruby>れだ！もっと<ruby>早<rt>はや</rt></ruby>く<ruby>買<rt>か</rt></ruby>っておけ＿＿。",o:["ばよかった","たらいい","ばいい","てよかった"],a:0,exp:"動詞ば＋<b>よかった</b>＝早知道就…（對沒做某事感到後悔）。"},
+
+/* ========== N3 Chapter 12：規定・慣例・習慣 ========== */
+{id:"n3-kotonishiteiru",lv:"N3",cat:"規定・習慣",q:"<ruby>毎晩<rt>まいばん</rt></ruby><ruby>12時<rt>じゅうにじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>る＿＿。",o:["ことにしている","ことになっている","ようになる","ものだ"],a:0,exp:"🔸 <b>ことにしている</b>＝（自己決心養成的）習慣、方針。ことになっている則是規定／慣例。"},
+{id:"n3-kotoninatteiru",lv:"N3",cat:"規定・習慣",q:"<ruby>夏休<rt>なつやす</rt></ruby>みのあいだ、<ruby>家事<rt>かじ</rt></ruby>は<ruby>子供<rt>こども</rt></ruby>たちがする＿＿。",o:["ことになっている","ことにしている","ものだから","わけだ"],a:0,exp:"<b>ことになっている</b>＝按規定／約定…（規定、慣例的存續）。"},
+{id:"n3-youganai",lv:"N3",cat:"規定・習慣",q:"<ruby>道<rt>みち</rt></ruby>に<ruby>人<rt>ひと</rt></ruby>が<ruby>溢<rt>あふ</rt></ruby>れているので、<ruby>通<rt>とお</rt></ruby>り<ruby>抜<rt>ぬ</rt></ruby>け＿＿。",o:["ようがない","ほかない","わけがない","がちだ"],a:0,exp:"ます形語幹＋<b>ようがない</b>＝沒辦法…（不管用什麼方法都不可能）。"},
+
+/* ========== N3 Chapter 13：並立・添加・列挙 ========== */
+{id:"n3-tsuideni",lv:"N3",cat:"並立・添加",q:"ごみを<ruby>出<rt>だ</rt></ruby>しに<ruby>行<rt>い</rt></ruby>く＿＿、<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>取<rt>と</rt></ruby>ってきた。",o:["ついでに","かわりに","とともに","ばかりか"],a:0,exp:"<b>ついで(に)</b>＝順便…（做主要事情時順手追加另一件）。"},
+{id:"n3-toka",lv:"N3",cat:"並立・添加",q:"<ruby>当時<rt>とうじ</rt></ruby>はまだ<ruby>新幹線<rt>しんかんせん</rt></ruby>がなかった＿＿。",o:["とか","っけ","もの","こそ"],a:0,exp:"句尾的<b>とか</b>＝好像…、聽說…（比そうだ更不確定的傳聞）。"},
+{id:"n3-totomoni",lv:"N3",cat:"並立・添加",q:"<ruby>仕事<rt>しごと</rt></ruby>すると、お<ruby>金<rt>かね</rt></ruby>＿＿、たくさんの<ruby>知識<rt>ちしき</rt></ruby>も<ruby>得<rt>え</rt></ruby>られる。",o:["とともに","について","にとって","として"],a:0,exp:"<b>とともに</b>＝和…一起、與…同時也…。"},
+{id:"n3-nikuwaete",lv:"N3",cat:"並立・添加",q:"<ruby>書道<rt>しょどう</rt></ruby>＿＿、<ruby>華道<rt>かどう</rt></ruby>も<ruby>習<rt>なら</rt></ruby>っている。",o:["に加えて","に比べて","に反して","について"],a:0,exp:"N＋<b>にくわえて</b>＝加上…（在前項上再添同類後項，＝だけでなく…も）。"},
+{id:"n3-bakarika",lv:"N3",cat:"並立・添加",q:"<ruby>彼<rt>かれ</rt></ruby>は、<ruby>勉強<rt>べんきょう</rt></ruby>＿＿、スポーツも<ruby>得意<rt>とくい</rt></ruby>だ。",o:["ばかりか","ばかりに","だけしか","について"],a:0,exp:"<b>ばかりか／ばかりでなく</b>＝不僅…而且…（後項程度更甚）。"},
+{id:"n3-hamochiron",lv:"N3",cat:"並立・添加",q:"<ruby>居間<rt>いま</rt></ruby>＿＿、トイレも<ruby>台所<rt>だいどころ</rt></ruby>も<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>掃除<rt>そうじ</rt></ruby>しました。",o:["はもちろん","について","にとって","にたいして"],a:0,exp:"N＋<b>はもちろん／はもとより</b>＝…不用說，連…也…（前項一般、後項程度更高）。"},
+{id:"n3-wohajime",lv:"N3",cat:"並立・添加",q:"<ruby>試合<rt>しあい</rt></ruby>には、<ruby>校長<rt>こうちょう</rt></ruby><ruby>先生<rt>せんせい</rt></ruby>＿＿、たくさんの<ruby>先生<rt>せんせい</rt></ruby><ruby>方<rt>がた</rt></ruby>も<ruby>応援<rt>おうえん</rt></ruby>に<ruby>来<rt>き</rt></ruby>た。",o:["をはじめ","を中心に","をもとに","について"],a:0,exp:"N＋<b>をはじめ</b>＝以…為首（を前面是最具代表性、核心的人或物）。"},
+{id:"n3-youna",lv:"N3",cat:"並立・添加",q:"お<ruby>寿司<rt>すし</rt></ruby>や<ruby>天<rt>てん</rt></ruby>ぷら＿＿<ruby>和食<rt>わしょく</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",o:["のような","らしい","みたいに","っぽい"],a:0,exp:"Nの＋<b>ような</b>＝像…那樣的…（列舉、比喻，修飾後面名詞）。"},
+
+/* ========== N3 Chapter 14：比較・対比・逆接 ========== */
+{id:"n3-kuseni",lv:"N3",cat:"比較・逆接",q:"<ruby>彼女<rt>かのじょ</rt></ruby>が<ruby>好<rt>す</rt></ruby>きな＿＿、<ruby>嫌<rt>きら</rt></ruby>いだと<ruby>言<rt>い</rt></ruby>い<ruby>張<rt>は</rt></ruby>っている。",o:["くせに","から","ので","とともに"],a:0,exp:"🔸 <b>くせに</b>＝雖然…卻…（帶譴責、輕蔑，比のに語氣更重，口語）。"},
+{id:"n3-kurainara",lv:"N3",cat:"比較・逆接",q:"こんなひどい<ruby>目<rt>め</rt></ruby>に<ruby>会<rt>あ</rt></ruby>う＿＿、むしろ<ruby>死<rt>し</rt></ruby>んだほうがいい。",o:["ぐらいなら","からには","とすれば","について"],a:0,exp:"動詞＋<b>くらいなら</b>＝與其…不如…（對前者表否定、厭惡，常配ましだ）。"},
+{id:"n3-toshitemo",lv:"N3",cat:"比較・逆接",q:"これが<ruby>本物<rt>ほんもの</rt></ruby>の<ruby>宝石<rt>ほうせき</rt></ruby>だ＿＿、<ruby>私<rt>わたし</rt></ruby>は<ruby>買<rt>か</rt></ruby>いません。",o:["としても","として","について","にとって"],a:0,exp:"<b>としても</b>＝即使…也…（假設前項成立，後項仍不變或相反）。"},
+{id:"n3-nikurabete",lv:"N3",cat:"比較・逆接",q:"<ruby>平野<rt>へいや</rt></ruby>＿＿、<ruby>盆地<rt>ぼんち</rt></ruby>は<ruby>夏<rt>なつ</rt></ruby><ruby>暑<rt>あつ</rt></ruby>いです。",o:["に比べて","に加えて","に反して","について"],a:0,exp:"N＋<b>にくらべて</b>＝與…相比、跟…比較起來。"},
+{id:"n3-nihanshite",lv:"N3",cat:"比較・逆接",q:"<ruby>期待<rt>きたい</rt></ruby>＿＿、<ruby>収穫量<rt>しゅうかくりょう</rt></ruby>は<ruby>少<rt>すく</rt></ruby>なかった。",o:["に反して","に比べて","に加えて","について"],a:0,exp:"N＋<b>にはんして</b>＝與…相反（常接期待、予想等，結果與預料相反）。"},
+{id:"n3-noni",lv:"N3",cat:"比較・逆接",q:"<ruby>頑張<rt>がんば</rt></ruby>った＿＿、うまくいかなかった。",o:["のに","ので","から","とともに"],a:0,exp:"<b>のに</b>＝明明…卻…（既定逆接，帶意外、不滿、埋怨）。"},
+{id:"n3-hanmen",lv:"N3",cat:"比較・逆接",q:"あの<ruby>会社<rt>かいしゃ</rt></ruby>は、<ruby>給料<rt>きゅうりょう</rt></ruby>がいい＿＿、<ruby>仕事<rt>しごと</rt></ruby>がきつい。",o:["反面","おかげで","ものだから","ばかりか"],a:0,exp:"<b>はんめん（反面）</b>＝另一方面…（同一事物兼具兩個對立面）。"},
+{id:"n3-warini",lv:"N3",cat:"比較・逆接",q:"<ruby>面積<rt>めんせき</rt></ruby>が<ruby>広<rt>ひろ</rt></ruby>い＿＿、<ruby>人口<rt>じんこう</rt></ruby>が<ruby>少<rt>すく</rt></ruby>ない。",o:["わりに","おかげで","ばかりに","について"],a:0,exp:"<b>わりに(は)</b>＝相對之下、雖然…但是…（結果與前項條件不成比例）。"},
+
+/* ========== N3 Chapter 15：限定・強調 ========== */
+{id:"n3-shikanai",lv:"N3",cat:"限定・強調",q:"<ruby>国会<rt>こっかい</rt></ruby><ruby>議員<rt>ぎいん</rt></ruby>になるには、<ruby>選挙<rt>せんきょ</rt></ruby>で<ruby>勝<rt>か</rt></ruby>つ＿＿。",o:["しかない","わけがない","ものか","ほどだ"],a:0,exp:"動詞辭書形＋<b>しかない</b>＝只能…、只好…（唯一可行）。"},
+{id:"n3-dake3",lv:"N3",cat:"限定・強調",q:"テレビは<ruby>一時間<rt>いちじかん</rt></ruby>＿＿<ruby>見<rt>み</rt></ruby>てもいいです。",o:["だけ","しか","こそ","さえ"],a:0,exp:"🔸 <b>だけ</b>＝只（中性限定，後可接肯定）。しか必接否定且帶可惜感。"},
+{id:"n3-shika3",lv:"N3",cat:"限定・強調",q:"<ruby>5000円<rt>ごせんえん</rt></ruby>＿＿ありません。",o:["しか","だけ","こそ","さえ"],a:0,exp:"<b>しか…ない</b>＝只有…（下接否定，帶不足、可惜）。"},
+{id:"n3-koso",lv:"N3",cat:"限定・強調",q:"こちら＿＿よろしくお<ruby>願<rt>ねが</rt></ruby>いします。",o:["こそ","さえ","しか","だけ"],a:0,exp:"N＋<b>こそ</b>＝正是…、才是…（強調）；也表「正因為…才」。"},
+{id:"n3-nanka",lv:"N3",cat:"限定・強調",q:"<ruby>庭<rt>にわ</rt></ruby>に、<ruby>芝生<rt>しばふ</rt></ruby>＿＿あるといいですね。",o:["なんか","しか","こそ","さえ"],a:0,exp:"<b>なんか／なんて</b>＝…之類的、…什麼的（口語舉例，或帶輕視）。"},
+
+/* ========== N3 Chapter 16：受身・使役・敬語・伝聞 ========== */
+{id:"n3-tehoshii16",lv:"N3",cat:"受身・敬語",q:"<ruby>学園祭<rt>がくえんさい</rt></ruby>には、たくさんの<ruby>人<rt>ひと</rt></ruby>に<ruby>来<rt>き</rt></ruby>て＿＿ですね。",o:["ほしい","たい","みたい","らしい"],a:0,exp:"動詞て＋<b>ほしい</b>＝希望（別人）…。否定為ないでほしい／てほしくない。"},
+{id:"n3-kotowanai",lv:"N3",cat:"受身・敬語",q:"<ruby>部長<rt>ぶちょう</rt></ruby>の<ruby>評価<rt>ひょうか</rt></ruby>なんて、<ruby>気<rt>き</rt></ruby>にする＿＿。",o:["ことはない","ことになる","ほかない","わけがない"],a:0,exp:"動詞辭書形＋<b>ことはない</b>＝用不著…、沒必要…（勸告）。"},
+{id:"n3-saseru",lv:"N3",cat:"受身・敬語",q:"<ruby>子供<rt>こども</rt></ruby>に<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>＿＿。",o:["させた","された","させられた","した"],a:0,exp:"<b>(さ)せる</b>＝使役（讓／叫某人做）。他動詞句型：XがYにNをV-させる。"},
+{id:"n3-saserareru",lv:"N3",cat:"受身・敬語",q:"<ruby>彼<rt>かれ</rt></ruby>と<ruby>食事<rt>しょくじ</rt></ruby>すると、いつも<ruby>僕<rt>ぼく</rt></ruby>がお<ruby>金<rt>かね</rt></ruby>を<ruby>払<rt>はら</rt></ruby>わ＿＿。",o:["せられる","せる","れる","す"],a:0,exp:"🔸 <b>(さ)せられる</b>＝使役被動＝被迫…（不情願、受害的心情）。"},
+{id:"n3-saseteitadaku",lv:"N3",cat:"受身・敬語",q:"<ruby>明日<rt>あした</rt></ruby>ちょっと<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ら＿＿のですが。",o:["せていただきたい","せてあげたい","れてほしい","させてくれ"],a:0,exp:"使役＋<b>ていただく</b>＝請允許我…（請求對方允許，並含受恩惠的謙讓語氣）。"},
+{id:"n3-tte",lv:"N3",cat:"受身・敬語",q:"<ruby>北海道<rt>ほっかいどう</rt></ruby>では、もう<ruby>初雪<rt>はつゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>った＿＿。",o:["って","わけ","はず","べき"],a:0,exp:"引用＋<b>って</b>＝（聽說）…、他說…（口語引用、傳聞）。"},
+{id:"n3-toiukotoda",lv:"N3",cat:"受身・敬語",q:"やきもちを<ruby>焼<rt>や</rt></ruby>くということは、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>君<rt>きみ</rt></ruby>に<ruby>気<rt>き</rt></ruby>がある＿＿。",o:["ということだ","わけがない","はずがない","ものだ"],a:0,exp:"<b>ということだ</b>＝也就是說…、這就表示…（由前項得到結論）。"},
+
+/* ========== N3 Chapter 17：授受表現 ========== */
+{id:"n3-sashiageru",lv:"N3",cat:"授受表現",q:"<ruby>私<rt>わたし</rt></ruby>たちは<ruby>先生<rt>せんせい</rt></ruby>にお<ruby>土産<rt>みやげ</rt></ruby>を＿＿。",o:["さしあげました","くださいました","いただきました","やりました"],a:0,exp:"<b>さしあげる</b>＝（下對上）敬贈、呈遞（あげる的謙讓語）。"},
+{id:"n3-kudasaru",lv:"N3",cat:"授受表現",q:"<ruby>先生<rt>せんせい</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>にご<ruby>著書<rt>ちょしょ</rt></ruby>を＿＿。",o:["くださいました","さしあげました","いただきました","あげました"],a:0,exp:"<b>くださる</b>＝（上對我方）給…（くれる的尊敬語）。"},
+{id:"n3-itadaku",lv:"N3",cat:"授受表現",q:"<ruby>私<rt>わたし</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>にアドバイスを＿＿。",o:["いただきました","くださいました","さしあげました","やりました"],a:0,exp:"<b>いただく</b>＝（從上位者）承蒙、拜領（もらう的謙讓語）。"},
+{id:"n3-yaru",lv:"N3",cat:"授受表現",q:"<ruby>応接間<rt>おうせつま</rt></ruby>の<ruby>花<rt>はな</rt></ruby>に<ruby>水<rt>みず</rt></ruby>を＿＿ください。",o:["やって","あげて","くれて","もらって"],a:0,exp:"<b>やる</b>＝給（晚輩、動植物）。對植物澆水固定用やる。"},
+{id:"n3-tekudasaru",lv:"N3",cat:"授受表現",q:"<ruby>先生<rt>せんせい</rt></ruby>は<ruby>30分<rt>さんじゅっぷん</rt></ruby>も<ruby>私<rt>わたし</rt></ruby>を<ruby>待<rt>ま</rt></ruby>って＿＿。",o:["くださいました","さしあげました","いただきました","やりました"],a:0,exp:"動詞て＋<b>くださる</b>＝（上位者為我方）做…（てくれる的尊敬語）。"},
+{id:"n3-temorau",lv:"N3",cat:"授受表現",q:"<ruby>田中<rt>たなか</rt></ruby>さんに<ruby>友<rt>とも</rt></ruby>だちを<ruby>紹介<rt>しょうかい</rt></ruby>して＿＿。",o:["もらった","くれた","あげた","やった"],a:0,exp:"動詞て＋<b>もらう</b>＝（我）請某人為我做…（帶感謝）。"},
+
+/* ========== N3 Chapter 18：その他 ========== */
+{id:"n3-karanikakete",lv:"N3",cat:"その他",q:"<ruby>春<rt>はる</rt></ruby>から<ruby>夏<rt>なつ</rt></ruby>＿＿、<ruby>雨<rt>あめ</rt></ruby>が<ruby>多<rt>おお</rt></ruby>い。",o:["にかけて","において","として","にとって"],a:0,exp:"<b>から…にかけて</b>＝從…到…（籠統地跨越兩個時間／空間，不像から…まで那麼明確）。"},
+{id:"n3-kiru",lv:"N3",cat:"その他",q:"<ruby>三日<rt>みっか</rt></ruby>も<ruby>寝<rt>ね</rt></ruby>ないで<ruby>働<rt>はたら</rt></ruby>いて、<ruby>疲<rt>つか</rt></ruby>れ＿＿しまった。",o:["きって","かけて","だして","つづけて"],a:0,exp:"ます形語幹＋<b>きる</b>＝…完／到極限（疲れきる＝精疲力竭）。"},
+{id:"n3-koto",lv:"N3",cat:"その他",q:"<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>詩<rt>し</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む＿＿です。",o:["こと","ところ","わけ","もの"],a:0,exp:"<b>こと</b>＝形式名詞（使短句名詞化）；後接です／だ、或ことができる等時只能用こと。"},
+{id:"n3-tatokoro",lv:"N3",cat:"その他",q:"<ruby>新<rt>あたら</rt></ruby>しい<ruby>雑誌<rt>ざっし</rt></ruby>を<ruby>創刊<rt>そうかん</rt></ruby>した＿＿、とてもよく<ruby>売<rt>う</rt></ruby>れている。",o:["ところ","とたん","ばかり","うちに"],a:0,exp:"動詞た＋<b>ところ</b>＝做了…結果（前後無直接因果，後項常是意外的客觀結果）。"},
+{id:"n3-tabini",lv:"N3",cat:"その他",q:"<ruby>試合<rt>しあい</rt></ruby>の＿＿、<ruby>彼女<rt>かのじょ</rt></ruby>がお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ってくれる。",o:["たびに","うちに","ところに","さいに"],a:0,exp:"Nの／動詞辭書形＋<b>たびに</b>＝每次…就…。"},
+{id:"n3-kke",lv:"N3",cat:"その他",q:"このニュース、<ruby>彼女<rt>かのじょ</rt></ruby>に<ruby>知<rt>し</rt></ruby>らせた＿＿。",o:["っけ","とか","もの","こそ"],a:0,exp:"<b>っけ</b>＝是不是…來著（確認自己記不清的事，口語、對長輩勿用）。"},
+{id:"n3-tokorodatta",lv:"N3",cat:"その他",q:"もう<ruby>少<rt>すこ</rt></ruby>しで<ruby>車<rt>くるま</rt></ruby>にはねられる＿＿。",o:["ところだった","ところだ","ばかりだった","とたんだ"],a:0,exp:"🔸 動詞辭書形＋<b>ところだった</b>＝差一點就…了（回想已發生的事）。ところだ則是「正要…」。"},
+{id:"n3-niwatatte",lv:"N3",cat:"その他",q:"わが<ruby>社<rt>しゃ</rt></ruby>の<ruby>製品<rt>せいひん</rt></ruby>は、<ruby>50年<rt>ごじゅうねん</rt></ruby>＿＿<ruby>愛用<rt>あいよう</rt></ruby>されてきた。",o:["にわたって","について","にとって","として"],a:0,exp:"N（時間／範圍）＋<b>にわたって</b>＝經歷、持續…（涉及的時間或空間範圍很大）。"},
+{id:"n3-mi",lv:"N3",cat:"形容詞名詞化",q:"この<ruby>包丁<rt>ほうちょう</rt></ruby>は<ruby>厚<rt>あつ</rt></ruby>＿＿のある<ruby>肉<rt>にく</rt></ruby>もよく<ruby>切<rt>き</rt></ruby>れる。",o:["み","さ","け","く"],a:0,exp:"🔸 形容詞詞幹＋<b>み</b>＝偏主觀的感受／狀態（厚み＝厚實感）。さ則偏客觀程度。"},
+{id:"n3-mono",lv:"N3",cat:"その他",q:"<ruby>哲学<rt>てつがく</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>なんて<ruby>読<rt>よ</rt></ruby>みたくないよ。<ruby>難<rt>むずか</rt></ruby>しすぎる＿＿。",o:["もの","こと","ところ","わけ"],a:0,exp:"句尾<b>もの／もん</b>＝因為…嘛（堅持自己的正當性、辯解，帶不滿語氣）。"},
+{id:"n3-wakeda",lv:"N3",cat:"その他",q:"<ruby>彼<rt>かれ</rt></ruby>はうちの<ruby>中<rt>なか</rt></ruby>にばかりいるから、<ruby>顔色<rt>かおいろ</rt></ruby>が<ruby>青白<rt>あおじろ</rt></ruby>い＿＿。",o:["わけだ","はずだ","ものだ","べきだ"],a:0,exp:"🔸 <b>わけだ</b>＝難怪…、當然…（合乎邏輯的必然結論，著重理由）。はずだ則著重推測。"},
+
+];
+
+/* ============================================================
+   App logic：測驗 / 主題篩選 / 選項洗牌 / 即時批改 / 錯題本 / 振假名切換
+   ============================================================ */
+"use strict";
+
+/* ---------- 持久化（localStorage，失敗時退回記憶體） ---------- */
+const STORE_KEY = "jp_grammar_drill_v2";
+let memFallback = null;
+function loadStore(){
+  try{ const r = localStorage.getItem(STORE_KEY); return r ? JSON.parse(r) : null; }
+  catch(e){ return memFallback; }
+}
+function saveStore(obj){
+  memFallback = obj;
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(obj)); }catch(e){}
+}
+
+/* ---------- 狀態 ---------- */
+const persisted = loadStore() || { wrong: [], furiOff:false, done:0, correct:0 };
+const state = {
+  wrong: Array.isArray(persisted.wrong) ? persisted.wrong : [],
+  done: persisted.done|0,
+  correct: persisted.correct|0,
+  level: "ALL",
+  cat: "ALL",
+  mode: "quiz",          // quiz | review
+  order: [],             // 目前題序（題目物件陣列）
+  idx: 0,
+  answered: false,
+};
+function persist(){
+  saveStore({ wrong: state.wrong, furiOff: document.body.classList.contains("hide-furi"),
+              done: state.done, correct: state.correct });
+}
+
+/* ---------- 小工具 ---------- */
+const $ = s => document.querySelector(s);
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1600); }
+function esc(s){ return String(s).replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+/* ---------- 振假名切換 ---------- */
+if(persisted.furiOff) document.body.classList.add("hide-furi");
+function syncFuri(){
+  const off = document.body.classList.contains("hide-furi");
+  $("#furiLabel").textContent = off ? "振假名 OFF" : "振假名 ON";
+}
+$("#furiBtn").addEventListener("click", ()=>{
+  document.body.classList.toggle("hide-furi"); syncFuri(); persist();
+});
+syncFuri();
+
+/* ---------- 題庫池 ---------- */
+function pool(){
+  return QUESTIONS.filter(q =>
+    (state.level==="ALL" || q.lv===state.level) &&
+    (state.cat==="ALL" || q.cat===state.cat));
+}
+
+/* ---------- 主題下拉（依等級動態） ---------- */
+function rebuildCats(){
+  const inLevel = QUESTIONS.filter(q => state.level==="ALL" || q.lv===state.level);
+  const cats = [...new Set(inLevel.map(q=>q.cat))];
+  const sel = $("#catSelect");
+  sel.innerHTML = '<option value="ALL">全部主題</option>' +
+    cats.map(c=>`<option value="${esc(c)}">${esc(c)}（${inLevel.filter(q=>q.cat===c).length}）</option>`).join("");
+  if(state.cat!=="ALL" && !cats.includes(state.cat)) state.cat="ALL";
+  sel.value = state.cat;
+}
+
+/* ---------- 等級晶片 ---------- */
+document.querySelectorAll(".chip[data-lv]").forEach(c=>{
+  c.addEventListener("click", ()=>{
+    document.querySelectorAll(".chip[data-lv]").forEach(x=>x.classList.remove("active"));
+    c.classList.add("active");
+    state.level = c.dataset.lv; state.cat="ALL";
+    rebuildCats(); startQuiz();
+  });
+});
+$("#catSelect").addEventListener("change", e=>{ state.cat=e.target.value; startQuiz(); });
+
+/* ---------- 開始 / 重建題序 ---------- */
+function startQuiz(){
+  state.mode="quiz";
+  state.order = shuffle(pool());
+  state.idx=0; state.answered=false;
+  $("#poolMeta").textContent = state.order.length ? `共 ${state.order.length} 題（隨機）` : "此範圍無題目";
+  renderCard();
+  refreshStats();
+}
+function startReview(){
+  if(!state.wrong.length){ toast("錯題本是空的"); return; }
+  state.mode="review";
+  state.order = shuffle(state.wrong);
+  state.idx=0; state.answered=false;
+  showQuizView();
+  renderCard();
+}
+
+/* ---------- 渲染題卡 ---------- */
+function renderCard(){
+  const card=$("#quizCard");
+  const list=state.order;
+  if(!list.length){
+    card.innerHTML = `<div class="empty"><span class="big">∅</span>這個範圍目前沒有題目，換個等級或主題吧。</div>`;
+    return;
+  }
+  if(state.idx>=list.length){
+    const reviewing = state.mode==="review";
+    card.innerHTML = `<div class="empty">
+      <span class="big">${reviewing?"✓":"卒"}</span>
+      ${reviewing? "錯題複習完成！答對的題目已從錯題本移除。" : "這一輪題目做完了！"}
+      <div class="actions" style="max-width:320px;margin:18px auto 0">
+        <button class="btn btn-primary" id="againBtn">再來一輪</button>
+        ${reviewing?'<button class="btn btn-ghost" id="backQuizBtn">回題庫</button>':''}
+      </div></div>`;
+    $("#againBtn").addEventListener("click", ()=> reviewing? startReview() : startQuiz());
+    if(reviewing) $("#backQuizBtn").addEventListener("click", startQuiz);
+    return;
+  }
+
+  const q=list[state.idx];
+  state.answered=false;
+  // 選項洗牌：保留原 index 以對照 q.a
+  const disp = shuffle(q.o.map((text,i)=>({text,orig:i})));
+  const circ=["①","②","③","④","⑤"];
+  const qHtml = q.q.replace(/＿+/g, '<span class="blank">＿＿</span>');
+
+  card.innerHTML = `
+    <div class="card-top">
+      <span class="tag lv">${esc(q.lv)}</span>
+      <span class="tag cat">${esc(q.cat)}</span>
+      <span class="qcount">${state.idx+1} / ${list.length}${state.mode==="review"?" ・錯題":""}</span>
+    </div>
+    <div class="question">${qHtml}</div>
+    <div class="options">
+      ${disp.map((o,di)=>`<button class="opt" data-orig="${o.orig}">
+          <span class="mark">${circ[di]}</span><span class="jp">${o.text}</span>
+        </button>`).join("")}
+    </div>
+    <div class="feedback" id="fb"></div>
+    <div class="actions" id="qactions" style="display:none">
+      <button class="btn btn-primary" id="nextBtn">下一題 →</button>
+    </div>`;
+
+  card.querySelectorAll(".opt").forEach(btn=>{
+    btn.addEventListener("click", ()=> answer(parseInt(btn.dataset.orig,10), q, card));
+  });
+}
+
+/* ---------- 作答批改 ---------- */
+function answer(orig, q, card){
+  if(state.answered) return;
+  state.answered=true;
+  const correct = orig===q.a;
+  const opts=card.querySelectorAll(".opt");
+  opts.forEach(b=>{
+    b.disabled=true;
+    const o=parseInt(b.dataset.orig,10);
+    if(o===q.a) b.classList.add("correct");
+    else if(o===orig) b.classList.add("wrong");
+  });
+
+  // 統計
+  state.done++; if(correct) state.correct++;
+
+  // 錯題本：答錯→收錄；review 模式答對→移除
+  if(!correct){
+    if(!state.wrong.some(w=>w.id===q.id)){
+      state.wrong.push(q);
+      toast("已收進錯題本");
+    }
+  }else if(state.mode==="review"){
+    state.wrong = state.wrong.filter(w=>w.id!==q.id);
+  }
+  persist(); refreshStats();
+
+  const fb=$("#fb");
+  fb.className = "feedback show " + (correct?"ok":"ng");
+  fb.innerHTML = `
+    <div class="fb-head">${correct?"正解 〇　よくできました！":"不正解 ✕　もう一度チェック"}</div>
+    <div class="fb-ans">正解：<b class="jp">${esc(q.o[q.a])}</b></div>
+    <div class="fb-exp">${q.exp}</div>`;
+  $("#qactions").style.display="flex";
+  $("#nextBtn").addEventListener("click", ()=>{ state.idx++; renderCard(); refreshStats(); });
+  $("#nextBtn").focus();
+}
+
+/* ---------- 統計 ---------- */
+function refreshStats(){
+  $("#sDone").textContent = state.done;
+  $("#sRate").textContent = state.done ? Math.round(state.correct/state.done*100)+"%" : "—";
+  $("#sWrong").textContent = state.wrong.length;
+  $("#nbCount").textContent = state.wrong.length;
+}
+
+/* ---------- 分頁切換 ---------- */
+function showQuizView(){
+  state.mode = state.mode==="review" ? "review" : "quiz";
+  $("#quizView").classList.remove("hidden");
+  $("#noteView").classList.add("hidden");
+  $("#tabQuiz").classList.add("active"); $("#tabNote").classList.remove("active");
+}
+function showNoteView(){
+  $("#quizView").classList.add("hidden");
+  $("#noteView").classList.remove("hidden");
+  $("#tabQuiz").classList.remove("active"); $("#tabNote").classList.add("active");
+  renderNotebook();
+}
+$("#tabQuiz").addEventListener("click", ()=>{ if(state.mode==="review") startQuiz(); showQuizView(); });
+$("#tabNote").addEventListener("click", showNoteView);
+
+/* ---------- 錯題本渲染 ---------- */
+function renderNotebook(){
+  const box=$("#nbList");
+  if(!state.wrong.length){
+    box.innerHTML=`<div class="empty"><span class="big">📕</span>目前沒有錯題。<br>答錯的題目會自動出現在這裡，也可以手動加入。</div>`;
+    return;
+  }
+  box.innerHTML = state.wrong.map((q,i)=>`
+    <div class="nb-item">
+      <div class="nb-meta">
+        <span class="tag lv">${esc(q.lv)}</span>
+        <span class="tag cat">${esc(q.cat)}</span>
+        <button class="nb-del" data-i="${i}" title="移除">✕</button>
+      </div>
+      <div class="nb-q">${q.q.replace(/＿+/g,'<span class="blank">＿＿</span>')}</div>
+      <div class="nb-ans">正解：${esc(q.o[q.a])}</div>
+      ${q.exp?`<div class="nb-exp">${q.exp}</div>`:""}
+    </div>`).join("");
+  box.querySelectorAll(".nb-del").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      state.wrong.splice(parseInt(b.dataset.i,10),1);
+      persist(); refreshStats(); renderNotebook();
+    });
+  });
+}
+
+/* ---------- 練習錯題 ---------- */
+$("#practiceBtn").addEventListener("click", startReview);
+
+/* ---------- 手動加入 ---------- */
+$("#toggleAddBtn").addEventListener("click", ()=> $("#addForm").classList.toggle("show"));
+$("#afCancel").addEventListener("click", ()=> $("#addForm").classList.remove("show"));
+$("#afSave").addEventListener("click", ()=>{
+  const qt=$("#afQ").value.trim();
+  const opts=$("#afOpts").value.split("\n").map(s=>s.trim()).filter(Boolean);
+  const ansTxt=$("#afAns").value.trim();
+  const exp=$("#afExp").value.trim();
+  if(!qt){ toast("請輸入題目"); return; }
+  if(opts.length<2){ toast("請至少輸入兩個選項"); return; }
+  let a=opts.indexOf(ansTxt);
+  if(a<0){
+    if(ansTxt){ opts.push(ansTxt); a=opts.length-1; }
+    else { toast("請填正解"); return; }
+  }
+  const q={ id:"manual-"+Date.now(), lv:"自訂", cat:"手動加入",
+            q: qt.includes("＿")? qt : qt+"＿＿", o:opts, a, exp: exp||"（自訂題目）" };
+  state.wrong.push(q); persist(); refreshStats();
+  $("#afQ").value=$("#afOpts").value=$("#afAns").value=$("#afExp").value="";
+  $("#addForm").classList.remove("show");
+  toast("已加入錯題本"); renderNotebook();
+});
+
+/* ---------- 啟動 ---------- */
+$("#totalQ").textContent = QUESTIONS.length;
+rebuildCats();
+startQuiz();
+refreshStats();
+</script>
+</body>
+</html>
